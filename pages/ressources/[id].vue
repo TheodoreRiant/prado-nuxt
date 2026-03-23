@@ -1,23 +1,36 @@
 <script setup lang="ts">
 import { ArrowLeft, ExternalLink, Loader2 } from 'lucide-vue-next'
+import * as prismicH from '@prismicio/client'
 import {
   RESSOURCE_CATEGORY_COLORS,
   type RessourceCategory,
 } from '~/constants/categories'
-import { fetchPublicRessources, type DbRessource } from '~/lib/api'
 
 const route = useRoute()
-const client = useSupabaseClient()
+const { client: prismic } = usePrismic()
 
-const ressource = ref<DbRessource | null>(null)
-const loading = ref(true)
+const id = route.params.id as string
 
-onMounted(async () => {
-  try {
-    const data = await fetchPublicRessources(client)
-    ressource.value = data.find(r => r.id === Number(route.params.id)) ?? null
-  } finally {
-    loading.value = false
+const { data: ressourceDoc, status } = await useAsyncData(`ressource-${id}`, async () => {
+  const results = await prismic.get({
+    filters: [prismicH.filter.at('my.ressource.original_id', Number(id))],
+    pageSize: 1,
+  })
+  return results.results[0] ?? null
+})
+
+const loading = computed(() => status.value === 'pending')
+
+const ressource = computed(() => {
+  const doc = ressourceDoc.value
+  if (!doc) return null
+  return {
+    id: doc.data.original_id as number,
+    title: doc.data.title as string,
+    category: doc.data.category as string,
+    description: (doc.data.description as any)?.[0]?.text ?? '',
+    url: (doc.data.url as any)?.url ?? '',
+    image: '',
   }
 })
 

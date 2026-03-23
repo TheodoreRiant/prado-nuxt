@@ -1,26 +1,43 @@
 <script setup lang="ts">
 import { ArrowLeft, Calendar, Clock, ExternalLink, Loader2 } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
+import * as prismicH from '@prismicio/client'
 import {
   PROGRAMMATION_CATEGORY_COLORS,
   type ProgrammationCategory,
 } from '~/constants/categories'
-import { fetchPublicActions, type DbAction } from '~/lib/api'
 
 const route = useRoute()
-const client = useSupabaseClient()
+const { client: prismic } = usePrismic()
 const { user, jeunes, inscriptions, inscrire, desinscrire } = useAuth()
 
 const showInscription = ref(false)
-const action = ref<DbAction | null>(null)
-const loading = ref(true)
+const id = route.params.id as string
 
-onMounted(async () => {
-  try {
-    const data = await fetchPublicActions(client)
-    action.value = data.find(a => a.id === Number(route.params.id)) ?? null
-  } finally {
-    loading.value = false
+const { data: actionDoc, status } = await useAsyncData(`action-${id}`, async () => {
+  const results = await prismic.get({
+    filters: [prismicH.filter.at('my.action.original_id', Number(id))],
+    pageSize: 1,
+  })
+  return results.results[0] ?? null
+})
+
+const loading = computed(() => status.value === 'pending')
+
+const action = computed(() => {
+  const doc = actionDoc.value
+  if (!doc) return null
+  return {
+    id: doc.data.original_id as number,
+    title: doc.data.title as string,
+    category: doc.data.category as string,
+    date: (doc.data.date_text as string) ?? '',
+    time: (doc.data.time_text as string) ?? '',
+    summary: (doc.data.summary as string) ?? '',
+    description: (doc.data.description as any)?.[0]?.text ?? '',
+    url_detail: (doc.data.url_detail as any)?.url ?? '',
+    url_image: '',
+    is_activite: (doc.data.is_activite as boolean) ?? false,
   }
 })
 

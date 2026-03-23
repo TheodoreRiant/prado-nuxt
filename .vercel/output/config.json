@@ -49,6 +49,10 @@
       "dest": "/__fallback"
     },
     {
+      "src": "/slice-simulator",
+      "dest": "/slice-simulator"
+    },
+    {
       "src": "/preview",
       "dest": "/preview"
     },

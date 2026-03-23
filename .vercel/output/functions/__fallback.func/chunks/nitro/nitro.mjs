@@ -4277,7 +4277,7 @@ function _expandFromEnv(value) {
 const _inlineRuntimeConfig = {
   "app": {
     "baseURL": "/",
-    "buildId": "ebdb576b-5657-495b-9470-63ea68367c1e",
+    "buildId": "eb2b4ff1-ea41-4db6-960e-1d48de389f6d",
     "buildAssetsDir": "/_nuxt/",
     "cdnURL": ""
   },
@@ -4330,17 +4330,19 @@ const _inlineRuntimeConfig = {
       "clientOptions": {}
     },
     "prismic": {
-      "endpoint": "prado-itineraires",
+      "endpoint": "prado-itineraire",
       "environment": "",
+      "client": "~/prismic/client",
+      "linkResolver": "~/prismic/linkResolver",
       "clientConfig": {},
-      "client": "~/app/prismic/client",
-      "linkResolver": "~/app/prismic/linkResolver",
-      "richTextSerializer": "~/app/prismic/richTextSerializer",
-      "injectComponents": true,
-      "components": {},
       "preview": "/preview",
       "toolbar": true,
-      "devtools": true
+      "imports": [
+        "vue"
+      ],
+      "components": {
+        "richTextComponents": "~/prismic/richTextComponents"
+      }
     }
   },
   "supabaseServiceRoleKey": "",

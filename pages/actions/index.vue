@@ -8,12 +8,11 @@ import {
   type ProgrammationCategory,
   type RessourceCategory,
 } from '~/constants/categories'
-import { fetchPublicActions, fetchPublicRessources, type DbAction, type DbRessource } from '~/lib/api'
 
 type Panel = 'actions' | 'ressources'
 type FilterMode = 'activite' | 'actions'
 
-const client = useSupabaseClient()
+const { client: prismic } = usePrismic()
 
 const panel = ref<Panel>('actions')
 const search = ref('')
@@ -24,49 +23,42 @@ const searchRes = ref('')
 const catRes = ref<RessourceCategory | 'all'>('all')
 const resPage = ref(1)
 const listRef = ref<HTMLDivElement | null>(null)
-const dbActions = ref<DbAction[]>([])
-const dbRessources = ref<DbRessource[]>([])
-const loadingData = ref(true)
 
 const ITEMS_PER_PAGE = 12
 const RES_PER_PAGE = 12
 
-onMounted(async () => {
-  try {
-    const [a, r] = await Promise.all([
-      fetchPublicActions(client),
-      fetchPublicRessources(client),
-    ])
-    dbActions.value = a
-    dbRessources.value = r
-  } finally {
-    loadingData.value = false
-  }
-})
+const { data: prismicActions, status: actionsStatus } = await useAsyncData('actions', () =>
+  prismic.getAllByType('action')
+)
+const { data: prismicRessources, status: ressourcesStatus } = await useAsyncData('ressources', () =>
+  prismic.getAllByType('ressource')
+)
+
+const loadingData = computed(() => actionsStatus.value === 'pending' || ressourcesStatus.value === 'pending')
 
 const programmation = computed(() =>
-  dbActions.value.map(a => ({
-    id: a.id,
-    title: a.title,
-    category: a.category as ProgrammationCategory,
-    date: a.date,
-    time: a.time,
-    summary: a.summary,
-    description: a.description,
-    urlDetail: a.url_detail,
-    urlImage: a.url_image,
-    isActivite: a.is_activite,
+  (prismicActions.value ?? []).map(doc => ({
+    id: doc.data.original_id as number,
+    title: doc.data.title as string,
+    category: doc.data.category as ProgrammationCategory,
+    date: (doc.data.date_text as string) ?? '',
+    time: (doc.data.time_text as string) ?? '',
+    summary: (doc.data.summary as string) ?? '',
+    description: (doc.data.description as any)?.[0]?.text ?? '',
+    urlDetail: (doc.data.url_detail as any)?.url ?? '',
+    urlImage: '',
+    isActivite: (doc.data.is_activite as boolean) ?? false,
   }))
 )
 
 const ressources = computed(() =>
-  dbRessources.value.map(r => ({
-    id: r.id,
-    title: r.title,
-    category: r.category as RessourceCategory,
-    description: r.description,
-    url: r.url,
-    image: r.image,
+  (prismicRessources.value ?? []).map(doc => ({
+    id: doc.data.original_id as number,
+    title: doc.data.title as string,
+    category: doc.data.category as RessourceCategory,
+    description: (doc.data.description as any)?.[0]?.text ?? '',
+    url: (doc.data.url as any)?.url ?? '',
+    image: '',
   }))
 )
 

@@ -1,1 +1,0 @@
-import{E as t,C as a}from"./gGRmV9L5.js";import{u as i}from"./QImMm1Jv.js";import"./UShm5Rt9.js";import"./D2CrPmIF.js";const m=t(async()=>{const{user:e,isAdmin:o}=i();if(!e.value||!o.value)return a("/connexion")});export{m as default};

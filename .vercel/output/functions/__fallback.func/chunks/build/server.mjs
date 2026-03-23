@@ -1,9 +1,10 @@
-import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};import { inject, hasInjectionContext, toRef, isRef, defineComponent, shallowRef, h, resolveComponent, getCurrentInstance, computed, unref, createElementBlock, provide, cloneVNode, defineAsyncComponent, shallowReactive, ref, Suspense, Fragment, createApp, onErrorCaptured, onServerPrefetch, createVNode, resolveDynamicComponent, reactive, effectScope, mergeProps, getCurrentScope, withCtx, nextTick, isReadonly, useSSRContext, isShallow, isReactive, toRaw, watch, Text } from 'vue';
-import { i as hasProtocol, k as isScriptProtocol, f as joinURL, p as parseQuery, w as withQuery, s as sanitizeStatusCode, l as parseURL, m as encodePath, n as decodePath, o as getContext, q as withTrailingSlash, r as withoutTrailingSlash, $ as $fetch, t as defu, v as createHooks, c as createError$1, x as executeAsync, y as getHeader, z as setCookie, A as klona, B as parse, C as getRequestHeader, D as destr, E as isEqual, F as getCookie, G as deleteCookie } from '../nitro/nitro.mjs';
-import { u as useHead$1, h as headSymbol, b as baseURL } from '../routes/renderer.mjs';
-import { useRoute as useRoute$1, RouterView, createMemoryHistory, createRouter, START_LOCATION, routerKey } from 'vue-router';
+import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};import { inject, hasInjectionContext, computed, toValue, getCurrentInstance, onServerPrefetch, toRef, isRef, defineComponent, shallowRef, h, resolveComponent, unref, ref, nextTick, createElementBlock, provide, cloneVNode, defineAsyncComponent, shallowReactive, Suspense, Fragment, createApp, onErrorCaptured, createVNode, resolveDynamicComponent, reactive, effectScope, mergeProps, getCurrentScope, withCtx, isReadonly, useSSRContext, isShallow, isReactive, toRaw } from 'vue';
+import { i as hasProtocol, k as isScriptProtocol, f as joinURL, p as parseQuery, w as withQuery, s as sanitizeStatusCode, l as parseURL, m as encodePath, n as decodePath, o as getContext, c as createError$1, q as withTrailingSlash, r as withoutTrailingSlash, $ as $fetch, t as defu, v as createHooks, x as executeAsync, y as getHeader, z as setCookie, A as klona, B as parse, C as getRequestHeader, D as destr, E as isEqual, F as getCookie, G as deleteCookie } from '../nitro/nitro.mjs';
+import { u as useSeoMeta$1, a as useHead$1, h as headSymbol, b as baseURL } from '../routes/renderer.mjs';
+import { useRoute as useRoute$1, RouterView, createMemoryHistory, createRouter, START_LOCATION } from 'vue-router';
 import { createServerClient, parseCookieHeader } from '@supabase/ssr';
-import { createClient, documentToLinkField, isFilled, asImagePixelDensitySrcSet, asImageWidthSrcSet, asImageSrc, asDate, asText, cookie, filter, asLinkAttrs, asLink, asHTML } from '@prismicio/client';
+import { debounce } from 'perfect-debounce';
+import { getToolbarSrc, cookie, isFilled, Client, createClient } from '@prismicio/client';
 import { ssrRenderSuspense, ssrRenderComponent, ssrRenderVNode } from 'vue/server-renderer';
 import 'node:http';
 import 'node:https';
@@ -15,8 +16,8 @@ import 'node:crypto';
 import 'vue-bundle-renderer/runtime';
 import 'unhead/server';
 import 'devalue';
-import 'unhead/utils';
 import 'unhead/plugins';
+import 'unhead/utils';
 
 if (!globalThis.$fetch) {
   globalThis.$fetch = $fetch.create({
@@ -28,6 +29,7 @@ if (!("global" in globalThis)) {
 }
 const appLayoutTransition = false;
 const nuxtLinkDefaults = { "componentName": "NuxtLink" };
+const asyncDataDefaults = { "value": null, "errorValue": null, "deep": true };
 const appId = "nuxt-app";
 function getNuxtAppCtx(id = appId) {
   return getContext(id, {
@@ -413,12 +415,12 @@ const _routes = [
   {
     name: "prismic-preview",
     path: "/preview",
-    component: () => import('./PrismicPreview-BIyeU2t9.mjs')
+    component: () => import('./PrismicPreview-B-3vcH0V.mjs')
   },
   {
     name: "index",
     path: "/",
-    component: () => import('./index-DMak5mwM.mjs')
+    component: () => import('./index-T8suT7WC.mjs')
   },
   {
     name: "contact",
@@ -428,7 +430,7 @@ const _routes = [
   {
     name: "fresque",
     path: "/fresque",
-    component: () => import('./fresque-DMu-QxDs.mjs')
+    component: () => import('./fresque-eKuJgWEp.mjs')
   },
   {
     name: "educolab",
@@ -438,51 +440,56 @@ const _routes = [
   {
     name: "connexion",
     path: "/connexion",
-    component: () => import('./connexion-DYvhI8Is.mjs')
+    component: () => import('./connexion-CxHZFsN6.mjs')
   },
   {
     name: "foodtruck",
     path: "/foodtruck",
-    component: () => import('./foodtruck-DhDEavgs.mjs')
+    component: () => import('./foodtruck-DkVWnAkL.mjs')
   },
   {
     name: "mon-compte",
     path: "/mon-compte",
     meta: { "middleware": "auth" },
-    component: () => import('./mon-compte-QRhFuIux.mjs')
+    component: () => import('./mon-compte-D68yemf3.mjs')
   },
   {
     name: "admin",
     path: "/admin",
     meta: { ...__nuxt_page_meta$2 || {}, ...{ "middleware": "admin" } },
-    component: () => import('./index-BepCTO7X.mjs')
+    component: () => import('./index-BFPClL8R.mjs')
   },
   {
     name: "actions-id",
     path: "/actions/:id()",
-    component: () => import('./_id_-BPNLbum7.mjs')
+    component: () => import('./_id_-D0bCBdL8.mjs')
   },
   {
     name: "actions",
     path: "/actions",
-    component: () => import('./index-DcuXB7CZ.mjs')
+    component: () => import('./index-CfVAPBoK.mjs')
   },
   {
     name: "ressources-id",
     path: "/ressources/:id()",
-    component: () => import('./_id_-6IOUHDpb.mjs')
+    component: () => import('./_id_-2Ewq2Ez1.mjs')
+  },
+  {
+    name: "slice-simulator",
+    path: "/slice-simulator",
+    component: () => import('./slice-simulator-DOoGwNHl.mjs')
   },
   {
     name: "admin-inscriptions",
     path: "/admin/inscriptions",
     meta: { ...__nuxt_page_meta$1 || {}, ...{ "middleware": "admin" } },
-    component: () => import('./inscriptions-Hbsh672s.mjs')
+    component: () => import('./inscriptions-BQdJz7H7.mjs')
   },
   {
     name: "admin-prescripteurs",
     path: "/admin/prescripteurs",
     meta: { ...__nuxt_page_meta || {}, ...{ "middleware": "admin" } },
-    component: () => import('./prescripteurs-BnIZHoDP.mjs')
+    component: () => import('./prescripteurs-dCmrG9c2.mjs')
   }
 ];
 const _wrapInTransition = (props, children) => {
@@ -628,8 +635,8 @@ const globalMiddleware = [
   manifest_45route_45rule
 ];
 const namedMiddleware = {
-  admin: () => import('./admin-DXJ2XlhL.mjs'),
-  auth: () => import('./auth-CE65BOSf.mjs')
+  admin: () => import('./admin-CZD-b03V.mjs'),
+  auth: () => import('./auth-DXT1kayg.mjs')
 };
 const plugin = /* @__PURE__ */ defineNuxtPlugin({
   name: "nuxt:router",
@@ -940,6 +947,12 @@ function useHead(input, options = {}) {
     return useHead$1(input, { head, ...options });
   }
 }
+function useSeoMeta(input, options = {}) {
+  const head = injectHead(options.nuxt);
+  if (head) {
+    return useSeoMeta$1(input, { head, ...options });
+  }
+}
 function useRequestEvent(nuxtApp) {
   nuxtApp ||= useNuxtApp();
   return nuxtApp.ssrContext?.event;
@@ -1005,591 +1018,6 @@ const revive_payload_server_MVtmlZaQpj6ApFmshWfUWl5PehCebzaBf2NuRMiIbms = /* @__
 const components_plugin_z4hgvsiddfKkfXTP6M8M4zG5Cb7sGnDhcryKVM45Di4 = /* @__PURE__ */ defineNuxtPlugin({
   name: "nuxt:global-components"
 });
-const prismicKey = /* @__PURE__ */ Symbol("prismic");
-const getSlots = (parent, slots, defaultPayload, fallback) => {
-  const fallbackSlot = fallback ? () => [h(Text, fallback)] : void 0;
-  if (typeof parent === "string") {
-    return slots.default ? slots.default(defaultPayload) : fallbackSlot == null ? void 0 : fallbackSlot();
-  } else {
-    if (slots.default) {
-      const content = slots.default(defaultPayload);
-      return {
-        ...slots,
-        default: content.length ? () => content : fallbackSlot
-      };
-    } else {
-      return fallbackSlot;
-    }
-  }
-};
-const isInternalURL = (url) => {
-  const isInternal = /^\/(?!\/)/.test(url);
-  const isSpecialLink = !isInternal && !/^https?:\/\//i.test(url);
-  return isInternal && !isSpecialLink;
-};
-const simplyResolveComponent = (component) => {
-  return resolveDynamicComponent(component);
-};
-const usePrismic = () => {
-  return inject(prismicKey, { options: { endpoint: "" } });
-};
-const defaultInternalComponent = "router-link";
-const defaultExternalComponent = "a";
-const defaultBlankTargetRelAttribute = "noopener noreferrer";
-const usePrismicLink = (props) => {
-  const { options } = usePrismic();
-  const type = computed(() => {
-    var _a, _b;
-    const internalComponent = unref(props.internalComponent) || ((_a = options.components) == null ? void 0 : _a.linkInternalComponent) || defaultInternalComponent;
-    const externalComponent = unref(props.externalComponent) || ((_b = options.components) == null ? void 0 : _b.linkExternalComponent) || defaultExternalComponent;
-    return href.value && isInternalURL(href.value) && !target.value ? internalComponent : externalComponent;
-  });
-  const href = computed(() => {
-    const field = unref(props.field);
-    const linkResolver2 = unref(props.linkResolver) ?? options.linkResolver;
-    return asLink(field, linkResolver2) ?? "";
-  });
-  const target = computed(() => {
-    const field = unref(props.field);
-    const target2 = unref(props.target);
-    if (typeof target2 !== "undefined") {
-      return target2;
-    } else {
-      return field && "target" in field && field.target ? field.target : null;
-    }
-  });
-  const rel = computed(() => {
-    var _a;
-    const rel2 = unref(props.rel);
-    if (typeof rel2 !== "undefined") {
-      return rel2;
-    } else if (target.value === "_blank") {
-      const blankTargetRelAttribute = unref(props.blankTargetRelAttribute);
-      if (typeof blankTargetRelAttribute !== "undefined") {
-        return blankTargetRelAttribute;
-      } else {
-        return typeof ((_a = options.components) == null ? void 0 : _a.linkBlankTargetRelAttribute) !== "undefined" ? options.components.linkBlankTargetRelAttribute : defaultBlankTargetRelAttribute;
-      }
-    } else {
-      return null;
-    }
-  });
-  const text = computed(() => {
-    const field = unref(props.field);
-    return field && "text" in field ? field.text : void 0;
-  });
-  return {
-    type,
-    href,
-    target,
-    rel,
-    text
-  };
-};
-const PrismicLinkImpl = /* @__PURE__ */ defineComponent({
-  name: "PrismicLink",
-  props: {
-    field: {
-      type: Object,
-      required: true
-    },
-    linkResolver: {
-      type: Function,
-      default: void 0,
-      required: false
-    },
-    target: {
-      type: String,
-      default: void 0,
-      required: false
-    },
-    rel: {
-      type: String,
-      default: void 0,
-      required: false
-    },
-    blankTargetRelAttribute: {
-      type: String,
-      default: void 0,
-      required: false
-    },
-    internalComponent: {
-      type: [String, Object, Function],
-      default: void 0,
-      required: false
-    },
-    externalComponent: {
-      type: [String, Object, Function],
-      default: void 0,
-      required: false
-    }
-  },
-  setup(props, { slots }) {
-    if (!props.field) {
-      return () => null;
-    }
-    const { type, href, target, rel, text } = usePrismicLink(props);
-    return () => {
-      const parent = type.value === "a" ? "a" : simplyResolveComponent(type.value);
-      const computedSlots = getSlots(parent, slots, reactive({ href: href.value, text: text.value }), text.value);
-      if (typeof parent === "string") {
-        return h(parent, { href: href.value, target: target.value, rel: rel.value }, computedSlots);
-      } else {
-        return h(parent, { to: href.value, target: target.value, rel: rel.value }, computedSlots);
-      }
-    };
-  }
-});
-const PrismicLink = PrismicLinkImpl;
-const defaultWrapper$2 = "div";
-const PrismicEmbedImpl = /* @__PURE__ */ defineComponent({
-  name: "PrismicEmbed",
-  props: {
-    field: {
-      type: Object,
-      required: true
-    },
-    wrapper: {
-      type: [String, Object, Function],
-      default: void 0,
-      required: false
-    }
-  },
-  setup(props) {
-    if (!props.field) {
-      return () => null;
-    }
-    return () => {
-      return h(simplyResolveComponent(props.wrapper || defaultWrapper$2), {
-        "data-oembed": props.field.embed_url,
-        "data-oembed-type": props.field.type,
-        "data-oembed-provider": props.field.provider_name,
-        innerHTML: props.field.html || null
-      });
-    };
-  }
-});
-const PrismicEmbed = PrismicEmbedImpl;
-if (typeof process === "undefined") {
-  globalThis.process = { env: {} };
-}
-const defaultImageComponent = "img";
-const usePrismicImage = (props) => {
-  const { options } = usePrismic();
-  const asImage = computed(() => {
-    var _a, _b;
-    const field = unref(props.field);
-    if (!isFilled.image(field)) {
-      return {
-        src: null,
-        srcset: null
-      };
-    }
-    const imgixParams = unref(props.imgixParams);
-    const widths = unref(props.widths);
-    const pixelDensities = unref(props.pixelDensities);
-    if (widths) {
-      return asImageWidthSrcSet(field, {
-        ...imgixParams,
-        widths: widths === "defaults" ? (_a = options.components) == null ? void 0 : _a.imageWidthSrcSetDefaults : widths
-      });
-    } else if (pixelDensities) {
-      return asImagePixelDensitySrcSet(field, {
-        ...imgixParams,
-        pixelDensities: pixelDensities === "defaults" ? (_b = options.components) == null ? void 0 : _b.imagePixelDensitySrcSetDefaults : pixelDensities
-      });
-    } else {
-      return {
-        src: asImageSrc(field, imgixParams),
-        srcset: null
-      };
-    }
-  });
-  const src = computed(() => {
-    return asImage.value.src;
-  });
-  const srcset = computed(() => {
-    return asImage.value.srcset;
-  });
-  const alt = computed(() => {
-    return unref(props.field).alt || "";
-  });
-  const copyright = computed(() => {
-    return unref(props.field).copyright || null;
-  });
-  return {
-    src,
-    srcset,
-    alt,
-    copyright
-  };
-};
-const PrismicImageImpl = /* @__PURE__ */ defineComponent({
-  name: "PrismicImage",
-  props: {
-    field: {
-      type: Object,
-      required: true
-    },
-    imageComponent: {
-      type: [String, Object],
-      default: void 0,
-      required: false
-    },
-    imgixParams: {
-      type: Object,
-      default: void 0,
-      required: false
-    },
-    widths: {
-      type: [String, Object],
-      default: void 0,
-      required: false
-    },
-    pixelDensities: {
-      type: [String, Object],
-      default: void 0,
-      required: false
-    }
-  },
-  setup(props) {
-    if (!props.field) {
-      return () => null;
-    }
-    const { options } = usePrismic();
-    const type = computed(() => {
-      var _a;
-      return props.imageComponent || ((_a = options.components) == null ? void 0 : _a.imageComponent) || defaultImageComponent;
-    });
-    const { src, srcset, alt, copyright } = usePrismicImage(props);
-    return () => {
-      const attributes = {
-        src: src.value,
-        srcset: srcset.value,
-        alt: alt.value
-      };
-      switch (type.value) {
-        case "img":
-          return h("img", attributes);
-        default:
-          return h(simplyResolveComponent(type.value), {
-            ...attributes,
-            copyright: copyright.value
-          });
-      }
-    };
-  }
-});
-const PrismicImage = PrismicImageImpl;
-const defaultWrapper$1 = "div";
-const usePrismicText = (props) => {
-  const text = computed(() => {
-    const field = unref(props.field);
-    if (!isFilled.richText(field)) {
-      return unref(props.fallback) ?? "";
-    }
-    return asText(unref(field), unref(props.separator));
-  });
-  return {
-    text
-  };
-};
-const PrismicTextImpl = /* @__PURE__ */ defineComponent({
-  name: "PrismicText",
-  props: {
-    field: {
-      type: Array,
-      default: void 0,
-      required: false
-    },
-    separator: {
-      type: String,
-      default: void 0,
-      required: false
-    },
-    wrapper: {
-      type: [String, Object, Function],
-      default: void 0,
-      required: false
-    },
-    fallback: {
-      type: String,
-      default: void 0,
-      required: false
-    }
-  },
-  setup(props) {
-    const { text } = usePrismicText(props);
-    return () => {
-      const parent = simplyResolveComponent(props.wrapper || defaultWrapper$1);
-      return h(parent, null, {
-        default: () => text.value
-      });
-    };
-  }
-});
-const PrismicText = PrismicTextImpl;
-const defaultWrapper = "div";
-const usePrismicRichText = (props) => {
-  const { options } = usePrismic();
-  const html = computed(() => {
-    const field = unref(props.field);
-    if (!isFilled.richText(field)) {
-      return unref(props.fallback) ?? "";
-    }
-    const linkResolver2 = unref(props.linkResolver) ?? options.linkResolver;
-    const serializer = unref(props.serializer) ?? unref(props.htmlSerializer) ?? options.richTextSerializer ?? options.htmlSerializer;
-    return asHTML(unref(field), linkResolver2, serializer);
-  });
-  return {
-    html
-  };
-};
-const PrismicRichTextImpl = /* @__PURE__ */ defineComponent({
-  name: "PrismicRichText",
-  props: {
-    field: {
-      type: Array,
-      default: void 0,
-      required: false
-    },
-    linkResolver: {
-      type: Function,
-      default: void 0,
-      required: false
-    },
-    serializer: {
-      type: [Function, Object],
-      default: void 0,
-      required: false
-    },
-    htmlSerializer: {
-      type: [Function, Object],
-      default: void 0,
-      required: false
-    },
-    wrapper: {
-      type: [String, Object, Function],
-      default: void 0,
-      required: false
-    },
-    fallback: {
-      type: String,
-      default: void 0,
-      required: false
-    }
-  },
-  setup(props) {
-    const { html } = usePrismicRichText(props);
-    const root = ref(null);
-    const maybeRouter = inject(routerKey, null);
-    if (maybeRouter) {
-      let links = [];
-      const navigate = function(event) {
-        event.preventDefault();
-        maybeRouter.push(this.href);
-      };
-      const addListeners = () => {
-        const node = root.value && "$el" in root.value ? root.value.$el : root.value;
-        if (node && "querySelectorAll" in node) {
-          links = Array.from(node.querySelectorAll("a")).map((element) => {
-            const href = element.getAttribute("href");
-            if (href && isInternalURL(href)) {
-              const listener = navigate.bind({ href });
-              element.addEventListener("click", listener);
-              return { element, listener };
-            } else {
-              return false;
-            }
-          }).filter((link) => link);
-        }
-      };
-      const removeListeners = () => {
-        links.forEach(({ element, listener }) => element.removeEventListener("click", listener));
-        links = [];
-      };
-      watch(html, () => {
-        removeListeners();
-        nextTick(addListeners);
-      });
-    }
-    return () => {
-      return h(simplyResolveComponent(props.wrapper || defaultWrapper), {
-        innerHTML: html.value,
-        ref: root
-      });
-    };
-  }
-});
-const PrismicRichText = PrismicRichTextImpl;
-const TODOSliceComponent = () => null ;
-const SliceZoneImpl = /* @__PURE__ */ defineComponent({
-  name: "SliceZone",
-  props: {
-    slices: {
-      type: Array,
-      required: true
-    },
-    components: {
-      type: Object,
-      default: void 0,
-      required: false
-    },
-    resolver: {
-      type: Function,
-      default: void 0,
-      required: false
-    },
-    context: {
-      type: null,
-      default: void 0,
-      required: false
-    },
-    defaultComponent: {
-      type: Object,
-      default: void 0,
-      required: false
-    },
-    wrapper: {
-      type: [String, Object, Function],
-      default: void 0,
-      required: false
-    }
-  },
-  setup(props) {
-    if (!props.slices) {
-      return () => null;
-    }
-    const { options } = usePrismic();
-    const renderedSlices = computed(() => {
-      return props.slices.map((slice, index) => {
-        var _a;
-        const type = "slice_type" in slice ? slice.slice_type : slice.type;
-        let component = props.components && type in props.components ? props.components[type] : props.defaultComponent || ((_a = options.components) == null ? void 0 : _a.sliceZoneDefaultComponent);
-        if (props.resolver) {
-          const resolvedComponent = props.resolver({
-            slice,
-            sliceName: type,
-            i: index
-          });
-          if (resolvedComponent) {
-            component = resolvedComponent;
-          }
-        }
-        const key = "id" in slice && typeof slice.id === "string" ? slice.id : `${index}-${JSON.stringify(slice)}`;
-        if (component) {
-          if (slice.__mapped) {
-            const { __mapped, ...mappedProps } = slice;
-            return h(simplyResolveComponent(component), {
-              key,
-              ...mappedProps
-            });
-          }
-          return h(simplyResolveComponent(component), {
-            key,
-            slice,
-            index,
-            context: props.context,
-            slices: props.slices
-          });
-        } else {
-          return h(simplyResolveComponent(TODOSliceComponent), { key, slice });
-        }
-      });
-    });
-    return () => {
-      if (props.wrapper) {
-        const parent = simplyResolveComponent(props.wrapper);
-        if (typeof parent === "string") {
-          return h(parent, null, renderedSlices.value);
-        } else {
-          return h(parent, null, { default: () => renderedSlices.value });
-        }
-      } else {
-        return renderedSlices.value;
-      }
-    };
-  }
-});
-const SliceZone = SliceZoneImpl;
-const createPrismic = (options) => {
-  let client;
-  if (options.client) {
-    client = options.client;
-  } else {
-    client = createClient(options.endpoint, {
-      fetch: async (endpoint, options2) => {
-        let fetchFunction;
-        if (typeof globalThis.fetch === "function") {
-          fetchFunction = globalThis.fetch;
-        } else {
-          fetchFunction = (await import('isomorphic-unfetch')).default;
-        }
-        return await fetchFunction(endpoint, options2);
-      },
-      ...options.clientConfig
-    });
-  }
-  const prismicClient = {
-    client,
-    filter,
-    cookie
-  };
-  const prismicHelpers = {
-    asText,
-    asHTML: (richTextField, ...config) => {
-      const [configOrLinkResolver, maybeHTMLSerializer] = config;
-      return asHTML(richTextField, typeof configOrLinkResolver === "function" || configOrLinkResolver == null ? {
-        linkResolver: configOrLinkResolver || options.linkResolver,
-        serializer: maybeHTMLSerializer || options.richTextSerializer || options.htmlSerializer
-      } : {
-        linkResolver: options.linkResolver,
-        serializer: options.richTextSerializer || options.htmlSerializer,
-        ...configOrLinkResolver
-      });
-    },
-    asLink: (linkField, config) => {
-      return asLink(linkField, typeof config === "function" ? { linkResolver: config } : {
-        linkResolver: options.linkResolver,
-        // TODO: For some reasons, TypeScript narrows the type to "unknown" where it's supposed to be a union
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ...config
-      });
-    },
-    asLinkAttrs: (linkField, config) => {
-      return asLinkAttrs(linkField, {
-        // TODO: We can't really retrieve the generic type here, this might cause some unexpected type error in some edge-case scenario
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        linkResolver: options.linkResolver,
-        ...config
-      });
-    },
-    asDate,
-    asImageSrc,
-    asImageWidthSrcSet,
-    asImagePixelDensitySrcSet,
-    isFilled,
-    documentToLinkField
-  };
-  const prismic = {
-    options,
-    ...prismicClient,
-    ...prismicHelpers,
-    install(app) {
-      app.provide(prismicKey, this);
-      app.config.globalProperties.$prismic = this;
-      if (options.injectComponents !== false) {
-        app.component(PrismicLink.name, PrismicLink);
-        app.component(PrismicEmbed.name, PrismicEmbed);
-        app.component(PrismicImage.name, PrismicImage);
-        app.component(PrismicText.name, PrismicText);
-        app.component(PrismicRichText.name, PrismicRichText);
-        app.component(SliceZone.name, SliceZone);
-      }
-    }
-  };
-  return prismic;
-};
 defineComponent({
   name: "ServerPlaceholder",
   render() {
@@ -1632,10 +1060,307 @@ const onNuxtReady = (callback) => {
     return;
   }
 };
+const isDefer = (dedupe) => dedupe === "defer" || dedupe === false;
+function useAsyncData(...args) {
+  const autoKey = typeof args[args.length - 1] === "string" ? args.pop() : void 0;
+  if (_isAutoKeyNeeded(args[0], args[1])) {
+    args.unshift(autoKey);
+  }
+  let [_key, _handler, options = {}] = args;
+  const key = computed(() => toValue(_key));
+  if (typeof key.value !== "string") {
+    throw new TypeError("[nuxt] [useAsyncData] key must be a string.");
+  }
+  if (typeof _handler !== "function") {
+    throw new TypeError("[nuxt] [useAsyncData] handler must be a function.");
+  }
+  const nuxtApp = useNuxtApp();
+  options.server ??= true;
+  options.default ??= getDefault;
+  options.getCachedData ??= getDefaultCachedData;
+  options.lazy ??= false;
+  options.immediate ??= true;
+  options.deep ??= asyncDataDefaults.deep;
+  options.dedupe ??= "cancel";
+  options._functionName || "useAsyncData";
+  nuxtApp._asyncData[key.value];
+  function createInitialFetch() {
+    const initialFetchOptions = { cause: "initial", dedupe: options.dedupe };
+    if (!nuxtApp._asyncData[key.value]?._init) {
+      initialFetchOptions.cachedData = options.getCachedData(key.value, nuxtApp, { cause: "initial" });
+      nuxtApp._asyncData[key.value] = createAsyncData(nuxtApp, key.value, _handler, options, initialFetchOptions.cachedData);
+    }
+    return () => nuxtApp._asyncData[key.value].execute(initialFetchOptions);
+  }
+  const initialFetch = createInitialFetch();
+  const asyncData = nuxtApp._asyncData[key.value];
+  asyncData._deps++;
+  const fetchOnServer = options.server !== false && nuxtApp.payload.serverRendered;
+  if (fetchOnServer && options.immediate) {
+    const promise = initialFetch();
+    if (getCurrentInstance()) {
+      onServerPrefetch(() => promise);
+    } else {
+      nuxtApp.hook("app:created", async () => {
+        await promise;
+      });
+    }
+  }
+  const asyncReturn = {
+    data: writableComputedRef(() => nuxtApp._asyncData[key.value]?.data),
+    pending: writableComputedRef(() => nuxtApp._asyncData[key.value]?.pending),
+    status: writableComputedRef(() => nuxtApp._asyncData[key.value]?.status),
+    error: writableComputedRef(() => nuxtApp._asyncData[key.value]?.error),
+    refresh: (...args2) => {
+      if (!nuxtApp._asyncData[key.value]?._init) {
+        const initialFetch2 = createInitialFetch();
+        return initialFetch2();
+      }
+      return nuxtApp._asyncData[key.value].execute(...args2);
+    },
+    execute: (...args2) => asyncReturn.refresh(...args2),
+    clear: () => {
+      const entry2 = nuxtApp._asyncData[key.value];
+      if (entry2?._abortController) {
+        try {
+          entry2._abortController.abort(new DOMException("AsyncData aborted by user.", "AbortError"));
+        } finally {
+          entry2._abortController = void 0;
+        }
+      }
+      clearNuxtDataByKey(nuxtApp, key.value);
+    }
+  };
+  const asyncDataPromise = Promise.resolve(nuxtApp._asyncDataPromises[key.value]).then(() => asyncReturn);
+  Object.assign(asyncDataPromise, asyncReturn);
+  Object.defineProperties(asyncDataPromise, {
+    then: { enumerable: true, value: asyncDataPromise.then.bind(asyncDataPromise) },
+    catch: { enumerable: true, value: asyncDataPromise.catch.bind(asyncDataPromise) },
+    finally: { enumerable: true, value: asyncDataPromise.finally.bind(asyncDataPromise) }
+  });
+  return asyncDataPromise;
+}
+function writableComputedRef(getter) {
+  return computed({
+    get() {
+      return getter()?.value;
+    },
+    set(value) {
+      const ref2 = getter();
+      if (ref2) {
+        ref2.value = value;
+      }
+    }
+  });
+}
+function _isAutoKeyNeeded(keyOrFetcher, fetcher) {
+  if (typeof keyOrFetcher === "string") {
+    return false;
+  }
+  if (typeof keyOrFetcher === "object" && keyOrFetcher !== null) {
+    return false;
+  }
+  if (typeof keyOrFetcher === "function" && typeof fetcher === "function") {
+    return false;
+  }
+  return true;
+}
 async function refreshNuxtData(keys) {
   {
     return Promise.resolve();
   }
+}
+function clearNuxtDataByKey(nuxtApp, key) {
+  if (key in nuxtApp.payload.data) {
+    nuxtApp.payload.data[key] = void 0;
+  }
+  if (key in nuxtApp.payload._errors) {
+    nuxtApp.payload._errors[key] = asyncDataDefaults.errorValue;
+  }
+  if (nuxtApp._asyncData[key]) {
+    nuxtApp._asyncData[key].data.value = void 0;
+    nuxtApp._asyncData[key].error.value = asyncDataDefaults.errorValue;
+    {
+      nuxtApp._asyncData[key].pending.value = false;
+    }
+    nuxtApp._asyncData[key].status.value = "idle";
+  }
+  if (key in nuxtApp._asyncDataPromises) {
+    nuxtApp._asyncDataPromises[key] = void 0;
+  }
+}
+function pick(obj, keys) {
+  const newObj = {};
+  for (const key of keys) {
+    newObj[key] = obj[key];
+  }
+  return newObj;
+}
+function createAsyncData(nuxtApp, key, _handler, options, initialCachedData) {
+  nuxtApp.payload._errors[key] ??= asyncDataDefaults.errorValue;
+  const hasCustomGetCachedData = options.getCachedData !== getDefaultCachedData;
+  const handler = _handler ;
+  const _ref = options.deep ? ref : shallowRef;
+  const hasCachedData = initialCachedData != null;
+  const unsubRefreshAsyncData = nuxtApp.hook("app:data:refresh", async (keys) => {
+    if (!keys || keys.includes(key)) {
+      await asyncData.execute({ cause: "refresh:hook" });
+    }
+  });
+  const asyncData = {
+    data: _ref(hasCachedData ? initialCachedData : options.default()),
+    pending: shallowRef(!hasCachedData),
+    error: toRef(nuxtApp.payload._errors, key),
+    status: shallowRef("idle"),
+    execute: (...args) => {
+      const [_opts, newValue = void 0] = args;
+      const opts = _opts && newValue === void 0 && typeof _opts === "object" ? _opts : {};
+      if (nuxtApp._asyncDataPromises[key]) {
+        if (isDefer(opts.dedupe ?? options.dedupe)) {
+          return nuxtApp._asyncDataPromises[key];
+        }
+      }
+      if (opts.cause === "initial" || nuxtApp.isHydrating) {
+        const cachedData = "cachedData" in opts ? opts.cachedData : options.getCachedData(key, nuxtApp, { cause: opts.cause ?? "refresh:manual" });
+        if (cachedData != null) {
+          nuxtApp.payload.data[key] = asyncData.data.value = cachedData;
+          asyncData.error.value = asyncDataDefaults.errorValue;
+          asyncData.status.value = "success";
+          return Promise.resolve(cachedData);
+        }
+      }
+      {
+        asyncData.pending.value = true;
+      }
+      if (asyncData._abortController) {
+        asyncData._abortController.abort(new DOMException("AsyncData request cancelled by deduplication", "AbortError"));
+      }
+      asyncData._abortController = new AbortController();
+      asyncData.status.value = "pending";
+      const cleanupController = new AbortController();
+      const promise = new Promise(
+        (resolve, reject) => {
+          try {
+            const timeout = opts.timeout ?? options.timeout;
+            const mergedSignal = mergeAbortSignals([asyncData._abortController?.signal, opts?.signal], cleanupController.signal, timeout);
+            if (mergedSignal.aborted) {
+              const reason = mergedSignal.reason;
+              reject(reason instanceof Error ? reason : new DOMException(String(reason ?? "Aborted"), "AbortError"));
+              return;
+            }
+            mergedSignal.addEventListener("abort", () => {
+              const reason = mergedSignal.reason;
+              reject(reason instanceof Error ? reason : new DOMException(String(reason ?? "Aborted"), "AbortError"));
+            }, { once: true, signal: cleanupController.signal });
+            return Promise.resolve(handler(nuxtApp, { signal: mergedSignal })).then(resolve, reject);
+          } catch (err) {
+            reject(err);
+          }
+        }
+      ).then(async (_result) => {
+        let result = _result;
+        if (options.transform) {
+          result = await options.transform(_result);
+        }
+        if (options.pick) {
+          result = pick(result, options.pick);
+        }
+        nuxtApp.payload.data[key] = result;
+        asyncData.data.value = result;
+        asyncData.error.value = asyncDataDefaults.errorValue;
+        asyncData.status.value = "success";
+      }).catch((error) => {
+        if (nuxtApp._asyncDataPromises[key] && nuxtApp._asyncDataPromises[key] !== promise) {
+          return nuxtApp._asyncDataPromises[key];
+        }
+        if (asyncData._abortController?.signal.aborted) {
+          return nuxtApp._asyncDataPromises[key];
+        }
+        if (typeof DOMException !== "undefined" && error instanceof DOMException && error.name === "AbortError") {
+          asyncData.status.value = "idle";
+          return nuxtApp._asyncDataPromises[key];
+        }
+        asyncData.error.value = createError(error);
+        asyncData.data.value = unref(options.default());
+        asyncData.status.value = "error";
+      }).finally(() => {
+        {
+          asyncData.pending.value = false;
+        }
+        cleanupController.abort();
+        delete nuxtApp._asyncDataPromises[key];
+      });
+      nuxtApp._asyncDataPromises[key] = promise;
+      return nuxtApp._asyncDataPromises[key];
+    },
+    _execute: debounce((...args) => asyncData.execute(...args), 0, { leading: true }),
+    _default: options.default,
+    _deps: 0,
+    _init: true,
+    _hash: void 0,
+    _off: () => {
+      unsubRefreshAsyncData();
+      if (nuxtApp._asyncData[key]?._init) {
+        nuxtApp._asyncData[key]._init = false;
+      }
+      if (!hasCustomGetCachedData) {
+        nextTick(() => {
+          if (!nuxtApp._asyncData[key]?._init) {
+            clearNuxtDataByKey(nuxtApp, key);
+            asyncData.execute = () => Promise.resolve();
+            asyncData.data.value = asyncDataDefaults.value;
+          }
+        });
+      }
+    }
+  };
+  return asyncData;
+}
+const getDefault = () => asyncDataDefaults.value;
+const getDefaultCachedData = (key, nuxtApp, ctx) => {
+  if (nuxtApp.isHydrating) {
+    return nuxtApp.payload.data[key];
+  }
+  if (ctx.cause !== "refresh:manual" && ctx.cause !== "refresh:hook") {
+    return nuxtApp.static.data[key];
+  }
+};
+function mergeAbortSignals(signals, cleanupSignal, timeout) {
+  const list = signals.filter((s) => !!s);
+  if (typeof timeout === "number" && timeout >= 0) {
+    const timeoutSignal = AbortSignal.timeout?.(timeout);
+    if (timeoutSignal) {
+      list.push(timeoutSignal);
+    }
+  }
+  if (AbortSignal.any) {
+    return AbortSignal.any(list);
+  }
+  const controller = new AbortController();
+  for (const sig of list) {
+    if (sig.aborted) {
+      const reason = sig.reason ?? new DOMException("Aborted", "AbortError");
+      try {
+        controller.abort(reason);
+      } catch {
+        controller.abort();
+      }
+      return controller.signal;
+    }
+  }
+  const onAbort = () => {
+    const abortedSignal = list.find((s) => s.aborted);
+    const reason = abortedSignal?.reason ?? new DOMException("Aborted", "AbortError");
+    try {
+      controller.abort(reason);
+    } catch {
+      controller.abort();
+    }
+  };
+  for (const sig of list) {
+    sig.addEventListener?.("abort", onAbort, { once: true, signal: cleanupSignal });
+  }
+  return controller.signal;
 }
 const CookieDefaults = {
   path: "/",
@@ -1986,74 +1711,104 @@ function applyTrailingSlashBehavior(to, trailingSlash) {
 }
 const _client = void 0;
 const linkResolver = void 0;
-const richTextSerializer = void 0;
-const plugin_dZwLP3pabhznAX15ySw1eaAQmwVOMPFRcNoLlER2dWI = /* @__PURE__ */ defineNuxtPlugin(async (nuxtApp) => {
-  const options = (/* @__PURE__ */ useRuntimeConfig()).public.prismic;
-  let client;
-  {
-    client = _client;
-  }
-  const endpoint = options.environment || options.endpoint || client?.documentAPIEndpoint || "";
-  const prismicPlugin = createPrismic({
-    ...options,
-    endpoint,
-    // TypeScript expects either an endpoint of a client, not both
-    client,
-    linkResolver,
-    richTextSerializer,
-    injectComponents: false,
-    // Handled at module level
-    components: {
-      linkInternalComponent: __nuxt_component_0$1,
-      linkExternalComponent: __nuxt_component_0$1,
-      ...options.components
-    }
-  });
-  nuxtApp.vueApp.use(prismicPlugin);
-  if (options.preview) {
-    const previewCookie = useCookie("io.prismic.preview").value;
-    {
-      const req = useRequestEvent()?.node.req;
-      if (req) {
-        prismicPlugin.client.enableAutoPreviewsFromReq(req);
-      }
-    }
-    if (previewCookie) {
-      try {
-        const session = typeof previewCookie === "string" ? JSON.parse(decodeURIComponent(previewCookie)) : previewCookie;
-        if (Object.keys(session).some((key) => key in session && typeof session[key] === "object" && session[key] !== null && "preview" in session[key] && session[key].preview)) {
-          let afterEachCalled = false;
-          onNuxtReady(() => {
-            if (!afterEachCalled) {
-              refreshNuxtData();
-            }
-          });
-          useRouter().afterEach(() => {
-            afterEachCalled = true;
-            refreshNuxtData();
-          });
-        }
-      } catch (error) {
-        console.warn("Failed to parse Prismic preview cookie", error);
-      }
-    }
-  }
-  if (options.toolbar && prismicPlugin.client?.repositoryName) {
-    useHead({
-      script: [{
-        key: "prismic-preview",
-        src: `https://static.cdn.prismic.io/prismic.min.js?repo=${prismicPlugin.client.repositoryName}&new=true`,
-        async: true,
-        defer: true,
-        crossorigin: "anonymous"
-      }]
-    });
-  } else {
-    useCookie("io.prismic.preview").value = null;
-  }
+const richTextComponents = void 0;
+const prismicKey = /* @__PURE__ */ Symbol.for("@prismicio/vue/plugin");
+const createPrismic = (config) => {
   return {
-    provide: { prismic: prismicPlugin }
+    ...config,
+    components: config.components || {},
+    isFilled,
+    install(app) {
+      app.provide(prismicKey, this);
+      app.config.globalProperties.$prismic = this;
+    }
   };
+};
+const usePrismic = () => {
+  return inject(prismicKey, { components: {} });
+};
+const plugin_dZwLP3pabhznAX15ySw1eaAQmwVOMPFRcNoLlER2dWI = /* @__PURE__ */ defineNuxtPlugin({
+  name: "prismic:setup",
+  parallel: true,
+  async setup(nuxtApp) {
+    let __temp, __restore;
+    const options = (/* @__PURE__ */ useRuntimeConfig()).public.prismic;
+    const client = ([__temp, __restore] = executeAsync(() => resolveClient()), __temp = await __temp, __restore(), __temp);
+    handlePreview();
+    addToolbar();
+    async function resolveClient() {
+      if (_client instanceof Client) {
+        return _client;
+      } else {
+        return createClient(
+          options.environment || options.endpoint || "endpoint-not-provided",
+          options.clientConfig
+        );
+      }
+    }
+    function handlePreview() {
+      if (options.preview) {
+        const previewCookie = useCookie("io.prismic.preview").value;
+        {
+          const req = useRequestEvent()?.node.req;
+          if (req) {
+            client.enableAutoPreviewsFromReq(req);
+          }
+        }
+        if (previewCookie) {
+          try {
+            const session = typeof previewCookie === "string" ? JSON.parse(decodeURIComponent(previewCookie)) : previewCookie;
+            if (Object.keys(session).some(
+              (key) => key in session && typeof session[key] === "object" && session[key] !== null && "preview" in session[key] && session[key].preview
+            )) {
+              let afterEachCalled = false;
+              onNuxtReady(() => {
+                if (!afterEachCalled) {
+                  refreshNuxtData();
+                }
+              });
+              useRouter().afterEach(() => {
+                afterEachCalled = true;
+                refreshNuxtData();
+              });
+            }
+          } catch (error) {
+            console.warn("Failed to parse Prismic preview cookie", error);
+          }
+        }
+      }
+    }
+    function addToolbar() {
+      if (options.toolbar) {
+        useHead({
+          script: [
+            {
+              key: "prismic-preview",
+              src: getToolbarSrc(client.repositoryName),
+              async: true,
+              defer: true,
+              crossorigin: "anonymous"
+            }
+          ]
+        });
+      } else {
+        useCookie(cookie.preview).value = null;
+      }
+    }
+    const prismicPlugin = createPrismic({
+      client,
+      linkResolver,
+      components: {
+        linkInternalComponent: __nuxt_component_0$1,
+        linkExternalComponent: __nuxt_component_0$1,
+        richTextComponents
+      }
+    });
+    nuxtApp.vueApp.use(prismicPlugin);
+    return {
+      provide: { prismic: prismicPlugin }
+    };
+  }
 });
 const plugins = [
   unhead_k2P3m_ZDyjlr2mMYnoDPwavjsDN8hBlk9cFai0bbopU,
@@ -2064,8 +1819,8 @@ const plugins = [
   plugin_dZwLP3pabhznAX15ySw1eaAQmwVOMPFRcNoLlER2dWI
 ];
 const layouts = {
-  admin: defineAsyncComponent(() => import('./admin-sR1CGO4j.mjs').then((m) => m.default || m)),
-  default: defineAsyncComponent(() => import('./default-CybCiZyS.mjs').then((m) => m.default || m))
+  admin: defineAsyncComponent(() => import('./admin-C1uXBNkk.mjs').then((m) => m.default || m)),
+  default: defineAsyncComponent(() => import('./default-CX5MszP5.mjs').then((m) => m.default || m))
 };
 const routeRulesMatcher = _routeRulesMatcher;
 const LayoutLoader = defineComponent({
@@ -2347,8 +2102,8 @@ const _sfc_main$1 = {
     const statusText = _error.statusMessage ?? (is404 ? "Page Not Found" : "Internal Server Error");
     const description = _error.message || _error.toString();
     const stack = void 0;
-    const _Error404 = defineAsyncComponent(() => import('./error-404-fGQbPcUd.mjs'));
-    const _Error = defineAsyncComponent(() => import('./error-500-BH9GJ3Xx.mjs'));
+    const _Error404 = defineAsyncComponent(() => import('./error-404-ih-bQ2cb.mjs'));
+    const _Error = defineAsyncComponent(() => import('./error-500-BV4aviRx.mjs'));
     const ErrorTemplate = is404 ? _Error404 : _Error;
     return (_ctx, _push, _parent, _attrs) => {
       _push(ssrRenderComponent(unref(ErrorTemplate), mergeProps({ status: unref(status), statusText: unref(statusText), statusCode: unref(status), statusMessage: unref(statusText), description: unref(description), stack: unref(stack) }, _attrs), null, _parent));
@@ -2429,5 +2184,5 @@ let entry;
 }
 const entry_default = ((ssrContext) => entry(ssrContext));
 
-export { _export_sfc as _, __nuxt_component_0$1 as a, usePrismic as b, useRouter as c, useRoute as d, entry_default as default, defineNuxtRouteMiddleware as e, useSupabaseUser as f, useState as g, useNuxtApp as h, navigateTo as n, useHead as u };
+export { _export_sfc as _, __nuxt_component_0$1 as a, usePrismic as b, useRouter as c, useSeoMeta as d, entry_default as default, useRoute as e, useAsyncData as f, defineNuxtRouteMiddleware as g, useSupabaseUser as h, useState as i, useNuxtApp as j, navigateTo as n, useHead as u };
 //# sourceMappingURL=server.mjs.map

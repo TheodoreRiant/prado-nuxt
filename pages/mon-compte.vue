@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { UserPlus, Trash2, Calendar, User, LogOut, Key, Loader2 } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
-import { fetchPublicActions, type DbAction } from '~/lib/api'
 
 definePageMeta({ middleware: 'auth' })
 
-const client = useSupabaseClient()
+const { client: prismic } = usePrismic()
 const {
   user, loading, logout, updatePassword,
   jeunes, jeunesLoading, addJeune, removeJeune,
@@ -20,15 +19,18 @@ const newJeune = ref({
 const newPassword = ref('')
 const confirmPassword = ref('')
 const submitting = ref(false)
-const actions = ref<DbAction[]>([])
 
-onMounted(async () => {
-  try {
-    actions.value = await fetchPublicActions(client)
-  } catch {
-    // Silently handle - actions are optional for display
-  }
-})
+const { data: prismicActions } = await useAsyncData('mon-compte-actions', () =>
+  prismic.getAllByType('action')
+)
+
+// Build a map from original_id (as string) to action data for inscription display
+const actions = computed(() =>
+  (prismicActions.value ?? []).map(doc => ({
+    id: doc.data.original_id as number,
+    title: doc.data.title as string,
+  }))
+)
 
 const isPending = computed(() => user.value?.status === 'pending')
 const isRejected = computed(() => user.value?.status === 'rejected')
