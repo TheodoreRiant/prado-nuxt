@@ -1,0 +1,121 @@
+import { fetchPrescripteur, fetchJeunes, fetchInscriptions, createJeune as apiCreateJeune, deleteJeune as apiDeleteJeune, createInscription as apiCreateInscription, cancelInscription as apiCancelInscription } from '~/lib/api';
+import type { Jeune, Inscription, Prescripteur } from '~/lib/api';
+
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  structure: string;
+  role: 'prescripteur' | 'admin';
+  status: 'pending' | 'approved' | 'rejected';
+}
+
+export function useAuth() {
+  const client = useSupabaseClient();
+  const supabaseUser = useSupabaseUser();
+
+  const user = useState<User | null>('auth-user', () => null);
+  const loading = useState<boolean>('auth-loading', () => true);
+  const jeunes = useState<Jeune[]>('auth-jeunes', () => []);
+  const jeunesLoading = useState<boolean>('auth-jeunes-loading', () => false);
+  const inscriptions = useState<Inscription[]>('auth-inscriptions', () => []);
+
+  const isAdmin = computed(() => user.value?.role === 'admin');
+
+  const loadProfile = async (userId: string, email: string) => {
+    const profile = await fetchPrescripteur(client, userId);
+    if (profile) {
+      user.value = { id: userId, email, name: profile.name, structure: profile.structure, role: profile.role, status: profile.status };
+    }
+  };
+
+  const loadData = async () => {
+    jeunesLoading.value = true;
+    try {
+      const [j, i] = await Promise.all([fetchJeunes(client), fetchInscriptions(client)]);
+      jeunes.value = j;
+      inscriptions.value = i;
+    } catch { /* RLS returns empty if not authenticated */ }
+    finally { jeunesLoading.value = false; }
+  };
+
+  const refreshData = async () => { await loadData(); };
+
+  // Watch supabase user state
+  watch(supabaseUser, async (newUser) => {
+    if (newUser) {
+      await loadProfile(newUser.id, newUser.email ?? '');
+      await loadData();
+    } else {
+      user.value = null;
+      jeunes.value = [];
+      inscriptions.value = [];
+    }
+    loading.value = false;
+  }, { immediate: true });
+
+  const login = async (email: string, password: string) => {
+    const { error } = await client.auth.signInWithPassword({ email, password });
+    if (error) return { error: error.message };
+    return {};
+  };
+
+  const logout = async () => {
+    await client.auth.signOut();
+    user.value = null;
+    jeunes.value = [];
+    inscriptions.value = [];
+  };
+
+  const register = async (data: { email: string; password: string; name: string; structure: string; phone?: string }) => {
+    const { error } = await client.auth.signUp({
+      email: data.email, password: data.password,
+      options: { data: { name: data.name, structure: data.structure, phone: data.phone ?? '' } },
+    });
+    if (error) return { error: error.message };
+    return {};
+  };
+
+  const resetPassword = async (email: string) => {
+    const { error } = await client.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/connexion?mode=reset`,
+    });
+    if (error) return { error: error.message };
+    return {};
+  };
+
+  const updatePassword = async (newPassword: string) => {
+    const { error } = await client.auth.updateUser({ password: newPassword });
+    if (error) return { error: error.message };
+    return {};
+  };
+
+  const addJeune = async (j: Omit<Jeune, 'id'>) => {
+    if (!supabaseUser.value) return;
+    const created = await apiCreateJeune(client, supabaseUser.value.id, j);
+    jeunes.value = [created, ...jeunes.value];
+  };
+
+  const removeJeune = async (id: string) => {
+    await apiDeleteJeune(client, id);
+    jeunes.value = jeunes.value.filter(j => j.id !== id);
+    inscriptions.value = inscriptions.value.filter(i => i.jeuneId !== id);
+  };
+
+  const inscrire = async (actionId: string, jeuneId: string) => {
+    if (!supabaseUser.value) return;
+    const created = await apiCreateInscription(client, supabaseUser.value.id, actionId, jeuneId);
+    inscriptions.value = [created, ...inscriptions.value];
+  };
+
+  const desinscrire = async (inscriptionId: string) => {
+    await apiCancelInscription(client, inscriptionId);
+    inscriptions.value = inscriptions.value.filter(i => i.id !== inscriptionId);
+  };
+
+  return {
+    user, isAdmin, loading, jeunes, jeunesLoading, inscriptions,
+    login, logout, register, resetPassword, updatePassword,
+    addJeune, removeJeune, inscrire, desinscrire, refreshData,
+  };
+}
