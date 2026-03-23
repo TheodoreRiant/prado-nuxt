@@ -1,5 +1,6 @@
 {
-  "repositoryName": "prado-itineraires",
+  "repositoryName": "prado-itineraire",
   "adapter": "@slicemachine/adapter-nuxt",
-  "libraries": ["./slices"]
+  "libraries": ["./slices"],
+  "localSliceSimulatorURL": "http://localhost:3000/slice-simulator"
 }
