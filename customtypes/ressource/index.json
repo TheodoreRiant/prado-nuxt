@@ -1,0 +1,26 @@
+{
+  "id": "ressource",
+  "label": "Ressource",
+  "repeatable": true,
+  "status": true,
+  "json": {
+    "Main": {
+      "uid": { "type": "UID", "config": { "label": "URL Slug" } },
+      "title": { "type": "Text", "config": { "label": "Titre", "placeholder": "Titre de la ressource" } },
+      "category": {
+        "type": "Select",
+        "config": {
+          "label": "Catégorie",
+          "options": [
+            "Accompagnement/Insertion", "Acces aux droits",
+            "Emploi/Formation", "Logement/Mobilite", "Sante"
+          ]
+        }
+      },
+      "description": { "type": "StructuredText", "config": { "label": "Description", "single": "paragraph" } },
+      "url": { "type": "Link", "config": { "label": "Lien vers la ressource" } },
+      "image": { "type": "Image", "config": { "label": "Image" } },
+      "original_id": { "type": "Number", "config": { "label": "ID original (migration)" } }
+    }
+  }
+}

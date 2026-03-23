@@ -1,0 +1,5 @@
+{
+  "repositoryName": "prado-itineraires",
+  "adapter": "@slicemachine/adapter-nuxt",
+  "libraries": ["./slices"]
+}
