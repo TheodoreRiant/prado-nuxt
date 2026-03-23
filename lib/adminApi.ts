@@ -45,3 +45,11 @@ export async function fetchAllInscriptions(client: SupabaseClient): Promise<Admi
   if (error) throw new Error(error.message);
   return data ?? [];
 }
+
+// ─── Actions (admin read-all, for inscription display) ───
+
+export async function fetchAllActions(client: SupabaseClient) {
+  const { data, error } = await client.from('actions').select('*').order('id', { ascending: true });
+  if (error) throw new Error(error.message);
+  return data ?? [];
+}
