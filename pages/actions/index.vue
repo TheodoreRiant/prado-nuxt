@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Search, ChevronLeft, ChevronRight, Loader2 } from 'lucide-vue-next'
+import { Search, Loader2 } from 'lucide-vue-next'
 import {
   PROGRAMMATION_CATEGORIES,
   PROGRAMMATION_CATEGORY_COLORS,
@@ -15,11 +15,13 @@ const { getPlacesInfo } = useActionPlaces()
 const search = ref('')
 const categoryFilter = ref<ProgrammationCategory | 'all'>('all')
 const filterMode = ref<FilterMode>('activite')
-const actionsPage = ref(1)
 const listRef = ref<HTMLDivElement | null>(null)
+const sentinelRef = ref<HTMLDivElement | null>(null)
 const actionsAnimKey = ref(0)
+const visibleCount = ref(12)
 
-const ITEMS_PER_PAGE = 12
+const BATCH_SIZE = 12
+
 
 const { data: prismicActions, status } = await useAsyncData('actions', () =>
   prismic.getAllByType('action'),
@@ -50,10 +52,11 @@ const filteredActions = computed(() =>
   }),
 )
 
-const actionsTotalPages = computed(() => Math.ceil(filteredActions.value.length / ITEMS_PER_PAGE))
-const paginatedActions = computed(() =>
-  filteredActions.value.slice((actionsPage.value - 1) * ITEMS_PER_PAGE, actionsPage.value * ITEMS_PER_PAGE),
+const visibleActions = computed(() =>
+  filteredActions.value.slice(0, visibleCount.value),
 )
+
+const hasMore = computed(() => visibleCount.value < filteredActions.value.length)
 
 const visibleCategories = computed(() =>
   PROGRAMMATION_CATEGORIES.filter(cat =>
@@ -71,38 +74,42 @@ function scrollToList() {
 
 function onSearchActions(val: string) {
   search.value = val
-  actionsPage.value = 1
+  visibleCount.value = BATCH_SIZE
   actionsAnimKey.value++
 }
 
 function toggleCategory(cat: ProgrammationCategory) {
   categoryFilter.value = categoryFilter.value === cat ? 'all' : cat
-  actionsPage.value = 1
+  visibleCount.value = BATCH_SIZE
   actionsAnimKey.value++
 }
 
 function setFilterModeAndReset(mode: FilterMode) {
   filterMode.value = mode
   categoryFilter.value = 'all'
-  actionsPage.value = 1
+  visibleCount.value = BATCH_SIZE
   actionsAnimKey.value++
 }
 
-function goToPage(page: number) {
-  actionsPage.value = page
-  actionsAnimKey.value++
-  scrollToList()
+function loadMore() {
+  visibleCount.value += BATCH_SIZE
 }
 
-function paginationPages(currentPage: number, totalPages: number): (number | string)[] {
-  return Array.from({ length: totalPages }, (_, i) => i + 1)
-    .filter(p => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 2)
-    .reduce<(number | string)[]>((acc, p, i, arr) => {
-      if (i > 0 && p - (arr[i - 1] as number) > 1) acc.push('...')
-      acc.push(p)
-      return acc
-    }, [])
-}
+onMounted(() => {
+  if (!sentinelRef.value) return
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting && hasMore.value) {
+        loadMore()
+      }
+    },
+    { rootMargin: '200px' },
+  )
+  observer.observe(sentinelRef.value)
+  onUnmounted(() => observer.disconnect())
+})
+
+
 
 function onCardEnter(el: Element, index: number) {
   const htmlEl = el as HTMLElement
@@ -221,9 +228,9 @@ function onCardEnter(el: Element, index: number) {
 
         <!-- Cards grid -->
         <Transition name="grid-fade" mode="out-in">
-          <div v-if="paginatedActions.length > 0" :key="actionsAnimKey" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div v-if="visibleActions.length > 0" :key="actionsAnimKey" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <NuxtLink
-              v-for="(a, i) in paginatedActions"
+              v-for="(a, i) in visibleActions"
               :key="a.id"
               :ref="(el: any) => { if (el?.$el) onCardEnter(el.$el, i) }"
               :to="`/actions/${a.id}`"
@@ -277,35 +284,9 @@ function onCardEnter(el: Element, index: number) {
           </div>
         </Transition>
 
-        <!-- Pagination -->
-        <div v-if="actionsTotalPages > 1" class="flex items-center justify-center gap-2 mt-12">
-          <button
-            :disabled="actionsPage === 1"
-            class="p-2 rounded-full text-prado-text-muted hover:text-prado-text hover:bg-prado-surface-hover disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
-            @click="goToPage(actionsPage - 1)"
-          >
-            <ChevronLeft :size="20" />
-          </button>
-          <template v-for="(p, i) in paginationPages(actionsPage, actionsTotalPages)" :key="i">
-            <span v-if="typeof p === 'string'" class="text-prado-text-faint px-1">...</span>
-            <button
-              v-else
-              :class="[
-                'w-10 h-10 rounded-full text-sm transition-colors',
-                actionsPage === p ? 'bg-prado-tag-bg text-prado-text' : 'text-prado-text-muted hover:text-prado-text hover:bg-prado-surface-hover',
-              ]"
-              @click="goToPage(p as number)"
-            >
-              {{ p }}
-            </button>
-          </template>
-          <button
-            :disabled="actionsPage === actionsTotalPages"
-            class="p-2 rounded-full text-prado-text-muted hover:text-prado-text hover:bg-prado-surface-hover disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
-            @click="goToPage(actionsPage + 1)"
-          >
-            <ChevronRight :size="20" />
-          </button>
+        <!-- Infinite scroll sentinel -->
+        <div ref="sentinelRef" class="flex justify-center py-8">
+          <Loader2 v-if="hasMore" class="animate-spin text-prado-text-muted" :size="24" />
         </div>
       </div>
     </div>
