@@ -193,6 +193,14 @@ async function handleLogout() {
             </button>
           </template>
 
+          <a
+            href="https://www.le-prado.fr/don/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-4 py-1.5 rounded-full text-sm text-[#FB6223] border border-[#FB6223]/30 hover:bg-[#FB6223]/10 hover:border-[#FB6223]/50 active:scale-95 transition-all"
+          >
+            Faire un don
+          </a>
           <template v-else>
             <NuxtLink
               to="/connexion"
@@ -307,6 +315,15 @@ async function handleLogout() {
                 Créer un compte
               </NuxtLink>
             </template>
+            <a
+              href="https://www.le-prado.fr/don/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block mt-2 py-2.5 rounded-full border border-[#FB6223]/30 text-[#FB6223] text-sm text-center"
+              @click="closeMenu"
+            >
+              Faire un don
+            </a>
           </div>
         </div>
       </Transition>
@@ -349,6 +366,14 @@ async function handleLogout() {
             <p>04 72 XX XX XX</p>
             <p>Lyon 7e, France</p>
           </div>
+          <a
+            href="https://www.le-prado.fr/don/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-block mt-4 px-4 py-2 rounded-full border border-[#FB6223]/30 text-[#FB6223] text-sm hover:bg-[#FB6223]/10 transition-colors"
+          >
+            Faire un don
+          </a>
         </div>
         <div>
           <h4 class="text-prado-text-secondary text-xs uppercase tracking-wider mb-4">Newsletter</h4>
