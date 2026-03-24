@@ -132,7 +132,7 @@ onUnmounted(() => {
       <!-- Desktop: split layout, page scroll -->
       <div class="hidden lg:flex gap-12 items-start">
         <!-- Left: sticky nav -->
-        <nav class="w-72 shrink-0 sticky top-28 self-start">
+        <nav class="w-72 shrink-0 sticky top-1/2 -translate-y-1/2 self-start">
           <ul class="space-y-1">
             <li v-for="prog in programmes" :key="prog.id">
               <button
