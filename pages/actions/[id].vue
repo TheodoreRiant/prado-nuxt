@@ -10,8 +10,7 @@ import {
 const route = useRoute()
 const { client: prismic } = usePrismic()
 const { user, jeunes, inscriptions, inscrire, desinscrire } = useAuth()
-const { loadImages, getActionImage } = useImages()
-await loadImages()
+const { getActionImage } = useImages()
 
 const showInscription = ref(false)
 const id = route.params.id as string

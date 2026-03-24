@@ -8,8 +8,7 @@ import {
 
 const route = useRoute()
 const { client: prismic } = usePrismic()
-const { loadImages, getRessourceImage } = useImages()
-await loadImages()
+const { getRessourceImage } = useImages()
 
 const id = route.params.id as string
 

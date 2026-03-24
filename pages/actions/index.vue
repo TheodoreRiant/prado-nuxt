@@ -13,8 +13,7 @@ type Panel = 'actions' | 'ressources'
 type FilterMode = 'activite' | 'actions'
 
 const { client: prismic } = usePrismic()
-const { loadImages, getActionImage, getRessourceImage } = useImages()
-await loadImages()
+const { getActionImage, getRessourceImage } = useImages()
 
 const panel = ref<Panel>('actions')
 const search = ref('')

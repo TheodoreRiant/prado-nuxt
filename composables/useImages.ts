@@ -1,42 +1,35 @@
 /**
  * Provides image URLs from Supabase for actions and ressources.
- * Prismic documents don't have images yet - this bridges the gap.
- * Cached globally so it only fetches once.
+ * Uses useAsyncData for SSR compatibility.
  */
 export function useImages() {
   const client = useSupabaseClient()
 
-  const actionImages = useState<Record<number, string>>('action-images', () => ({}))
-  const ressourceImages = useState<Record<number, string>>('ressource-images', () => ({}))
-  const loaded = useState<boolean>('images-loaded', () => false)
-
-  async function loadImages() {
-    if (loaded.value) return
-    const [actionsRes, ressourcesRes] = await Promise.all([
-      client.from('actions').select('id, url_image'),
-      client.from('ressources').select('id, image'),
-    ])
-    const aMap: Record<number, string> = {}
-    for (const row of actionsRes.data ?? []) {
-      aMap[row.id] = row.url_image ?? ''
+  const { data: actionImagesData } = useAsyncData('action-images', async () => {
+    const { data } = await client.from('actions').select('id, url_image')
+    const map: Record<number, string> = {}
+    for (const row of data ?? []) {
+      map[row.id] = row.url_image ?? ''
     }
-    actionImages.value = aMap
+    return map
+  }, { default: () => ({} as Record<number, string>) })
 
-    const rMap: Record<number, string> = {}
-    for (const row of ressourcesRes.data ?? []) {
-      rMap[row.id] = row.image ?? ''
+  const { data: ressourceImagesData } = useAsyncData('ressource-images', async () => {
+    const { data } = await client.from('ressources').select('id, image')
+    const map: Record<number, string> = {}
+    for (const row of data ?? []) {
+      map[row.id] = row.image ?? ''
     }
-    ressourceImages.value = rMap
-    loaded.value = true
-  }
+    return map
+  }, { default: () => ({} as Record<number, string>) })
 
   function getActionImage(originalId: number): string {
-    return actionImages.value[originalId] ?? ''
+    return actionImagesData.value[originalId] ?? ''
   }
 
   function getRessourceImage(originalId: number): string {
-    return ressourceImages.value[originalId] ?? ''
+    return ressourceImagesData.value[originalId] ?? ''
   }
 
-  return { loadImages, getActionImage, getRessourceImage }
+  return { getActionImage, getRessourceImage }
 }
