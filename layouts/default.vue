@@ -159,7 +159,6 @@ async function handleLogout() {
         </nav>
 
         <!-- Desktop right -->
-        <!-- Desktop right -->
         <div class="hidden lg:flex items-center gap-2 shrink-0">
           <!-- Don = CTA principal -->
           <a
@@ -180,14 +179,14 @@ async function handleLogout() {
             <NuxtLink
               v-if="isAdmin"
               to="/admin"
-              class="p-2 rounded-full text-prado-text-muted hover:text-prado-text hover:bg-prado-surface-hover active:scale-90 transition-all"
+              class="nav-icon-btn"
               title="Admin"
             >
               <LayoutDashboard :size="16" />
             </NuxtLink>
             <NuxtLink
               to="/mon-compte"
-              class="p-2 rounded-full border border-transparent text-prado-text-secondary hover:text-prado-text hover:bg-prado-surface hover:border-prado-border-light active:scale-90 transition-all"
+              class="nav-icon-btn"
               title="Mon espace"
             >
               <User :size="16" />
@@ -196,7 +195,7 @@ async function handleLogout() {
           <template v-else>
             <NuxtLink
               to="/connexion"
-              class="p-2 rounded-full border border-transparent text-prado-text-secondary hover:text-prado-text hover:bg-prado-surface hover:border-prado-border-light active:scale-90 transition-all"
+              class="nav-icon-btn"
               title="Se connecter"
             >
               <LayoutDashboard :size="16" />
@@ -205,7 +204,7 @@ async function handleLogout() {
 
           <!-- Theme toggle -->
           <button
-            class="p-2 rounded-full border border-transparent text-prado-text-muted hover:text-prado-text hover:bg-prado-surface hover:border-prado-border-light active:scale-90 transition-all"
+            class="nav-icon-btn"
             aria-label="Changer de thème"
             @click="toggleTheme"
           >
@@ -421,5 +420,33 @@ async function handleLogout() {
 
 .nav-link.is-active::after {
   transform: scaleX(1);
+}
+
+/* Icon buttons (theme toggle, dashboard, etc.) */
+.nav-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 9999px;
+  color: var(--prado-text-muted);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.nav-icon-btn:hover {
+  color: var(--prado-text);
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: scale(1.1);
+}
+
+.nav-icon-btn:active {
+  transform: scale(0.9);
+}
+
+[data-theme="light"] .nav-icon-btn:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.1);
 }
 </style>
