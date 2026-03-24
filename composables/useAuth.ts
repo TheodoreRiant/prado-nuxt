@@ -67,12 +67,46 @@ export function useAuth() {
     inscriptions.value = [];
   };
 
-  const register = async (data: { email: string; password: string; name: string; structure: string; phone?: string }) => {
+  const register = async (data: { email: string; password: string; name: string; structure: string; fonction?: string; phone?: string }) => {
     const { error } = await client.auth.signUp({
       email: data.email, password: data.password,
-      options: { data: { name: data.name, structure: data.structure, phone: data.phone ?? '' } },
+      options: { data: { name: data.name, structure: data.structure, fonction: data.fonction ?? '', phone: data.phone ?? '' } },
     });
     if (error) return { error: error.message };
+    return {};
+  };
+
+  const sendMagicLink = async (email: string) => {
+    const { error } = await client.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: `${window.location.origin}/connexion?step=profile` },
+    });
+    if (error) return { error: error.message };
+    return {};
+  };
+
+  const completeProfile = async (data: { name: string; structure: string; fonction?: string; phone?: string }) => {
+    if (!supabaseUser.value) return { error: 'Non authentifié' };
+
+    // Update user metadata
+    const { error: metaError } = await client.auth.updateUser({
+      data: { name: data.name, structure: data.structure, fonction: data.fonction ?? '', phone: data.phone ?? '' },
+    });
+    if (metaError) return { error: metaError.message };
+
+    // Upsert prescripteur row
+    const { error: dbError } = await client.from('prescripteurs').upsert({
+      id: supabaseUser.value.id,
+      name: data.name,
+      professional_email: supabaseUser.value.email,
+      structure: data.structure,
+      phone: data.phone ?? '',
+      role: 'prescripteur',
+      status: 'pending',
+    }, { onConflict: 'id' });
+    if (dbError) return { error: dbError.message };
+
+    await loadProfile(supabaseUser.value.id, supabaseUser.value.email ?? '');
     return {};
   };
 
@@ -115,7 +149,7 @@ export function useAuth() {
 
   return {
     user, isAdmin, loading, jeunes, jeunesLoading, inscriptions,
-    login, logout, register, resetPassword, updatePassword,
+    login, logout, register, sendMagicLink, completeProfile, resetPassword, updatePassword,
     addJeune, removeJeune, inscrire, desinscrire, refreshData,
   };
 }
