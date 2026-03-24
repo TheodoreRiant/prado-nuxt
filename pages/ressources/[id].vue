@@ -8,6 +8,8 @@ import {
 
 const route = useRoute()
 const { client: prismic } = usePrismic()
+const { loadImages, getRessourceImage } = useImages()
+await loadImages()
 
 const id = route.params.id as string
 
@@ -29,7 +31,7 @@ const ressource = computed(() => {
     category: doc.data.category as string,
     description: doc.data.description?.[0]?.text ?? '',
     url: doc.data.url?.url ?? '',
-    image: '',
+    image: getRessourceImage(doc.data.original_id as number),
   }
 })
 

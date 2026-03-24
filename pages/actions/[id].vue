@@ -10,6 +10,8 @@ import {
 const route = useRoute()
 const { client: prismic } = usePrismic()
 const { user, jeunes, inscriptions, inscrire, desinscrire } = useAuth()
+const { loadImages, getActionImage } = useImages()
+await loadImages()
 
 const showInscription = ref(false)
 const id = route.params.id as string
@@ -35,7 +37,7 @@ const action = computed(() => {
     summary: (doc.data.summary as string) ?? '',
     description: doc.data.description?.[0]?.text ?? '',
     url_detail: doc.data.url_detail?.url ?? '',
-    url_image: '',
+    url_image: getActionImage(doc.data.original_id as number),
     is_activite: doc.data.is_activite ?? false,
   }
 })

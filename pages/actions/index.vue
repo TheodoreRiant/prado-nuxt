@@ -13,6 +13,8 @@ type Panel = 'actions' | 'ressources'
 type FilterMode = 'activite' | 'actions'
 
 const { client: prismic } = usePrismic()
+const { loadImages, getActionImage, getRessourceImage } = useImages()
+await loadImages()
 
 const panel = ref<Panel>('actions')
 const search = ref('')
@@ -46,7 +48,7 @@ const programmation = computed(() =>
     summary: (doc.data.summary as string) ?? '',
     description: doc.data.description?.[0]?.text ?? '',
     urlDetail: doc.data.url_detail?.url ?? '',
-    urlImage: '',
+    urlImage: getActionImage(doc.data.original_id as number),
     isActivite: doc.data.is_activite ?? false,
   }))
 )
@@ -58,7 +60,7 @@ const ressources = computed(() =>
     category: doc.data.category as RessourceCategory,
     description: doc.data.description?.[0]?.text ?? '',
     url: doc.data.url?.url ?? '',
-    image: '',
+    image: getRessourceImage(doc.data.original_id as number),
   }))
 )
 

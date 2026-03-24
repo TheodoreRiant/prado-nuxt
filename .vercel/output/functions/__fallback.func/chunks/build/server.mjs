@@ -440,7 +440,7 @@ const _routes = [
   {
     name: "connexion",
     path: "/connexion",
-    component: () => import('./connexion-CxHZFsN6.mjs')
+    component: () => import('./connexion-BsuLWyy7.mjs')
   },
   {
     name: "foodtruck",
@@ -451,7 +451,7 @@ const _routes = [
     name: "mon-compte",
     path: "/mon-compte",
     meta: { "middleware": "auth" },
-    component: () => import('./mon-compte-D68yemf3.mjs')
+    component: () => import('./mon-compte-DRCPfNgk.mjs')
   },
   {
     name: "admin",
@@ -462,17 +462,17 @@ const _routes = [
   {
     name: "actions-id",
     path: "/actions/:id()",
-    component: () => import('./_id_-DB2V6Nlz.mjs')
+    component: () => import('./_id_-CkbacUbH.mjs')
   },
   {
     name: "actions",
     path: "/actions",
-    component: () => import('./index-CfVAPBoK.mjs')
+    component: () => import('./index-BCTHZ1Of.mjs')
   },
   {
     name: "ressources-id",
     path: "/ressources/:id()",
-    component: () => import('./_id_-DAXIOUwK.mjs')
+    component: () => import('./_id_-FQck5fQo.mjs')
   },
   {
     name: "slice-simulator",
@@ -635,8 +635,8 @@ const globalMiddleware = [
   manifest_45route_45rule
 ];
 const namedMiddleware = {
-  admin: () => import('./admin-CZD-b03V.mjs'),
-  auth: () => import('./auth-DXT1kayg.mjs')
+  admin: () => import('./admin-CSNprLuy.mjs'),
+  auth: () => import('./auth-REeSnsHp.mjs')
 };
 const plugin = /* @__PURE__ */ defineNuxtPlugin({
   name: "nuxt:router",
@@ -1819,8 +1819,8 @@ const plugins = [
   plugin_dZwLP3pabhznAX15ySw1eaAQmwVOMPFRcNoLlER2dWI
 ];
 const layouts = {
-  admin: defineAsyncComponent(() => import('./admin-C1uXBNkk.mjs').then((m) => m.default || m)),
-  default: defineAsyncComponent(() => import('./default-CX5MszP5.mjs').then((m) => m.default || m))
+  admin: defineAsyncComponent(() => import('./admin-Cqjs_Typ.mjs').then((m) => m.default || m)),
+  default: defineAsyncComponent(() => import('./default-C3tq1a0E.mjs').then((m) => m.default || m))
 };
 const routeRulesMatcher = _routeRulesMatcher;
 const LayoutLoader = defineComponent({
@@ -2184,5 +2184,5 @@ let entry;
 }
 const entry_default = ((ssrContext) => entry(ssrContext));
 
-export { _export_sfc as _, __nuxt_component_0$1 as a, usePrismic as b, useRouter as c, useSeoMeta as d, entry_default as default, useRoute as e, useAsyncData as f, defineNuxtRouteMiddleware as g, useSupabaseUser as h, useState as i, useNuxtApp as j, navigateTo as n, useHead as u };
+export { _export_sfc as _, __nuxt_component_0$1 as a, usePrismic as b, useRouter as c, useSeoMeta as d, entry_default as default, useRoute as e, useAsyncData as f, useState as g, defineNuxtRouteMiddleware as h, useSupabaseUser as i, useNuxtApp as j, navigateTo as n, useHead as u };
 //# sourceMappingURL=server.mjs.map
