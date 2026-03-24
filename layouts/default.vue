@@ -187,7 +187,7 @@ async function handleLogout() {
             </NuxtLink>
             <NuxtLink
               to="/mon-compte"
-              class="p-2 rounded-full text-prado-text-secondary hover:text-prado-text hover:bg-prado-surface-hover active:scale-90 transition-all"
+              class="p-2 rounded-full border border-transparent text-prado-text-secondary hover:text-prado-text hover:bg-prado-surface hover:border-prado-border-light active:scale-90 transition-all"
               title="Mon espace"
             >
               <User :size="16" />
@@ -196,7 +196,7 @@ async function handleLogout() {
           <template v-else>
             <NuxtLink
               to="/connexion"
-              class="p-2 rounded-full text-prado-text-secondary hover:text-prado-text hover:bg-prado-surface-hover active:scale-90 transition-all"
+              class="p-2 rounded-full border border-transparent text-prado-text-secondary hover:text-prado-text hover:bg-prado-surface hover:border-prado-border-light active:scale-90 transition-all"
               title="Se connecter"
             >
               <LayoutDashboard :size="16" />
@@ -205,7 +205,7 @@ async function handleLogout() {
 
           <!-- Theme toggle -->
           <button
-            class="p-2 rounded-full text-prado-text-muted hover:text-prado-text hover:bg-prado-surface-hover active:scale-90 transition-all"
+            class="p-2 rounded-full border border-transparent text-prado-text-muted hover:text-prado-text hover:bg-prado-surface hover:border-prado-border-light active:scale-90 transition-all"
             aria-label="Changer de thème"
             @click="toggleTheme"
           >
