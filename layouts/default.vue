@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {
-  Menu, X, User, LogOut, Heart, Facebook, Instagram, Linkedin, Youtube, Sun, Moon,
+  Menu, X, User, LogOut, Heart, LayoutDashboard, Facebook, Instagram, Linkedin, Youtube, Sun, Moon,
   ChevronDown, Truck, BookOpen, ArrowRight,
 } from 'lucide-vue-next'
 import { Toaster } from 'vue-sonner'
@@ -160,58 +160,50 @@ async function handleLogout() {
 
         <!-- Desktop right -->
         <!-- Desktop right -->
-        <div class="hidden lg:flex items-center gap-1.5 shrink-0">
-          <template v-if="user">
-            <NuxtLink
-              v-if="isAdmin"
-              to="/admin"
-              class="px-3 py-1.5 rounded-full bg-[#004657] text-white text-xs hover:bg-[#003545] active:scale-95 transition-all"
-            >
-              Admin
-            </NuxtLink>
-            <NuxtLink
-              to="/mon-compte"
-              class="flex items-center gap-2 px-4 py-1.5 rounded-full border border-prado-border-medium text-prado-text text-sm hover:bg-prado-surface-hover active:scale-95 transition-all"
-            >
-              <User :size="14" />
-              <span>{{ user.name?.split(' ')[0] }}</span>
-            </NuxtLink>
-            <button
-              class="p-2 rounded-full hover:bg-prado-surface-hover text-prado-text-muted hover:text-prado-text active:scale-90 transition-all"
-              title="Déconnexion"
-              @click="logout()"
-            >
-              <LogOut :size="15" />
-            </button>
-          </template>
-          <template v-else>
-            <NuxtLink
-              to="/connexion"
-              class="px-3 py-1.5 text-sm text-prado-text-secondary hover:text-prado-text transition-colors"
-            >
-              Se connecter
-            </NuxtLink>
-            <NuxtLink
-              to="/connexion?mode=register"
-              class="px-4 py-1.5 rounded-full bg-[#CF006C] text-white text-sm hover:bg-[#a80057] active:scale-95 transition-all font-medium"
-            >
-              Créer un compte
-            </NuxtLink>
-          </template>
-
-          <!-- Separator -->
-          <div class="w-px h-5 bg-prado-border mx-1" />
-
-          <!-- Icon buttons -->
+        <div class="hidden lg:flex items-center gap-2 shrink-0">
+          <!-- Don = CTA principal -->
           <a
             href="https://www.le-prado.fr/don/"
             target="_blank"
             rel="noopener noreferrer"
-            class="p-2 rounded-full text-[#FB6223] hover:bg-[#FB6223]/10 active:scale-90 transition-all"
-            title="Faire un don"
+            class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#FB6223] text-white text-sm hover:bg-[#e0551a] active:scale-95 transition-all font-medium"
           >
-            <Heart :size="16" />
+            <Heart :size="14" />
+            Faire un don
           </a>
+
+          <!-- Separator -->
+          <div class="w-px h-5 bg-prado-border mx-0.5" />
+
+          <!-- Espace pro / connexion -->
+          <template v-if="user">
+            <NuxtLink
+              v-if="isAdmin"
+              to="/admin"
+              class="p-2 rounded-full text-prado-text-muted hover:text-prado-text hover:bg-prado-surface-hover active:scale-90 transition-all"
+              title="Admin"
+            >
+              <LayoutDashboard :size="16" />
+            </NuxtLink>
+            <NuxtLink
+              to="/mon-compte"
+              class="p-2 rounded-full text-prado-text-secondary hover:text-prado-text hover:bg-prado-surface-hover active:scale-90 transition-all"
+              title="Mon espace"
+            >
+              <User :size="16" />
+            </NuxtLink>
+          </template>
+          <template v-else>
+            <NuxtLink
+              to="/connexion"
+              class="p-2 rounded-full text-prado-text-secondary hover:text-prado-text hover:bg-prado-surface-hover active:scale-90 transition-all"
+              title="Se connecter"
+            >
+              <LayoutDashboard :size="16" />
+            </NuxtLink>
+          </template>
+
+          <!-- Theme toggle -->
           <button
             class="p-2 rounded-full text-prado-text-muted hover:text-prado-text hover:bg-prado-surface-hover active:scale-90 transition-all"
             aria-label="Changer de thème"
