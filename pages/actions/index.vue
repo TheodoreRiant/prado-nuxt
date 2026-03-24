@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Search, Loader2 } from 'lucide-vue-next'
+import { Search } from 'lucide-vue-next'
 import {
   PROGRAMMATION_CATEGORIES,
   PROGRAMMATION_CATEGORY_COLORS,
@@ -157,8 +157,12 @@ function onCardEnter(el: Element, index: number) {
 
     <!-- Content -->
     <div ref="listRef" class="bg-prado-bg-deep min-h-screen">
-      <div v-if="status === 'pending'" class="flex items-center justify-center py-20">
-        <Loader2 class="animate-spin text-prado-text-muted" :size="32" />
+      <div v-if="status === 'pending'" class="max-w-7xl mx-auto px-6 py-14">
+        <div class="h-8 w-64 rounded-full bg-prado-surface animate-pulse mb-8" />
+        <div class="h-14 w-full rounded-2xl bg-prado-surface animate-pulse mb-8" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <UiSkeletonCard v-for="n in 6" :key="n" />
+        </div>
       </div>
       <div v-else class="max-w-7xl mx-auto px-6 py-14">
         <h2 class="text-3xl md:text-4xl text-prado-text mb-6" :style="{ fontFamily: 'Poppins' }">
@@ -285,8 +289,10 @@ function onCardEnter(el: Element, index: number) {
         </Transition>
 
         <!-- Infinite scroll sentinel -->
-        <div ref="sentinelRef" class="flex justify-center py-8">
-          <Loader2 v-if="hasMore" class="animate-spin text-prado-text-muted" :size="24" />
+        <div ref="sentinelRef">
+          <div v-if="hasMore" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+            <UiSkeletonCard v-for="n in 3" :key="n" />
+          </div>
         </div>
       </div>
     </div>
