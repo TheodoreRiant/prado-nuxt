@@ -143,7 +143,7 @@ onUnmounted(() => {
 <template>
   <div
     ref="sectionRef"
-    class="transition-colors duration-700 ease-in-out overflow-x-hidden"
+    class="transition-colors duration-700 ease-in-out overflow-x-hidden bg-[#1a1a2e]"
   >
     <section class="relative flex flex-col items-center justify-start min-h-[100dvh]">
       <div class="relative w-full flex flex-col items-center min-h-[100dvh]">
@@ -275,9 +275,9 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <!-- Content slot (visible after expansion) -->
+          <!-- Content slot (visible after expansion, forced dark theme) -->
           <section
-            class="flex flex-col w-full px-8 py-10 md:px-16 lg:py-20 transition-opacity duration-700"
+            class="flex flex-col w-full px-8 py-10 md:px-16 lg:py-20 transition-opacity duration-700 [--prado-text:#ffffff] [--prado-text-secondary:rgba(255,255,255,0.6)] [--prado-text-muted:rgba(255,255,255,0.4)]"
             :style="{ opacity: contentOpacity }"
           >
             <slot />
