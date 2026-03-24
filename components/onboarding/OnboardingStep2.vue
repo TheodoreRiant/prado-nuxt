@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Loader2, User, Building, Briefcase, Phone } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
-import { STRUCTURES_PARTENAIRES, DOMAIN_TO_STRUCTURE } from '~/constants/structures'
+import { STRUCTURES_PARTENAIRES } from '~/constants/structures'
 
 const emit = defineEmits<{
   completed: []
@@ -22,7 +22,7 @@ const form = ref({
   phone: '',
 })
 const submitting = ref(false)
-const showStructureDropdown = ref(false)
+const structureLibre = ref('')
 
 const FONCTIONS = [
   'Éducateur·rice spécialisé·e',
@@ -35,38 +35,17 @@ const FONCTIONS = [
   'Autre',
 ]
 
-// Auto-detect structure from email domain
-onMounted(() => {
-  if (props.email) {
-    const domain = props.email.split('@')[1]?.toLowerCase()
-    if (domain && DOMAIN_TO_STRUCTURE[domain]) {
-      form.value.structure = DOMAIN_TO_STRUCTURE[domain]
-    }
-  }
-})
-
-const filteredStructures = computed(() => {
-  const query = form.value.structure.toLowerCase()
-  if (!query) return [...STRUCTURES_PARTENAIRES]
-  return STRUCTURES_PARTENAIRES.filter(s =>
-    s.toLowerCase().includes(query),
-  )
-})
-
-function selectStructure(name: string) {
-  form.value.structure = name
-  showStructureDropdown.value = false
-}
 
 async function handleSubmit() {
-  if (!form.value.prenom || !form.value.nom || !form.value.structure) {
+  const structure = form.value.structure === '__autre' ? structureLibre.value : form.value.structure
+  if (!form.value.prenom || !form.value.nom || !structure) {
     toast.error('Veuillez remplir les champs obligatoires')
     return
   }
   submitting.value = true
   const result = await completeProfile({
     name: `${form.value.prenom} ${form.value.nom}`,
-    structure: form.value.structure,
+    structure,
     fonction: form.value.fonction,
     phone: form.value.phone,
   })
@@ -143,40 +122,30 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
         </div>
       </div>
 
-      <!-- Structure (autocomplete) -->
-      <div class="relative z-30">
+      <!-- Structure (select natif avec recherche) -->
+      <div>
         <label class="text-sm text-prado-text-secondary mb-1.5 block">Structure / Établissement *</label>
         <div class="relative">
           <Building :size="16" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-prado-text-muted" />
-          <input
+          <select
             v-model="form.structure"
+            required
+            :class="inputClass"
+          >
+            <option value="" disabled>Sélectionner votre structure</option>
+            <option v-for="s in STRUCTURES_PARTENAIRES" :key="s" :value="s">{{ s }}</option>
+            <option value="__autre">Autre (saisie libre)</option>
+          </select>
+        </div>
+        <!-- Saisie libre si "Autre" -->
+        <div v-if="form.structure === '__autre'" class="mt-2">
+          <input
+            v-model="structureLibre"
             type="text"
             required
-            autocomplete="off"
-            placeholder="Tapez pour rechercher..."
-            :class="inputClass"
-            @focus="showStructureDropdown = true"
-            @blur="setTimeout(() => showStructureDropdown = false, 200)"
+            placeholder="Nom de votre structure..."
+            class="w-full px-4 py-3 rounded-xl bg-prado-surface border border-prado-border text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-[#CF006C]/50 transition-colors"
           />
-        </div>
-        <!-- Dropdown -->
-        <div
-          v-if="showStructureDropdown && filteredStructures.length > 0"
-          class="absolute z-50 left-0 right-0 mt-1 max-h-48 overflow-y-auto rounded-xl border border-prado-border-light shadow-2xl"
-          style="background-color: var(--prado-surface);"
-        >
-          <button
-            v-for="s in filteredStructures"
-            :key="s"
-            type="button"
-            class="w-full text-left px-4 py-2.5 text-sm text-prado-text transition-colors first:rounded-t-xl last:rounded-b-xl"
-            style="background-color: var(--prado-surface);"
-            @mouseenter="$el.style.backgroundColor = 'var(--prado-bg-deep)'"
-            @mouseleave="$el.style.backgroundColor = 'var(--prado-surface)'"
-            @mousedown.prevent="selectStructure(s)"
-          >
-            {{ s }}
-          </button>
         </div>
       </div>
 

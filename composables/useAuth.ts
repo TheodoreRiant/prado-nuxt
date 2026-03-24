@@ -94,17 +94,15 @@ export function useAuth() {
     });
     if (metaError) return { error: metaError.message };
 
-    // Upsert prescripteur row
-    const { error: dbError } = await client.from('prescripteurs').upsert({
-      id: supabaseUser.value.id,
-      name: data.name,
-      professional_email: supabaseUser.value.email,
-      structure: data.structure,
-      phone: data.phone ?? '',
-      role: 'prescripteur',
-      status: 'pending',
-    }, { onConflict: 'id' });
-    if (dbError) return { error: dbError.message };
+    // Upsert prescripteur row via server route (bypasses RLS)
+    try {
+      await $fetch('/api/complete-profile', {
+        method: 'POST',
+        body: data,
+      });
+    } catch (err: any) {
+      return { error: err.data?.message ?? 'Erreur lors de la création du profil' };
+    }
 
     await loadProfile(supabaseUser.value.id, supabaseUser.value.email ?? '');
     return {};
