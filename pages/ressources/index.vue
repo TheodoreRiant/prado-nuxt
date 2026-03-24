@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { Search, ChevronLeft, ChevronRight, Loader2 } from 'lucide-vue-next'
+import * as prismicClient from '@prismicio/client'
 import {
   RESSOURCE_CATEGORIES,
   RESSOURCE_CATEGORY_COLORS,
   type RessourceCategory,
 } from '~/constants/categories'
 
-const { client: prismic } = usePrismic()
 const { getRessourceImage } = useImages()
 
 const searchRes = ref('')
@@ -17,9 +17,19 @@ const resAnimKey = ref(0)
 
 const RES_PER_PAGE = 12
 
-const { data: prismicRessources, status } = await useAsyncData('ressources', () =>
-  prismic.getAllByType('ressource'),
-)
+const { data: prismicRessources, status } = await useAsyncData('ressources-page', async () => {
+  const client = prismicClient.createClient('prado-nuxt')
+  const res = await client.getByType('ressource', { pageSize: 100 })
+  // Fetch all pages
+  let allResults = [...res.results]
+  let nextPage = res.next_page
+  while (nextPage) {
+    const next = await (await fetch(nextPage)).json()
+    allResults = [...allResults, ...next.results]
+    nextPage = next.next_page
+  }
+  return allResults
+})
 
 const ressources = computed(() =>
   (prismicRessources.value ?? [])
