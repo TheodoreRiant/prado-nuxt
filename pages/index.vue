@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowRight, Heart, BookOpen, Truck, Users } from 'lucide-vue-next'
+import { ArrowRight } from 'lucide-vue-next'
 
 const HERO_IMAGE = '/images/hero-jeunes.jpg'
 const HERO_BG = 'https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1920&auto=format&fit=crop'
@@ -43,13 +43,6 @@ const partners = [
   'DDETS du Rhone',
 ]
 
-const pillars = [
-  { icon: Users, title: 'Jeunes & Autonomes', desc: 'Programmation d\'actions pour les 12-21 ans en parcours d\'insertion', color: '#CF006C', to: '/actions' },
-  { icon: Truck, title: 'Foodtruck Solidaire', desc: 'Creer du lien et former les jeunes aux metiers de la restauration', color: '#FB6223', to: '/foodtruck' },
-  { icon: Heart, title: 'Fresque PDE', desc: 'Sensibiliser aux enjeux de la protection de l\'enfance', color: '#C18ED8', to: '/fresque' },
-  { icon: BookOpen, title: 'Educolab', desc: 'Renforcement des competences parentales et programmes educatifs', color: '#93C1AF', to: '/educolab' },
-]
-
 const stats = [
   { n: '500+', l: 'Jeunes accompagnes', c: '#CF006C' },
   { n: '80+', l: 'Actions par an', c: '#FB6223' },
@@ -64,62 +57,33 @@ function formatDate(dateStr: string) {
 
 <template>
   <div>
-    <!-- Hero -->
+    <!-- Section 1 — Hero -->
     <UiScrollExpandHero
       media-type="image"
       :media-src="HERO_IMAGE"
       :bg-image-src="HERO_BG"
-      title="Construisons l'Avenir"
-      subtitle="Prado Itineraires"
-      scroll-hint="Scrollez pour decouvrir"
+      title="L'innovation sociale au service des jeunes et des familles"
+      subtitle="Prado Itinéraires"
+      scroll-hint="Scrollez pour découvrir"
     >
       <div class="max-w-4xl mx-auto text-center">
-        <p class="text-[#FB6223] text-sm mb-4 tracking-wide">Remobilisation des jeunes en vulnerabilite -- Lyon</p>
-        <h2
-          class="text-3xl md:text-4xl text-prado-text mb-6 italic"
-          :style="{ lineHeight: 1.2, fontFamily: 'Poppins' }"
-        >
-          Actions culturelles et educatives pour les
-          <span class="text-[#FB6223]">12-21 ans</span>
-        </h2>
+        <p class="text-[#FB6223] text-sm mb-4 tracking-wide uppercase">Association de la Fondation du Prado — Lyon Métropole</p>
         <p class="text-prado-text-muted text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
-          Portees par Prado Itineraires, association de la Fondation du Prado, nos actions accompagnent les jeunes vers l'autonomie a travers la culture, l'education et l'insertion professionnelle.
+          Prado Itinéraires construit des solutions nouvelles et complémentaires pour accompagner les jeunes de 11 à 25 ans et leurs familles vers l'autonomie. Ateliers, formations, ressources, dispositifs d'insertion&nbsp;: nous relions les publics accompagnés à des partenaires engagés, des environnements porteurs et favorables, pour que chacun puisse prendre conscience de son pouvoir d'agir et trouver sa place.
         </p>
         <div class="flex flex-wrap justify-center gap-3">
-          <NuxtLink to="/connexion" class="px-7 py-3 rounded-full border border-prado-border-medium text-prado-text hover:bg-prado-surface-hover transition-colors">
-            Se connecter
+          <NuxtLink to="/actions" class="px-7 py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#CF006C]/90 transition-colors font-medium">
+            Découvrir nos actions
           </NuxtLink>
-          <NuxtLink to="/connexion?mode=register" class="px-7 py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#CF006C]/90 transition-colors">
-            Creer un compte
+          <NuxtLink to="/connexion?mode=register" class="px-7 py-3 rounded-full border border-prado-border-medium text-prado-text hover:bg-prado-surface-hover transition-colors">
+            Inscrire un jeune
           </NuxtLink>
         </div>
       </div>
     </UiScrollExpandHero>
 
-    <!-- 4 piliers -->
-    <section class="py-20 bg-prado-bg-deep">
-      <div class="max-w-7xl mx-auto px-6">
-        <p class="text-[#FB6223] text-sm mb-2 tracking-wide text-center">Nos domaines d'action</p>
-        <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-12 italic" :style="{ fontFamily: 'Poppins' }">Quatre leviers pour l'insertion</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          <NuxtLink
-            v-for="item in pillars"
-            :key="item.title"
-            :to="item.to"
-            class="group bg-prado-surface rounded-2xl p-6 hover:brightness-110 transition-all duration-300 border border-prado-border hover:border-prado-border-light"
-          >
-            <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" :style="{ backgroundColor: item.color + '20' }">
-              <component :is="item.icon" :size="20" :style="{ color: item.color }" />
-            </div>
-            <h3 class="text-prado-text mb-2">{{ item.title }}</h3>
-            <p class="text-sm text-prado-text-muted leading-relaxed">{{ item.desc }}</p>
-            <span class="inline-flex items-center gap-1 text-sm mt-4 group-hover:gap-2 transition-all" :style="{ color: item.color }">
-              Decouvrir <ArrowRight :size="13" />
-            </span>
-          </NuxtLink>
-        </div>
-      </div>
-    </section>
+    <!-- Section 2 — Les 4 Programmes -->
+    <HomeProgrammes />
 
     <!-- Actualites -->
     <section class="py-20">
