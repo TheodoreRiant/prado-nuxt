@@ -43,13 +43,6 @@ const partners = [
   'DDETS du Rhone',
 ]
 
-const stats = [
-  { n: '500+', l: 'Jeunes accompagnes', c: '#CF006C' },
-  { n: '80+', l: 'Actions par an', c: '#FB6223' },
-  { n: '50+', l: 'Partenaires', c: '#C18ED8' },
-  { n: '15', l: 'Annees d\'experience', c: '#93C1AF' },
-]
-
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
 }
@@ -58,35 +51,49 @@ function formatDate(dateStr: string) {
 <template>
   <div>
     <!-- Section 1 — Hero -->
-    <UiScrollExpandHero
-      media-type="image"
-      :media-src="HERO_IMAGE"
-      :bg-image-src="HERO_BG"
-      title="L'innovation sociale au service des jeunes et des familles"
-      subtitle="Prado Itinéraires"
-      scroll-hint="Scrollez pour découvrir"
-    >
-      <div class="max-w-4xl mx-auto text-center">
-        <p class="text-[#FB6223] text-sm mb-4 tracking-wide uppercase">Association de la Fondation du Prado — Lyon Métropole</p>
-        <p class="text-prado-text-muted text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
-          Prado Itinéraires construit des solutions nouvelles et complémentaires pour accompagner les jeunes de 11 à 25 ans et leurs familles vers l'autonomie. Ateliers, formations, ressources, dispositifs d'insertion&nbsp;: nous relions les publics accompagnés à des partenaires engagés, des environnements porteurs et favorables, pour que chacun puisse prendre conscience de son pouvoir d'agir et trouver sa place.
-        </p>
-        <div class="flex flex-wrap justify-center gap-3">
-          <NuxtLink to="/actions" class="px-7 py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#CF006C]/90 transition-colors font-medium">
-            Découvrir nos actions
-          </NuxtLink>
-          <NuxtLink to="/connexion?mode=register" class="px-7 py-3 rounded-full border border-prado-border-medium text-prado-text hover:bg-prado-surface-hover transition-colors">
-            Inscrire un jeune
-          </NuxtLink>
+    <div id="hero">
+      <UiScrollExpandHero
+        media-type="image"
+        :media-src="HERO_IMAGE"
+        :bg-image-src="HERO_BG"
+        title="L'innovation sociale au service des jeunes et des familles"
+        subtitle="Prado Itinéraires"
+        scroll-hint="Scrollez pour découvrir"
+      >
+        <div class="max-w-4xl mx-auto text-center">
+          <p class="text-[#FB6223] text-sm mb-4 tracking-wide uppercase">Association de la Fondation du Prado — Lyon Métropole</p>
+          <p class="text-prado-text-muted text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
+            Prado Itinéraires construit des solutions nouvelles et complémentaires pour accompagner les jeunes de 11 à 25 ans et leurs familles vers l'autonomie. Ateliers, formations, ressources, dispositifs d'insertion&nbsp;: nous relions les publics accompagnés à des partenaires engagés, des environnements porteurs et favorables, pour que chacun puisse prendre conscience de son pouvoir d'agir et trouver sa place.
+          </p>
+          <div class="flex flex-wrap justify-center gap-3">
+            <NuxtLink to="/actions" class="px-7 py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#CF006C]/90 transition-colors font-medium">
+              Découvrir nos actions
+            </NuxtLink>
+            <NuxtLink to="/connexion?mode=register" class="px-7 py-3 rounded-full border border-prado-border-medium text-prado-text hover:bg-prado-surface-hover transition-colors">
+              Inscrire un jeune
+            </NuxtLink>
+          </div>
         </div>
-      </div>
-    </UiScrollExpandHero>
+      </UiScrollExpandHero>
+    </div>
 
     <!-- Section 2 — Les 4 Programmes -->
-    <HomeProgrammes />
+    <div id="programmes">
+      <HomeProgrammes />
+    </div>
 
-    <!-- Actualites -->
-    <section class="py-20">
+    <!-- Section 3 — Nos missions -->
+    <div id="missions">
+      <HomeMissions />
+    </div>
+
+    <!-- Section 4 — Chiffres d'impact -->
+    <div id="impact">
+      <HomeImpact />
+    </div>
+
+    <!-- Actualites (à remplacer par les futures sections 5-10) -->
+    <section id="actualites" class="py-20">
       <div class="max-w-7xl mx-auto px-6">
         <div class="flex items-end justify-between mb-10">
           <div>
@@ -114,18 +121,8 @@ function formatDate(dateStr: string) {
       </div>
     </section>
 
-    <!-- Stats -->
-    <section class="py-16 bg-prado-bg-deep">
-      <div class="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-        <div v-for="s in stats" :key="s.l">
-          <div class="text-3xl md:text-4xl mb-1" :style="{ color: s.c, fontFamily: 'Poppins' }">{{ s.n }}</div>
-          <div class="text-xs text-prado-text-muted">{{ s.l }}</div>
-        </div>
-      </div>
-    </section>
-
     <!-- Partenaires -->
-    <section class="py-16">
+    <section id="partenaires" class="py-16">
       <div class="max-w-7xl mx-auto px-6 text-center">
         <p class="text-[#FB6223] text-sm mb-2 tracking-wide">Ils nous font confiance</p>
         <h2 class="text-2xl text-prado-text italic mb-10" :style="{ fontFamily: 'Poppins' }">Nos partenaires</h2>
@@ -138,7 +135,7 @@ function formatDate(dateStr: string) {
     </section>
 
     <!-- CTA -->
-    <section class="py-16 bg-gradient-to-r from-[#CF006C] to-[#FB6223]">
+    <section id="cta" class="py-16 bg-gradient-to-r from-[#CF006C] to-[#FB6223]">
       <div class="max-w-3xl mx-auto px-6 text-center">
         <h2 class="text-3xl text-white mb-4 italic" :style="{ fontFamily: 'Poppins' }">Vous etes prescripteur ?</h2>
         <p class="text-white/80 mb-8">Creez votre compte pour inscrire les jeunes que vous accompagnez a nos actions culturelles et educatives.</p>
