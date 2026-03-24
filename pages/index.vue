@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ArrowRight, Heart, BookOpen, Truck, Users } from 'lucide-vue-next'
 
+const HERO_IMAGE = '/images/hero-jeunes.jpg'
+const HERO_BG = 'https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1920&auto=format&fit=crop'
+
 const IMAGES = {
   hero: 'https://images.unsplash.com/photo-1773270196888-0cdacb07edae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx5b3V0aCUyMHdvcmtzaG9wJTIwZWR1Y2F0aW9uJTIwZ3JvdXB8ZW58MXx8fHwxNzc0Mjc0NTEzfDA&ixlib=rb-4.1.0&q=80&w=1080',
   foodtruck: 'https://images.unsplash.com/photo-1612208176815-e132bcf971b0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmb29kJTIwdHJ1Y2slMjBzdHJlZXQlMjB1cmJhbnxlbnwxfHx8fDE3NzQyNzQ1MTR8MA&ixlib=rb-4.1.0&q=80&w=1080',
@@ -62,43 +65,36 @@ function formatDate(dateStr: string) {
 <template>
   <div>
     <!-- Hero -->
-    <section class="relative overflow-hidden">
-      <div class="max-w-7xl mx-auto px-6 py-20 md:py-28 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div>
-          <p class="text-[#FB6223] text-sm mb-4 tracking-wide">Remobilisation des jeunes en vulnerabilite -- Lyon</p>
-          <h1
-            class="text-4xl md:text-5xl lg:text-[3.4rem] text-prado-text mb-6 italic"
-            :style="{ lineHeight: 1.1, fontFamily: 'Poppins' }"
-          >
-            Construisons ensemble l'avenir des
-            <span class="text-[#FB6223]">jeunes</span> grace a nos actions
-          </h1>
-          <p class="text-prado-text-muted text-lg mb-10 max-w-lg leading-relaxed">
-            Actions culturelles et educatives pour les 12-21 ans, portees par Prado Itineraires, association de la Fondation du Prado.
-          </p>
-          <div class="flex flex-wrap gap-3">
-            <NuxtLink to="/connexion" class="px-7 py-3 rounded-full border border-prado-border-medium text-prado-text hover:bg-prado-surface-hover transition-colors">
-              Se connecter
-            </NuxtLink>
-            <NuxtLink to="/connexion?mode=register" class="px-7 py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#CF006C]/90 transition-colors">
-              Creer un compte
-            </NuxtLink>
-          </div>
-        </div>
-        <div class="relative hidden lg:block">
-          <div class="relative rounded-2xl overflow-hidden shadow-2xl shadow-black/30">
-            <img :src="IMAGES.hero" alt="Jeunes en atelier" class="w-full h-[400px] object-cover" />
-            <div class="absolute inset-0 bg-gradient-to-t from-prado-bg/40 to-transparent" />
-          </div>
-          <div class="absolute -bottom-4 -left-6 bg-[#CF006C] text-white px-4 py-2 rounded-full text-sm shadow-lg">
-            500+ jeunes accompagnes
-          </div>
-          <div class="absolute -top-3 -right-4 bg-[#93C1AF] text-white px-4 py-2 rounded-full text-sm shadow-lg">
-            80+ actions / an
-          </div>
+    <UiScrollExpandHero
+      media-type="image"
+      :media-src="HERO_IMAGE"
+      :bg-image-src="HERO_BG"
+      title="Construisons l'Avenir"
+      subtitle="Prado Itineraires"
+      scroll-hint="Scrollez pour decouvrir"
+    >
+      <div class="max-w-4xl mx-auto text-center">
+        <p class="text-[#FB6223] text-sm mb-4 tracking-wide">Remobilisation des jeunes en vulnerabilite -- Lyon</p>
+        <h2
+          class="text-3xl md:text-4xl text-prado-text mb-6 italic"
+          :style="{ lineHeight: 1.2, fontFamily: 'Poppins' }"
+        >
+          Actions culturelles et educatives pour les
+          <span class="text-[#FB6223]">12-21 ans</span>
+        </h2>
+        <p class="text-prado-text-muted text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
+          Portees par Prado Itineraires, association de la Fondation du Prado, nos actions accompagnent les jeunes vers l'autonomie a travers la culture, l'education et l'insertion professionnelle.
+        </p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <NuxtLink to="/connexion" class="px-7 py-3 rounded-full border border-prado-border-medium text-prado-text hover:bg-prado-surface-hover transition-colors">
+            Se connecter
+          </NuxtLink>
+          <NuxtLink to="/connexion?mode=register" class="px-7 py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#CF006C]/90 transition-colors">
+            Creer un compte
+          </NuxtLink>
         </div>
       </div>
-    </section>
+    </UiScrollExpandHero>
 
     <!-- 4 piliers -->
     <section class="py-20 bg-prado-bg-deep">
