@@ -1,6 +1,12 @@
 <script setup lang="ts">
+const { data: homepage } = await useHomepage()
+
 const HERO_IMAGE = '/images/hero-jeunes.jpg'
 const HERO_BG = 'https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1920&auto=format&fit=crop'
+
+function findSlice(type: string) {
+  return homepage.value?.data?.body?.find((s: any) => s.slice_type === type) ?? null
+}
 </script>
 
 <template>
@@ -15,53 +21,58 @@ const HERO_BG = 'https://images.unsplash.com/photo-1557683316-973673baf926?q=80&
         subtitle="Prado Itinéraires"
         scroll-hint="Scrollez pour découvrir"
       >
-        <HomeHeroContent />
+        <HomeHeroContent :data="findSlice('hero')" />
       </UiScrollExpandHero>
     </div>
 
-    <!-- Section 2 — Les 4 Programmes -->
+    <!-- Section 2 — Les Programmes -->
     <div id="programmes">
-      <HomeProgrammes />
+      <HomeProgrammes :data="findSlice('programmes')" />
     </div>
 
     <!-- Section 3 — Nos missions -->
     <div id="missions">
-      <HomeMissions />
+      <HomeMissions :data="findSlice('missions')" />
     </div>
 
     <!-- Section 4 — Chiffres d'impact -->
     <div id="impact">
-      <HomeImpact />
+      <HomeImpact :data="findSlice('impact')" />
     </div>
 
     <!-- Section 5 — Comment ça marche -->
     <div id="etapes">
-      <HomeSteps />
+      <HomeSteps :data="findSlice('steps')" />
     </div>
 
     <!-- Section 6 — Témoignages -->
     <div id="temoignages">
-      <HomeTestimonials />
+      <HomeTestimonials :data="findSlice('testimonials')" />
     </div>
 
     <!-- Section 7 — FAQ -->
     <div id="faq">
-      <HomeFaq />
+      <HomeFaq :data="findSlice('faq')" />
+    </div>
+
+    <!-- Newsletter -->
+    <div id="newsletter">
+      <HomeNewsletter />
     </div>
 
     <!-- Section 8 — Partenaires -->
     <div id="partenaires">
-      <HomePartenaires />
+      <HomePartenaires :data="findSlice('partners')" />
     </div>
 
     <!-- Section 9 — En savoir plus -->
     <div id="en-savoir-plus">
-      <HomeEnSavoirPlus />
+      <HomeEnSavoirPlus :data="findSlice('en_savoir_plus')" />
     </div>
 
     <!-- Section 10 — CTA Final -->
     <div id="cta">
-      <HomeCtaFinal />
+      <HomeCtaFinal :data="findSlice('cta_final')" />
     </div>
   </div>
 </template>

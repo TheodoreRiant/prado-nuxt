@@ -351,8 +351,10 @@ async function handleLogout() {
           </div>
         </div>
         <div>
-          <h4 class="text-prado-text-secondary text-xs uppercase tracking-wider mb-4">Suivez-nous</h4>
-          <div class="flex gap-2">
+          <h4 class="text-prado-text-secondary text-xs uppercase tracking-wider mb-4">Newsletter</h4>
+          <p class="text-sm text-prado-text-muted mb-3">Recevez nos actualités</p>
+          <UiNewsletterForm source="footer" />
+          <div class="flex gap-2 mt-5">
             <a
               v-for="(Icon, i) in socialIcons"
               :key="i"
@@ -368,6 +370,11 @@ async function handleLogout() {
         &copy; 2026 Prado Itinéraires — Fondation du Prado. Tous droits réservés.
       </div>
     </footer>
+
+    <!-- Chat widget (flottant, toutes les pages) -->
+    <ClientOnly>
+      <UiChatWidget />
+    </ClientOnly>
   </div>
 </template>
 
