@@ -134,18 +134,9 @@ onUnmounted(() => {
     <div class="max-w-7xl mx-auto px-6 pb-24">
       <!-- Desktop: split layout, page scroll -->
       <div class="hidden lg:flex gap-12 items-start">
-        <!-- Left: sticky nav + halo -->
-        <div class="w-72 shrink-0 sticky top-[30vh] self-start relative">
-          <!-- Sticky halo that follows the nav -->
-          <div
-            class="absolute -left-32 -top-32 w-[500px] h-[500px] rounded-full pointer-events-none transition-all duration-700 ease-out"
-            :style="{
-              background: `radial-gradient(circle, ${activeColor} 0%, transparent 70%)`,
-              opacity: 0.08,
-              filter: 'blur(50px)',
-            }"
-          />
-        <nav class="relative z-10">
+        <!-- Left: sticky nav -->
+        <div class="w-72 shrink-0 sticky top-[30vh] self-start">
+        <nav>
           <ul class="space-y-1">
             <li v-for="prog in programmes" :key="prog.id">
               <button
@@ -187,8 +178,19 @@ onUnmounted(() => {
         </nav>
         </div>
 
-        <!-- Right: content flows with page scroll -->
-        <div class="flex-1">
+        <!-- Right: content + sticky halo -->
+        <div class="flex-1 relative">
+          <!-- Sticky halo on the right side -->
+          <div class="sticky top-[30vh] float-right -mr-32 -mt-16 pointer-events-none z-0">
+            <div
+              class="w-[500px] h-[500px] rounded-full transition-all duration-700 ease-out"
+              :style="{
+                background: `radial-gradient(circle, ${activeColor} 0%, transparent 70%)`,
+                opacity: 0.08,
+                filter: 'blur(50px)',
+              }"
+            />
+          </div>
           <div
             v-for="prog in programmes"
             :key="prog.id"
