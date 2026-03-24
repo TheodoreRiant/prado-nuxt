@@ -92,7 +92,12 @@ function formatDate(dateStr: string) {
       <HomeImpact />
     </div>
 
-    <!-- Actualites (à remplacer par les futures sections 5-10) -->
+    <!-- Section 5 — Comment ça marche -->
+    <div id="etapes">
+      <HomeSteps />
+    </div>
+
+    <!-- Actualites (à remplacer par les futures sections 6-10) -->
     <section id="actualites" class="py-20">
       <div class="max-w-7xl mx-auto px-6">
         <div class="flex items-end justify-between mb-10">
