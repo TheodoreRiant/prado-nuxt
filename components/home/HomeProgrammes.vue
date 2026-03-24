@@ -81,6 +81,7 @@ const programmes: Programme[] = [
 ]
 
 const activeId = ref(programmes[0].id)
+const activeColor = computed(() => programmes.find(p => p.id === activeId.value)?.color ?? '#CF006C')
 const programmeRefs = ref<Record<string, HTMLElement | null>>({})
 const sectionRef = ref<HTMLElement | null>(null)
 
@@ -124,8 +125,6 @@ onUnmounted(() => {
 
 <template>
   <section ref="sectionRef" class="relative">
-    <HomeHalo color="#CF006C" position="top-right" :size="700" :opacity="0.06" />
-
     <div class="max-w-7xl mx-auto px-6 pt-24 pb-12 relative z-10">
       <h2 class="text-3xl md:text-4xl text-prado-text text-center">
         Quatre programmes pour agir concrètement
@@ -135,8 +134,18 @@ onUnmounted(() => {
     <div class="max-w-7xl mx-auto px-6 pb-24">
       <!-- Desktop: split layout, page scroll -->
       <div class="hidden lg:flex gap-12 items-start">
-        <!-- Left: sticky nav (top-[30vh] keeps it below the title area) -->
-        <nav class="w-72 shrink-0 sticky top-[30vh] self-start">
+        <!-- Left: sticky nav + halo -->
+        <div class="w-72 shrink-0 sticky top-[30vh] self-start relative">
+          <!-- Sticky halo that follows the nav -->
+          <div
+            class="absolute -left-32 -top-32 w-[500px] h-[500px] rounded-full pointer-events-none transition-all duration-700 ease-out"
+            :style="{
+              background: `radial-gradient(circle, ${activeColor} 0%, transparent 70%)`,
+              opacity: 0.08,
+              filter: 'blur(50px)',
+            }"
+          />
+        <nav class="relative z-10">
           <ul class="space-y-1">
             <li v-for="prog in programmes" :key="prog.id">
               <button
@@ -176,6 +185,7 @@ onUnmounted(() => {
             </li>
           </ul>
         </nav>
+        </div>
 
         <!-- Right: content flows with page scroll -->
         <div class="flex-1">
