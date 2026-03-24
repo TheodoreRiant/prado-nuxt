@@ -15,7 +15,8 @@ const { completeProfile } = useAuth()
 const { complete } = useOnboarding()
 
 const form = ref({
-  name: '',
+  prenom: '',
+  nom: '',
   fonction: '',
   structure: '',
   phone: '',
@@ -58,12 +59,17 @@ function selectStructure(name: string) {
 }
 
 async function handleSubmit() {
-  if (!form.value.name || !form.value.structure) {
+  if (!form.value.prenom || !form.value.nom || !form.value.structure) {
     toast.error('Veuillez remplir les champs obligatoires')
     return
   }
   submitting.value = true
-  const result = await completeProfile(form.value)
+  const result = await completeProfile({
+    name: `${form.value.prenom} ${form.value.nom}`,
+    structure: form.value.structure,
+    fonction: form.value.fonction,
+    phone: form.value.phone,
+  })
   submitting.value = false
   if (result.error) {
     toast.error(result.error)
@@ -95,17 +101,29 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
 
     <!-- Form -->
     <form class="space-y-4" @submit.prevent="handleSubmit">
-      <!-- Nom -->
-      <div>
-        <label class="text-sm text-prado-text-secondary mb-1.5 block">Nom complet *</label>
-        <div class="relative">
-          <User :size="16" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-prado-text-muted" />
+      <!-- Prénom + Nom -->
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-sm text-prado-text-secondary mb-1.5 block">Prénom *</label>
+          <div class="relative">
+            <User :size="16" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-prado-text-muted" />
+            <input
+              v-model="form.prenom"
+              type="text"
+              required
+              placeholder="Prénom"
+              :class="inputClass"
+            />
+          </div>
+        </div>
+        <div>
+          <label class="text-sm text-prado-text-secondary mb-1.5 block">Nom *</label>
           <input
-            v-model="form.name"
+            v-model="form.nom"
             type="text"
             required
-            placeholder="Prénom Nom"
-            :class="inputClass"
+            placeholder="Nom"
+            class="w-full px-4 py-3 rounded-xl bg-prado-surface border border-prado-border text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-[#CF006C]/50 transition-colors"
           />
         </div>
       </div>
@@ -126,7 +144,7 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
       </div>
 
       <!-- Structure (autocomplete) -->
-      <div class="relative">
+      <div class="relative z-30">
         <label class="text-sm text-prado-text-secondary mb-1.5 block">Structure / Établissement *</label>
         <div class="relative">
           <Building :size="16" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-prado-text-muted" />
@@ -134,6 +152,7 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
             v-model="form.structure"
             type="text"
             required
+            autocomplete="off"
             placeholder="Tapez pour rechercher..."
             :class="inputClass"
             @focus="showStructureDropdown = true"
@@ -143,13 +162,17 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
         <!-- Dropdown -->
         <div
           v-if="showStructureDropdown && filteredStructures.length > 0"
-          class="absolute z-20 w-full mt-1 max-h-48 overflow-y-auto bg-prado-surface border border-prado-border rounded-xl shadow-lg"
+          class="absolute z-50 left-0 right-0 mt-1 max-h-48 overflow-y-auto rounded-xl border border-prado-border-light shadow-2xl"
+          style="background-color: var(--prado-surface);"
         >
           <button
             v-for="s in filteredStructures"
             :key="s"
             type="button"
-            class="w-full text-left px-4 py-2.5 text-sm text-prado-text hover:bg-prado-surface-hover transition-colors first:rounded-t-xl last:rounded-b-xl"
+            class="w-full text-left px-4 py-2.5 text-sm text-prado-text transition-colors first:rounded-t-xl last:rounded-b-xl"
+            style="background-color: var(--prado-surface);"
+            @mouseenter="$el.style.backgroundColor = 'var(--prado-bg-deep)'"
+            @mouseleave="$el.style.backgroundColor = 'var(--prado-surface)'"
             @mousedown.prevent="selectStructure(s)"
           >
             {{ s }}
