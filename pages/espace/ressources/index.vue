@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Search, ExternalLink, FileText } from 'lucide-vue-next'
+import { Search, FileText } from 'lucide-vue-next'
 import * as prismicClient from '@prismicio/client'
 import {
   RESSOURCE_CATEGORIES,
@@ -157,10 +157,6 @@ onMounted(() => {
           <p class="text-xs text-prado-text-muted line-clamp-1 mt-0.5">{{ r.description }}</p>
         </div>
 
-        <!-- External link indicator -->
-        <div v-if="r.url" class="shrink-0">
-          <ExternalLink :size="14" class="text-prado-text-faint group-hover:text-prado-text transition-colors" />
-        </div>
       </NuxtLink>
     </div>
 
