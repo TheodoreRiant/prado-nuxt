@@ -5,7 +5,17 @@ interface Partner {
   url: string
 }
 
-const partners: Partner[] = [
+const props = defineProps<{ data?: any }>()
+
+const sectionTitle = computed(() =>
+  props.data?.primary?.section_title || 'Ils nous soutiennent'
+)
+
+const subtitle = computed(() =>
+  props.data?.primary?.subtitle || 'Notre activité est rendue possible grâce au soutien de la Métropole de Lyon, de la Fondation du Prado et de leurs partenaires.'
+)
+
+const defaultPartners: Partner[] = [
   { name: 'Fondation du Prado', logo: '/images/partenaires/fondation-du-prado.png', url: 'https://www.le-prado.fr' },
   { name: 'Métropole de Lyon', logo: '/images/partenaires/metropole-de-lyon.png', url: 'https://www.grandlyon.com' },
   { name: 'Département du Rhône', logo: '/images/partenaires/departement-du-rhone.png', url: 'https://www.rhone.fr' },
@@ -15,18 +25,29 @@ const partners: Partner[] = [
   { name: 'Région Auvergne-Rhône-Alpes', logo: '/images/partenaires/region-aura.png', url: 'https://www.auvergnerhonealpes.fr' },
 ]
 
+const partners = computed<Partner[]>(() => {
+  if (props.data?.items?.length) {
+    return props.data.items.map((item: any) => ({
+      name: item.name || '',
+      logo: item.logo?.url || '',
+      url: item.url?.url || '',
+    }))
+  }
+  return defaultPartners
+})
+
 // Double the list for seamless loop
-const scrollPartners = [...partners, ...partners]
+const scrollPartners = computed(() => [...partners.value, ...partners.value])
 </script>
 
 <template>
   <section class="py-24">
     <div class="max-w-7xl mx-auto px-6">
       <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-4">
-        Ils nous soutiennent
+        {{ sectionTitle }}
       </h2>
       <p class="text-prado-text-muted text-base text-center mb-12 max-w-3xl mx-auto">
-        Notre activité est rendue possible grâce au soutien de la Métropole de Lyon, de la Fondation du Prado et de leurs partenaires.
+        {{ subtitle }}
       </p>
     </div>
 

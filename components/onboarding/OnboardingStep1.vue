@@ -2,6 +2,10 @@
 import { Loader2, Mail, Lock, Shield } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 
+const props = defineProps<{
+  initialEmail?: string
+}>()
+
 const emit = defineEmits<{
   magicLinkSent: [email: string]
   switchToPassword: []
@@ -9,7 +13,7 @@ const emit = defineEmits<{
 
 const { sendMagicLink } = useAuth()
 
-const email = ref('')
+const email = ref(props.initialEmail ?? '')
 const submitting = ref(false)
 const usePassword = ref(false)
 

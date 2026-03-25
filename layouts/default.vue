@@ -28,7 +28,12 @@ const navLinks = [
   ...programmeItems.map(p => ({ to: p.to, label: p.label })),
 ]
 
-const socialIcons = [Facebook, Instagram, Linkedin, Youtube]
+const socialLinks = [
+  { icon: Facebook, url: 'https://www.facebook.com/FondationduPrado', label: 'Facebook' },
+  { icon: Instagram, url: 'https://www.instagram.com/fondation_du_prado/', label: 'Instagram' },
+  { icon: Linkedin, url: 'https://www.linkedin.com/company/fondation-du-prado/', label: 'LinkedIn' },
+  { icon: Youtube, url: 'https://www.youtube.com/@fondationduprado', label: 'YouTube' },
+]
 
 function isActive(to: string) {
   return route.path.startsWith(to)
@@ -102,7 +107,7 @@ async function handleLogout() {
           >
             <button
               :class="[
-                'nav-link relative flex items-center gap-1 px-3 py-1.5 text-sm transition-colors',
+                'nav-link relative flex items-center gap-1 px-3 py-1.5 text-sm font-normal transition-colors',
                 isProgrammeActive
                   ? 'text-prado-text is-active'
                   : programmesOpen
@@ -375,14 +380,21 @@ async function handleLogout() {
           <h4 class="text-prado-text-secondary text-xs uppercase tracking-wider mb-4">Newsletter</h4>
           <p class="text-sm text-prado-text-muted mb-3">Recevez nos actualités</p>
           <UiNewsletterForm source="footer" />
+          <div class="mt-4 flex flex-col gap-1 text-xs text-prado-text-muted">
+            <NuxtLink to="/mentions-legales" class="hover:text-[#FB6223]">Mentions légales</NuxtLink>
+            <NuxtLink to="/politique-confidentialite" class="hover:text-[#FB6223]">Politique de confidentialité</NuxtLink>
+          </div>
           <div class="flex gap-2 mt-5">
             <a
-              v-for="(Icon, i) in socialIcons"
-              :key="i"
-              href="#"
+              v-for="link in socialLinks"
+              :key="link.label"
+              :href="link.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              :aria-label="link.label"
               class="w-9 h-9 rounded-full bg-prado-tag-bg flex items-center justify-center text-prado-text-muted hover:bg-[#CF006C] hover:text-white transition-colors"
             >
-              <component :is="Icon" :size="15" />
+              <component :is="link.icon" :size="15" />
             </a>
           </div>
         </div>
@@ -391,6 +403,11 @@ async function handleLogout() {
         &copy; 2026 Prado Itinéraires — Fondation du Prado. Tous droits réservés.
       </div>
     </footer>
+
+    <!-- Cookie Banner -->
+    <ClientOnly>
+      <UiCookieBanner />
+    </ClientOnly>
 
     <!-- Chat widget (flottant, toutes les pages) -->
     <ClientOnly>

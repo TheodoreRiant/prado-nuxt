@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ArrowRight, Users, Truck, Heart, BookOpen } from 'lucide-vue-next'
+import { iconMap } from '~/utils/iconMap'
+import type { Component } from 'vue'
 
 interface ProgrammeCta {
   label: string
@@ -10,13 +12,19 @@ interface Programme {
   id: string
   title: string
   shortTitle: string
-  icon: typeof Users
+  icon: Component
   color: string
   text: string[]
   ctas: ProgrammeCta[]
 }
 
-const programmes: Programme[] = [
+const props = defineProps<{ data?: any }>()
+
+const sectionTitle = computed(() =>
+  props.data?.primary?.section_title || 'Quatre programmes pour agir concrètement'
+)
+
+const defaultProgrammes: Programme[] = [
   {
     id: 'jeunes',
     title: 'Programme Jeunes & Autonomes',
@@ -80,8 +88,27 @@ const programmes: Programme[] = [
   },
 ]
 
-const activeId = ref(programmes[0].id)
-const activeColor = computed(() => programmes.find(p => p.id === activeId.value)?.color ?? '#CF006C')
+const programmes = computed<Programme[]>(() => {
+  if (props.data?.items?.length) {
+    return props.data.items.map((item: any) => ({
+      id: item.slug || '',
+      title: item.title || '',
+      shortTitle: item.short_title || '',
+      icon: iconMap[item.icon_name] || Users,
+      color: item.brand_color || '#CF006C',
+      text: item.description?.map((block: any) => block.text).filter(Boolean) ?? [],
+      ctas: [
+        item.cta_1_label ? { label: item.cta_1_label, to: item.cta_1_link?.url || '#' } : null,
+        item.cta_2_label ? { label: item.cta_2_label, to: item.cta_2_link?.url || '#' } : null,
+        item.cta_3_label ? { label: item.cta_3_label, to: item.cta_3_link?.url || '#' } : null,
+      ].filter((cta): cta is ProgrammeCta => cta !== null),
+    }))
+  }
+  return defaultProgrammes
+})
+
+const activeId = ref(programmes.value[0].id)
+const activeColor = computed(() => programmes.value.find(p => p.id === activeId.value)?.color ?? '#CF006C')
 const programmeRefs = ref<Record<string, HTMLElement | null>>({})
 const sectionRef = ref<HTMLElement | null>(null)
 
@@ -101,17 +128,17 @@ function scrollToProgram(id: string) {
 function handleScroll() {
   const threshold = window.innerHeight * 0.5
 
-  for (let i = programmes.length - 1; i >= 0; i--) {
-    const el = programmeRefs.value[programmes[i].id]
+  for (let i = programmes.value.length - 1; i >= 0; i--) {
+    const el = programmeRefs.value[programmes.value[i].id]
     if (el) {
       const rect = el.getBoundingClientRect()
       if (rect.top <= threshold) {
-        activeId.value = programmes[i].id
+        activeId.value = programmes.value[i].id
         return
       }
     }
   }
-  activeId.value = programmes[0].id
+  activeId.value = programmes.value[0].id
 }
 
 onMounted(() => {
@@ -127,7 +154,7 @@ onUnmounted(() => {
   <section ref="sectionRef" class="relative">
     <div class="max-w-7xl mx-auto px-6 pt-24 pb-12 relative z-10">
       <h2 class="text-3xl md:text-4xl text-prado-text text-center">
-        Quatre programmes pour agir concrètement
+        {{ sectionTitle }}
       </h2>
     </div>
 

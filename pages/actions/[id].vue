@@ -10,25 +10,22 @@ import {
 const route = useRoute()
 const { client: prismic } = usePrismic()
 const { user, jeunes, inscriptions, inscrire, desinscrire } = useAuth()
-const { getActionImage } = useImages()
+const { getPlacesInfo } = useActionPlaces()
 
 const showInscription = ref(false)
-const id = route.params.id as string
+const uid = route.params.id as string
 
-const { data: actionResult, status } = await useAsyncData(`action-${id}`, () =>
-  prismic.get({
-    filters: [prismicH.filter.at('my.action.original_id', Number(id))],
-    pageSize: 1,
-  })
+const { data: actionDoc, status } = await useAsyncData(`action-${uid}`, () =>
+  prismic.getByUID('action', uid)
 )
 
 const loading = computed(() => status.value === 'pending')
 
 const action = computed(() => {
-  const doc = actionResult.value?.results?.[0]
+  const doc = actionDoc.value
   if (!doc) return null
   return {
-    id: doc.data.original_id as number,
+    id: doc.uid,
     title: doc.data.title as string,
     category: doc.data.category as string,
     date: (doc.data.date_text as string) ?? '',
@@ -36,7 +33,7 @@ const action = computed(() => {
     summary: (doc.data.summary as string) ?? '',
     description: doc.data.description ?? [{ type: 'paragraph', text: '', spans: [] }],
     url_detail: doc.data.url_detail?.url ?? '',
-    url_image: getActionImage(doc.data.original_id as number),
+    url_image: doc.data.image?.url ?? '',
     is_activite: doc.data.is_activite ?? false,
   }
 })
@@ -50,6 +47,8 @@ const color = computed(() =>
 const actionInscriptions = computed(() =>
   inscriptions.value.filter(i => i.actionId === String(action.value?.id))
 )
+
+const placesInfo = computed(() => action.value ? getPlacesInfo(action.value.id) : null)
 
 async function handleInscrire(jeuneId: string) {
   if (!action.value) return
@@ -117,6 +116,23 @@ async function handleDesinscrire(inscriptionId: string) {
         <Clock :size="15" class="text-[#93C1AF] shrink-0" />
         <span>{{ action.time }}</span>
       </div>
+
+      <!-- Places status -->
+      <div v-if="placesInfo && placesInfo.placesMax !== null" class="pt-3 border-t border-prado-border-light mt-3">
+        <div class="flex items-center justify-between text-sm mb-1.5">
+          <span :class="placesInfo.isFull ? 'text-red-400 font-medium' : 'text-prado-text-secondary'">
+            {{ placesInfo.isFull ? 'Complet' : `${placesInfo.placesRemaining} places restantes sur ${placesInfo.placesMax}` }}
+          </span>
+        </div>
+        <div class="h-1.5 w-full bg-prado-bg rounded-full overflow-hidden">
+          <div
+            class="h-full rounded-full transition-all duration-500 ease-out"
+            :class="placesInfo.isFull ? 'bg-red-500' : (placesInfo.placesRemaining! <= 3 ? 'bg-[#FB6223]' : 'bg-[#93C1AF]')"
+            :style="{ width: `${placesInfo.placesMax > 0 ? Math.min(100, (placesInfo.inscriptionsCount / placesInfo.placesMax) * 100) : 0}%` }"
+          />
+        </div>
+      </div>
+
       <div class="mt-3">
         <a
           :href="action.url_detail"
@@ -142,9 +158,13 @@ async function handleDesinscrire(inscriptionId: string) {
         </p>
       </template>
       <template v-else>
+        <div v-if="placesInfo?.isFull" class="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center mb-4">
+          Cette action est complete.
+        </div>
         <button
           v-if="!showInscription"
-          class="px-6 py-2.5 rounded-full bg-[#CF006C] text-white text-sm hover:bg-[#a80057] transition-colors"
+          class="px-6 py-2.5 rounded-full bg-[#CF006C] text-white text-sm hover:bg-[#a80057] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          :disabled="placesInfo?.isFull"
           @click="showInscription = true"
         >
           Inscrire un jeune
@@ -171,7 +191,8 @@ async function handleDesinscrire(inscriptionId: string) {
               </button>
               <button
                 v-else
-                class="text-xs px-3 py-1.5 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057]"
+                class="text-xs px-3 py-1.5 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] disabled:opacity-50 disabled:cursor-not-allowed"
+                :disabled="placesInfo?.isFull"
                 @click="handleInscrire(j.id)"
               >
                 Inscrire

@@ -9,7 +9,6 @@ import {
 type FilterMode = 'activite' | 'actions'
 
 const { client: prismic } = usePrismic()
-const { getActionImage } = useImages()
 const { getPlacesInfo } = useActionPlaces()
 
 const search = ref('')
@@ -29,7 +28,7 @@ const { data: prismicActions, status } = await useAsyncData('actions', () =>
 
 const programmation = computed(() =>
   (prismicActions.value ?? []).map(doc => ({
-    id: doc.data.original_id as number,
+    id: doc.uid,
     title: doc.data.title as string,
     category: doc.data.category as ProgrammationCategory,
     date: (doc.data.date_text as string) ?? '',
@@ -37,7 +36,7 @@ const programmation = computed(() =>
     summary: (doc.data.summary as string) ?? '',
     description: doc.data.description?.[0]?.text ?? '',
     urlDetail: doc.data.url_detail?.url ?? '',
-    urlImage: getActionImage(doc.data.original_id as number),
+    urlImage: doc.data.image?.url ?? '',
     isActivite: doc.data.is_activite ?? false,
   })),
 )

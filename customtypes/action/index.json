@@ -25,7 +25,7 @@
       "url_detail": { "type": "Link", "config": { "label": "Lien détail (site Prado)" } },
       "image": { "type": "Image", "config": { "label": "Image" } },
       "is_activite": { "type": "Boolean", "config": { "label": "Est une activité datée", "default_value": false } },
-      "original_id": { "type": "Number", "config": { "label": "ID original (migration)", "placeholder": "ID numérique Supabase" } }
+      "original_id": { "type": "Number", "config": { "label": "ID original (migration)" } }
     }
   }
 }
