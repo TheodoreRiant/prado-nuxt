@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import {
-  LayoutDashboard, Users, ClipboardList, Settings, BookOpen, FileText, Globe, LogOut, Menu, X,
+  LayoutDashboard, Users, ClipboardList, Settings, BookOpen, FileText, LogOut, Menu, X, Sun, Moon,
 } from 'lucide-vue-next'
 import { Toaster } from 'vue-sonner'
 
 const { user, logout, jeunes, inscriptions } = useAuth()
+const { theme, toggleTheme } = useTheme()
 const route = useRoute()
 
 const sidebarOpen = ref(false)
@@ -15,14 +16,6 @@ const navItems = [
   { to: '/espace/inscriptions', label: 'Inscriptions', icon: ClipboardList, exact: false, badge: () => inscriptions.value.length },
   { to: '/espace/actions', label: 'Actions', icon: BookOpen, exact: false, badge: null },
   { to: '/espace/ressources', label: 'Ressources', icon: FileText, exact: false, badge: null },
-]
-
-const secondaryItems = [
-  { to: '/espace/parametres', label: 'Parametres', icon: Settings, exact: false },
-]
-
-const externalItems = [
-  { to: '/', label: 'Voir le site', icon: Globe },
 ]
 
 function isNavActive(to: string, exact: boolean) {
@@ -86,42 +79,47 @@ async function handleLogout() {
           </span>
         </NuxtLink>
 
-        <!-- Separator -->
-        <div class="border-t border-prado-border my-3" />
+      </nav>
 
-        <!-- Secondary nav -->
+      <!-- Footer sidebar -->
+      <div class="p-3 border-t border-prado-border space-y-1">
+        <!-- Theme toggle -->
+        <button
+          class="flex items-center justify-between w-full px-3 py-2.5 rounded-xl text-sm text-prado-text-muted hover:text-prado-text hover:bg-prado-surface-hover transition-colors"
+          @click="toggleTheme"
+        >
+          <div class="flex items-center gap-3">
+            <Sun v-if="theme === 'dark'" :size="18" />
+            <Moon v-else :size="18" />
+            <span>{{ theme === 'dark' ? 'Mode clair' : 'Mode sombre' }}</span>
+          </div>
+          <div
+            class="relative w-9 h-5 rounded-full transition-colors"
+            :class="theme === 'dark' ? 'bg-[#004657]' : 'bg-prado-border'"
+          >
+            <div
+              class="absolute top-0.5 w-4 h-4 rounded-full bg-white transition-transform"
+              :class="theme === 'dark' ? 'translate-x-4' : 'translate-x-0.5'"
+            />
+          </div>
+        </button>
+
+        <!-- Parametres -->
         <NuxtLink
-          v-for="item in secondaryItems"
-          :key="item.to"
-          :to="item.to"
+          to="/espace/parametres"
           :class="[
             'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors',
-            isNavActive(item.to, item.exact)
+            isNavActive('/espace/parametres', false)
               ? 'bg-[#004657] text-white'
-              : 'text-prado-text-secondary hover:text-prado-text hover:bg-prado-surface-hover',
+              : 'text-prado-text-muted hover:text-prado-text hover:bg-prado-surface-hover',
           ]"
           @click="sidebarOpen = false"
         >
-          <component :is="item.icon" :size="18" />
-          <span>{{ item.label }}</span>
+          <Settings :size="18" />
+          <span>Parametres</span>
         </NuxtLink>
 
-        <!-- External links -->
-        <div class="border-t border-prado-border my-3" />
-
-        <NuxtLink
-          v-for="item in externalItems"
-          :key="item.to"
-          :to="item.to"
-          class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-prado-text-muted hover:text-prado-text hover:bg-prado-surface-hover transition-colors"
-          @click="sidebarOpen = false"
-        >
-          <component :is="item.icon" :size="18" />
-          <span>{{ item.label }}</span>
-        </NuxtLink>
-      </nav>
-
-      <div class="p-4 border-t border-prado-border">
+        <!-- Deconnexion -->
         <button
           class="flex items-center gap-3 px-3 py-2.5 w-full rounded-xl text-sm text-prado-text-muted hover:text-red-400 hover:bg-prado-surface-hover transition-colors"
           @click="handleLogout"
@@ -148,15 +146,7 @@ async function handleLogout() {
           {{ user?.name }}
         </div>
 
-        <div class="flex items-center gap-4">
-          <NuxtLink
-            to="/"
-            class="flex items-center gap-1.5 text-sm text-prado-text-muted hover:text-prado-text transition-colors"
-          >
-            <Globe :size="16" />
-            Voir le site
-          </NuxtLink>
-        </div>
+        <div class="flex items-center gap-4" />
       </header>
 
       <!-- Page content -->

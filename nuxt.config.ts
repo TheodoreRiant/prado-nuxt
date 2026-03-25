@@ -61,9 +61,13 @@ export default defineNuxtConfig({
     supabaseServiceRoleKey: '',
     resendApiKey: '',
     cronSecret: '',
+    veriffApiKey: '',
+    veriffSecretKey: '',
+    veriffBaseUrl: 'https://stationapi.veriff.com',
     public: {
       supabaseUrl: '',
       supabaseKey: '',
+      siteUrl: '',
     },
   },
 })
