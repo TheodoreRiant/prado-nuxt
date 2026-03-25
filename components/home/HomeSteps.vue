@@ -1,7 +1,18 @@
 <script setup lang="ts">
 import { ArrowRight } from 'lucide-vue-next'
 
-const steps = [
+const props = defineProps<{ data?: any }>()
+
+const p = computed(() => props.data?.primary)
+
+const sectionTitle = computed(() => p.value?.section_title || 'Comment inscrire un jeune ?')
+const ctaLabel = computed(() => p.value?.cta_label || 'Créer mon compte gratuitement')
+const ctaLink = computed(() => p.value?.cta_link?.url || '/connexion?mode=register')
+const reassurance = computed(() =>
+  p.value?.reassurance_text || '100% gratuit · Sans engagement · Réservé aux professionnels de l\'accompagnement'
+)
+
+const defaultSteps = [
   {
     number: '01',
     title: 'Créez votre compte',
@@ -18,23 +29,57 @@ const steps = [
     text: 'Parcourez les 89 actions disponibles, choisissez celle qui correspond, sélectionnez le jeune, confirmez. L\'inscription est immédiate. Vous pouvez l\'annuler à tout moment.',
   },
 ]
+
+const steps = computed(() => {
+  if (props.data?.items?.length) {
+    return props.data.items.map((item: any) => ({
+      number: item.step_number || '',
+      title: item.title || '',
+      text: item.description || '',
+    }))
+  }
+  return defaultSteps
+})
+
+const sectionRef = ref<HTMLElement | null>(null)
+const isVisible = ref(false)
+
+onMounted(() => {
+  if (!sectionRef.value) return
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) {
+        isVisible.value = true
+        observer.disconnect()
+      }
+    },
+    { threshold: 0.25 },
+  )
+  observer.observe(sectionRef.value)
+})
 </script>
 
 <template>
-  <section class="py-24 relative">
+  <section ref="sectionRef" class="py-24 relative">
     <HomeHalo color="#93C1AF" position="bottom-left" :size="600" :opacity="0.07" />
 
     <div class="max-w-7xl mx-auto px-6 relative z-10">
-      <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-12">
-        Comment inscrire un jeune ?
+      <h2
+        class="text-3xl md:text-4xl text-prado-text text-center mb-12 reveal"
+        :class="isVisible && 'is-visible'"
+        style="--delay: 0s;"
+      >
+        {{ sectionTitle }}
       </h2>
 
       <!-- 3 cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div
-          v-for="step in steps"
+          v-for="(step, idx) in steps"
           :key="step.number"
-          class="bg-prado-surface rounded-2xl p-8 border border-prado-border"
+          class="bg-prado-surface rounded-2xl p-8 border border-prado-border reveal"
+          :class="isVisible && 'is-visible'"
+          :style="{ '--delay': `${0.1 + idx * 0.12}s` }"
         >
           <div class="text-5xl font-bold text-prado-text-faint mb-4">
             {{ step.number }}
@@ -49,18 +94,38 @@ const steps = [
       </div>
 
       <!-- CTA + Réassurance -->
-      <div class="mt-12 text-center">
+      <div
+        class="mt-12 text-center reveal"
+        :class="isVisible && 'is-visible'"
+        style="--delay: 0.5s;"
+      >
         <NuxtLink
-          to="/connexion?mode=register"
+          :to="ctaLink"
           class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#CF006C]/90 transition-colors font-medium"
         >
-          Créer mon compte gratuitement
+          {{ ctaLabel }}
           <ArrowRight :size="16" />
         </NuxtLink>
         <p class="text-prado-text-muted text-sm mt-4">
-          100% gratuit · Sans engagement · Réservé aux professionnels de l'accompagnement
+          {{ reassurance }}
         </p>
       </div>
     </div>
   </section>
 </template>
+
+<style scoped>
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--delay, 0s);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>

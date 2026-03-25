@@ -1,17 +1,26 @@
 <script setup lang="ts">
-import { Send, Heart, Mail, Facebook, Instagram, Linkedin, Youtube } from 'lucide-vue-next'
+import { Send, Heart, Mail, Facebook, Instagram, Linkedin, Youtube, Loader2 } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 
 const form = ref({ name: '', email: '', subject: '', message: '' })
 const newsletter = ref('')
+const loading = ref(false)
 
 const socialIcons = [Facebook, Instagram, Linkedin, Youtube]
 
 const inputClass = 'w-full px-4 py-2.5 rounded-xl bg-prado-surface border border-prado-border text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-prado-border-medium'
 
-function handleSubmit() {
-  toast.success('Message envoye ! Nous vous repondrons sous 48h.')
-  form.value = { name: '', email: '', subject: '', message: '' }
+async function handleSubmit() {
+  loading.value = true
+  try {
+    await $fetch('/api/contact', { method: 'POST', body: form.value })
+    toast.success('Message envoyé ! Nous vous répondrons sous 48h.')
+    form.value = { name: '', email: '', subject: '', message: '' }
+  } catch {
+    toast.error("Erreur lors de l'envoi du message.")
+  } finally {
+    loading.value = false
+  }
 }
 
 function handleNewsletter() {
@@ -55,8 +64,9 @@ function handleNewsletter() {
               placeholder="Votre message..."
             />
           </div>
-          <button type="submit" class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] transition-colors">
-            <Send :size="15" /> Envoyer
+          <button type="submit" :disabled="loading" class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] transition-colors disabled:opacity-70 disabled:cursor-not-allowed">
+            <Loader2 v-if="loading" class="animate-spin" :size="15" />
+            <template v-else><Send :size="15" /> Envoyer</template>
           </button>
         </form>
       </div>

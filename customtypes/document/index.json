@@ -1,0 +1,16 @@
+{
+  "id": "document",
+  "label": "Document",
+  "repeatable": true,
+  "status": true,
+  "json": {
+    "Main": {
+      "uid": { "type": "UID", "config": { "label": "URL Slug" } },
+      "title": { "type": "Text", "config": { "label": "Titre" } },
+      "description": { "type": "Text", "config": { "label": "Description" } },
+      "category": { "type": "Select", "config": { "label": "Catégorie", "options": ["Catalogue", "Rapport", "Guide", "Autre"] } },
+      "file": { "type": "Link", "config": { "label": "Fichier PDF", "allowTargetBlank": true, "select": "media" } },
+      "image": { "type": "Image", "config": { "label": "Image de couverture" } }
+    }
+  }
+}

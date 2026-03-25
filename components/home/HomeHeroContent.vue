@@ -1,8 +1,42 @@
 <script setup lang="ts">
 import { ArrowRight } from 'lucide-vue-next'
+import { asHTML } from '@prismicio/client'
+import { richTextSerializer } from '~/utils/prismicSerializer'
+
+const props = defineProps<{ data?: any }>()
 
 const containerRef = ref<HTMLElement | null>(null)
 const isVisible = ref(false)
+
+const p = computed(() => props.data?.primary)
+
+const surtitle = computed(() =>
+  p.value?.surtitle || 'Association de la Fondation du Prado — Lyon Métropole'
+)
+
+const titleHtml = computed(() => {
+  if (p.value?.title?.length) {
+    return asHTML(p.value.title, { serializer: richTextSerializer })
+  }
+  return '<p>Accompagner les jeunes de <span class="text-[#CF006C]">11 à 25 ans</span> et leurs familles vers l\'autonomie.</p>'
+})
+
+const descriptionHtml = computed(() => {
+  if (p.value?.description?.length) {
+    return asHTML(p.value.description)
+  }
+  return '<p>Ateliers, formations, ressources, dispositifs d\'insertion&nbsp;: nous relions les publics accompagnés à des <span class="text-prado-text">partenaires engagés</span>, des <span class="text-prado-text">environnements porteurs</span>, pour que chacun puisse prendre conscience de son <span class="text-prado-text">pouvoir d\'agir</span>.</p>'
+})
+
+const ctaPrimary = computed(() => ({
+  label: p.value?.cta_primary_label || 'Découvrir nos actions',
+  to: p.value?.cta_primary_link?.url || '/actions',
+}))
+
+const ctaSecondary = computed(() => ({
+  label: p.value?.cta_secondary_label || 'Inscrire un jeune',
+  to: p.value?.cta_secondary_link?.url || '/connexion?mode=register',
+}))
 
 onMounted(() => {
   if (!containerRef.value) return
@@ -27,33 +61,24 @@ onMounted(() => {
       :class="isVisible ? 'is-visible' : ''"
       style="--delay: 0s;"
     >
-      Association de la Fondation du Prado — Lyon Métropole
+      {{ surtitle }}
     </p>
 
-    <!-- Texte principal — mise en forme impactante -->
+    <!-- Texte principal -->
     <div class="space-y-6 mb-12">
-      <p
-        class="text-2xl md:text-3xl text-prado-text text-center leading-snug font-medium hero-reveal"
+      <div
+        class="prismic-title text-2xl md:text-3xl text-prado-text text-center leading-snug font-medium hero-reveal"
         :class="isVisible ? 'is-visible' : ''"
         style="--delay: 0.15s;"
-      >
-        Accompagner les jeunes de
-        <span class="text-[#CF006C]">11 à 25 ans</span>
-        et leurs familles vers l'autonomie.
-      </p>
+        v-html="titleHtml"
+      />
 
-      <p
-        class="text-prado-text-secondary text-center text-lg leading-relaxed max-w-2xl mx-auto hero-reveal"
+      <div
+        class="prismic-desc text-prado-text-secondary text-center text-lg leading-relaxed max-w-2xl mx-auto hero-reveal"
         :class="isVisible ? 'is-visible' : ''"
         style="--delay: 0.3s;"
-      >
-        Ateliers, formations, ressources, dispositifs d'insertion&nbsp;: nous relions les publics accompagnés à des
-        <span class="text-prado-text">partenaires engagés</span>,
-        des
-        <span class="text-prado-text">environnements porteurs</span>,
-        pour que chacun puisse prendre conscience de son
-        <span class="text-prado-text">pouvoir d'agir</span>.
-      </p>
+        v-html="descriptionHtml"
+      />
     </div>
 
     <!-- Ligne de séparation subtile -->
@@ -70,17 +95,17 @@ onMounted(() => {
       style="--delay: 0.55s;"
     >
       <NuxtLink
-        to="/actions"
+        :to="ctaPrimary.to"
         class="group inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#CF006C] text-white hover:bg-[#CF006C]/90 transition-all font-medium"
       >
-        Découvrir nos actions
+        {{ ctaPrimary.label }}
         <ArrowRight :size="16" class="group-hover:translate-x-1 transition-transform" />
       </NuxtLink>
       <NuxtLink
-        to="/connexion?mode=register"
+        :to="ctaSecondary.to"
         class="px-8 py-3.5 rounded-full border border-prado-border-medium text-prado-text hover:bg-prado-surface-hover transition-colors"
       >
-        Inscrire un jeune
+        {{ ctaSecondary.label }}
       </NuxtLink>
     </div>
   </div>
@@ -102,5 +127,10 @@ onMounted(() => {
   opacity: 1;
   transform: translateY(0);
   filter: blur(0);
+}
+
+.prismic-title :deep(p),
+.prismic-desc :deep(p) {
+  margin: 0;
 }
 </style>

@@ -33,6 +33,13 @@ export default defineNuxtConfig({
     head: {
       title: 'Prado Itinéraires',
       htmlAttrs: { lang: 'fr' },
+      script: [
+        {
+          innerHTML: `(function(){try{var t=localStorage.getItem('prado-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t)}}catch(e){}})()`,
+          type: 'text/javascript',
+          tagPosition: 'head',
+        },
+      ],
       link: [
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap' },
       ],
@@ -46,8 +53,14 @@ export default defineNuxtConfig({
     preset: 'vercel',
   },
 
+  routeRules: {
+    '/': { swr: 60 },
+  },
+
   runtimeConfig: {
     supabaseServiceRoleKey: '',
+    resendApiKey: '',
+    cronSecret: '',
     public: {
       supabaseUrl: '',
       supabaseKey: '',

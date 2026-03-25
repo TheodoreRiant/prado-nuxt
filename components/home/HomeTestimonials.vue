@@ -6,7 +6,13 @@ interface Testimonial {
   org: string
 }
 
-const testimonials: Testimonial[] = [
+const props = defineProps<{ data?: any }>()
+
+const sectionTitle = computed(() =>
+  props.data?.primary?.section_title || 'Ils travaillent avec nous'
+)
+
+const defaultTestimonials: Testimonial[] = [
   {
     text: 'Les actions Prado Itinéraires nous permettent de proposer des activités variées et de qualité aux jeunes que nous accompagnons. La médiation animale, les ateliers cuisine, le théâtre — ce sont des leviers de remobilisation que nous ne pourrions pas mettre en place seuls. Et la plateforme simplifie énormément les inscriptions.',
     name: 'Marie D.',
@@ -27,18 +33,30 @@ const testimonials: Testimonial[] = [
   },
 ]
 
+const testimonials = computed<Testimonial[]>(() => {
+  if (props.data?.items?.length) {
+    return props.data.items.map((item: any) => ({
+      text: item.quote?.[0]?.text || '',
+      name: item.author_name || '',
+      role: item.author_role || '',
+      org: item.author_org || '',
+    }))
+  }
+  return defaultTestimonials
+})
+
 const colors = ['#CF006C', '#FB6223', '#C18ED8', '#93C1AF']
-const firstColumn = testimonials
-const secondColumn = [...testimonials].reverse()
-const thirdColumn = [...testimonials.slice(1), testimonials[0]]
-const fourthColumn = [...testimonials.slice(2), ...testimonials.slice(0, 2)]
+const firstColumn = computed(() => testimonials.value)
+const secondColumn = computed(() => [...testimonials.value].reverse())
+const thirdColumn = computed(() => [...testimonials.value.slice(1), testimonials.value[0]])
+const fourthColumn = computed(() => [...testimonials.value.slice(2), ...testimonials.value.slice(0, 2)])
 </script>
 
 <template>
   <section class="py-24 relative">
     <!-- Header -->
     <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-12 px-6">
-      Ils travaillent avec nous
+      {{ sectionTitle }}
     </h2>
 
     <!-- Columns — full width, no max-w container -->

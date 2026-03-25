@@ -1,20 +1,22 @@
 <script setup lang="ts">
-import { LogIn, UserPlus, Loader2, Lock, Mail, ArrowLeft } from 'lucide-vue-next'
+import { Loader2, Lock, Mail, ArrowLeft, ArrowRight } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 
 const route = useRoute()
 const { login, register, resetPassword, user, loading } = useAuth()
 
-// Steps: 'login' | 'register-email' | 'magic-link-sent' | 'register-password' | 'profile' | 'welcome'
+// Steps: 'email' | 'password' | 'register-email' | 'magic-link-sent' | 'register-password' | 'profile' | 'welcome'
 const step = ref<string>(
   route.query.step === 'profile' ? 'profile'
-    : route.query.mode === 'register' ? 'register-email'
-      : 'login',
+    : route.query.mode === 'register' ? 'email'
+      : 'email',
 )
+const emailInput = ref('')
 const magicLinkEmail = ref('')
 const forgotPassword = ref(false)
 const forgotEmail = ref('')
 const submitting = ref(false)
+const checking = ref(false)
 
 const loginForm = ref({ email: '', password: '' })
 const registerForm = ref({
@@ -24,10 +26,9 @@ const registerForm = ref({
 // Redirect if already logged in (with profile)
 watch(user, (u) => {
   if (u && step.value !== 'profile' && step.value !== 'welcome') {
-    // User logged in via magic link, needs profile completion?
     if (!u.name || u.name === '') {
       step.value = 'profile'
-    } else if (step.value === 'login') {
+    } else if (step.value === 'password') {
       navigateTo('/mon-compte')
     }
   }
@@ -39,6 +40,30 @@ onMounted(() => {
     step.value = 'profile'
   }
 })
+
+async function handleEmailCheck() {
+  if (!emailInput.value) return
+  checking.value = true
+  try {
+    const { exists } = await $fetch<{ exists: boolean }>('/api/check-email', {
+      method: 'POST',
+      body: { email: emailInput.value },
+    })
+    if (exists) {
+      // Known user → show password field
+      loginForm.value.email = emailInput.value
+      step.value = 'password'
+    } else {
+      // New user → register flow
+      registerForm.value.email = emailInput.value
+      step.value = 'register-email'
+    }
+  } catch {
+    toast.error('Erreur de vérification, veuillez réessayer.')
+  } finally {
+    checking.value = false
+  }
+}
 
 async function handleLogin() {
   submitting.value = true
@@ -86,9 +111,14 @@ function onProfileCompleted() {
   step.value = 'welcome'
 }
 
+function goBackToEmail() {
+  step.value = 'email'
+  forgotPassword.value = false
+}
+
 async function handleForgotPassword() {
   submitting.value = true
-  const result = await resetPassword(forgotEmail.value)
+  const result = await resetPassword(forgotEmail.value || loginForm.value.email)
   submitting.value = false
   if (result.error) {
     toast.error(result.error)
@@ -108,51 +138,80 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
 
   <div v-else class="max-w-md mx-auto px-6 py-16 min-h-[80vh] flex flex-col justify-center">
 
-    <!-- Step: Login -->
-    <template v-if="step === 'login' && !forgotPassword">
-      <!-- Mode toggle -->
-      <div class="flex rounded-full overflow-hidden bg-prado-surface p-1 mb-8">
-        <button
-          class="flex-1 py-2.5 rounded-full text-sm flex items-center justify-center gap-2 transition-colors bg-[#CF006C] text-white"
-        >
-          <LogIn :size="15" /> Se connecter
-        </button>
-        <button
-          class="flex-1 py-2.5 rounded-full text-sm flex items-center justify-center gap-2 transition-colors text-prado-text-muted"
-          @click="step = 'register-email'"
-        >
-          <UserPlus :size="15" /> Créer un compte
-        </button>
-      </div>
-
-      <form class="space-y-4" @submit.prevent="handleLogin">
+    <!-- Step: Email (entry point) -->
+    <template v-if="step === 'email'">
+      <form class="space-y-4" @submit.prevent="handleEmailCheck">
         <h2 class="text-xl text-prado-text">Espace professionnel</h2>
-        <p class="text-sm text-prado-text-muted mb-2">Connectez-vous pour inscrire des jeunes.</p>
+        <p class="text-sm text-prado-text-muted mb-2">Entrez votre email pour continuer.</p>
 
         <div>
           <label class="text-sm text-prado-text-secondary mb-1.5 block">Email professionnel</label>
           <div class="relative">
             <Mail :size="16" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-prado-text-muted" />
-            <input v-model="loginForm.email" type="email" required :class="inputClass" placeholder="votre@email-pro.fr" />
+            <input
+              v-model="emailInput"
+              type="email"
+              required
+              autofocus
+              :class="inputClass"
+              placeholder="votre@email-pro.fr"
+            />
           </div>
         </div>
+
+        <button
+          type="submit"
+          :disabled="checking"
+          class="w-full py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] transition-colors disabled:opacity-50 flex items-center justify-center gap-2 font-normal"
+        >
+          <Loader2 v-if="checking" :size="16" class="animate-spin" />
+          <template v-else>
+            Continuer <ArrowRight :size="16" />
+          </template>
+        </button>
+      </form>
+    </template>
+
+    <!-- Step: Password (known user) -->
+    <template v-if="step === 'password' && !forgotPassword">
+      <form class="space-y-4" @submit.prevent="handleLogin">
+        <button
+          type="button"
+          class="text-sm text-prado-text-muted hover:text-prado-text transition-colors flex items-center gap-1 mb-2"
+          @click="goBackToEmail"
+        >
+          <ArrowLeft :size="14" /> Changer d'email
+        </button>
+
+        <h2 class="text-xl text-prado-text">Bon retour !</h2>
+        <p class="text-sm text-prado-text-muted mb-2">
+          Connectez-vous en tant que <span class="text-prado-text">{{ loginForm.email }}</span>
+        </p>
+
         <div>
           <label class="text-sm text-prado-text-secondary mb-1.5 block">Mot de passe</label>
           <div class="relative">
             <Lock :size="16" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-prado-text-muted" />
-            <input v-model="loginForm.password" type="password" required :class="inputClass" placeholder="••••••••" />
+            <input
+              v-model="loginForm.password"
+              type="password"
+              required
+              autofocus
+              :class="inputClass"
+              placeholder="••••••••"
+            />
           </div>
         </div>
 
         <button
           type="submit"
           :disabled="submitting"
-          class="w-full py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] transition-colors disabled:opacity-50 flex items-center justify-center gap-2 font-medium"
+          class="w-full py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] transition-colors disabled:opacity-50 flex items-center justify-center gap-2 font-normal"
         >
           <Loader2 v-if="submitting" :size="16" class="animate-spin" />
           Se connecter
         </button>
-        <button type="button" class="text-sm text-[#FB6223]" @click="forgotPassword = true">
+        <button type="button" class="text-sm text-[#FB6223] font-normal" @click="forgotPassword = true">
           Mot de passe oublié ?
         </button>
       </form>
@@ -166,41 +225,34 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
           <label class="text-sm text-prado-text-secondary mb-1.5 block">Email professionnel</label>
           <div class="relative">
             <Mail :size="16" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-prado-text-muted" />
-            <input v-model="forgotEmail" type="email" required :class="inputClass" />
+            <input v-model="forgotEmail" type="email" required :class="inputClass" :placeholder="loginForm.email" />
           </div>
         </div>
         <button
           type="submit"
           :disabled="submitting"
-          class="w-full py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] disabled:opacity-50 flex items-center justify-center gap-2"
+          class="w-full py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] disabled:opacity-50 flex items-center justify-center gap-2 font-normal"
         >
           <Loader2 v-if="submitting" :size="16" class="animate-spin" />
           Réinitialiser
         </button>
-        <button type="button" class="text-sm text-prado-text-faint" @click="forgotPassword = false">
+        <button type="button" class="text-sm text-prado-text-faint font-normal" @click="forgotPassword = false">
           <ArrowLeft :size="12" class="inline mr-1" /> Retour
         </button>
       </form>
     </template>
 
-    <!-- Step: Register - Email (magic link) -->
+    <!-- Step: Register - Email (magic link) — new user -->
     <template v-if="step === 'register-email'">
-      <!-- Mode toggle -->
-      <div class="flex rounded-full overflow-hidden bg-prado-surface p-1 mb-8">
-        <button
-          class="flex-1 py-2.5 rounded-full text-sm flex items-center justify-center gap-2 transition-colors text-prado-text-muted"
-          @click="step = 'login'"
-        >
-          <LogIn :size="15" /> Se connecter
-        </button>
-        <button
-          class="flex-1 py-2.5 rounded-full text-sm flex items-center justify-center gap-2 transition-colors bg-[#CF006C] text-white"
-        >
-          <UserPlus :size="15" /> Créer un compte
-        </button>
-      </div>
+      <button
+        class="text-sm text-prado-text-muted hover:text-prado-text transition-colors flex items-center gap-1 mb-6"
+        @click="goBackToEmail"
+      >
+        <ArrowLeft :size="14" /> Changer d'email
+      </button>
 
       <OnboardingStep1
+        :initial-email="registerForm.email"
         @magic-link-sent="onMagicLinkSent"
         @switch-to-password="onSwitchToPassword"
       />
@@ -224,8 +276,8 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
           </p>
         </div>
         <button
-          class="text-sm text-prado-text-muted hover:text-prado-text transition-colors"
-          @click="step = 'register-email'"
+          class="text-sm text-prado-text-muted hover:text-prado-text transition-colors font-normal"
+          @click="goBackToEmail"
         >
           <ArrowLeft :size="12" class="inline mr-1" /> Changer d'email
         </button>
@@ -235,7 +287,7 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
     <!-- Step: Register with password (fallback) -->
     <template v-if="step === 'register-password'">
       <button
-        class="text-sm text-prado-text-muted mb-6 flex items-center gap-1"
+        class="text-sm text-prado-text-muted mb-6 flex items-center gap-1 font-normal"
         @click="step = 'register-email'"
       >
         <ArrowLeft :size="14" /> Retour
@@ -273,7 +325,7 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
           <button
             type="submit"
             :disabled="submitting"
-            class="w-full py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] disabled:opacity-50 flex items-center justify-center gap-2 font-medium"
+            class="w-full py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] disabled:opacity-50 flex items-center justify-center gap-2 font-normal"
           >
             <Loader2 v-if="submitting" :size="16" class="animate-spin" />
             Créer mon compte

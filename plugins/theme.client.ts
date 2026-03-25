@@ -1,8 +1,7 @@
 export default defineNuxtPlugin(() => {
-  const saved = localStorage.getItem('prado-theme') as 'light' | 'dark' | null;
-  const theme = saved ?? 'dark';
-  document.documentElement.setAttribute('data-theme', theme);
-
+  // data-theme is already set by the inline head script (no flash).
+  // Here we just sync the Nuxt reactive state.
+  const current = document.documentElement.getAttribute('data-theme') as 'light' | 'dark' | null;
   const themeState = useState('theme');
-  themeState.value = theme;
+  themeState.value = current ?? 'dark';
 });

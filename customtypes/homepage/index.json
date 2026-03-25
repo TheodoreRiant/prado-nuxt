@@ -1,0 +1,184 @@
+{
+  "id": "homepage",
+  "label": "Homepage",
+  "repeatable": false,
+  "status": true,
+  "json": {
+    "Main": {
+      "body": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "hero": {
+              "type": "Slice",
+              "fieldset": "Hero",
+              "description": "Section hero avec sur-titre, titre, description et CTAs",
+              "icon": "star_border",
+              "non-repeat": {
+                "surtitle": { "type": "Text", "config": { "label": "Sur-titre", "placeholder": "Association de la Fondation du Prado" } },
+                "title": { "type": "StructuredText", "config": { "label": "Titre principal", "single": "paragraph", "labels": ["highlight-pink", "highlight-orange", "highlight-purple", "highlight-green"] } },
+                "description": { "type": "StructuredText", "config": { "label": "Description", "multi": "paragraph,strong,em" } },
+                "cta_primary_label": { "type": "Text", "config": { "label": "CTA primaire - Texte" } },
+                "cta_primary_link": { "type": "Link", "config": { "label": "CTA primaire - Lien" } },
+                "cta_secondary_label": { "type": "Text", "config": { "label": "CTA secondaire - Texte" } },
+                "cta_secondary_link": { "type": "Link", "config": { "label": "CTA secondaire - Lien" } }
+              },
+              "repeat": {}
+            },
+            "programmes": {
+              "type": "Slice",
+              "fieldset": "Programmes",
+              "description": "Les programmes avec navigation sticky",
+              "icon": "view_list",
+              "non-repeat": {
+                "section_title": { "type": "Text", "config": { "label": "Titre de section" } }
+              },
+              "repeat": {
+                "slug": { "type": "Text", "config": { "label": "Slug (ancre)", "placeholder": "jeunes, foodtruck, etc." } },
+                "title": { "type": "Text", "config": { "label": "Titre complet" } },
+                "short_title": { "type": "Text", "config": { "label": "Titre court (sidebar)" } },
+                "icon_name": { "type": "Select", "config": { "label": "Icône", "options": ["Users", "Truck", "Heart", "BookOpen", "UtensilsCrossed", "HeartHandshake", "Puzzle"] } },
+                "brand_color": { "type": "Color", "config": { "label": "Couleur" } },
+                "description": { "type": "StructuredText", "config": { "label": "Description", "multi": "paragraph,strong,em,hyperlink" } },
+                "cta_1_label": { "type": "Text", "config": { "label": "CTA 1 - Texte" } },
+                "cta_1_link": { "type": "Link", "config": { "label": "CTA 1 - Lien" } },
+                "cta_2_label": { "type": "Text", "config": { "label": "CTA 2 - Texte" } },
+                "cta_2_link": { "type": "Link", "config": { "label": "CTA 2 - Lien" } },
+                "cta_3_label": { "type": "Text", "config": { "label": "CTA 3 - Texte" } },
+                "cta_3_link": { "type": "Link", "config": { "label": "CTA 3 - Lien" } }
+              }
+            },
+            "missions": {
+              "type": "Slice",
+              "fieldset": "Missions",
+              "description": "Nos missions pour les jeunes et les familles",
+              "icon": "flag",
+              "non-repeat": {
+                "section_title": { "type": "Text", "config": { "label": "Titre de section" } },
+                "intro_text": { "type": "StructuredText", "config": { "label": "Texte d'introduction", "multi": "paragraph,strong,em,hyperlink" } },
+                "jeunes_title": { "type": "Text", "config": { "label": "Titre colonne jeunes" } },
+                "familles_title": { "type": "Text", "config": { "label": "Titre colonne familles" } }
+              },
+              "repeat": {
+                "category": { "type": "Select", "config": { "label": "Catégorie", "options": ["jeunes", "familles"] } },
+                "text": { "type": "Text", "config": { "label": "Texte de la mission" } }
+              }
+            },
+            "impact": {
+              "type": "Slice",
+              "fieldset": "Chiffres d'impact",
+              "description": "Statistiques animées avec compteurs GSAP",
+              "icon": "trending_up",
+              "non-repeat": {
+                "section_title": { "type": "Text", "config": { "label": "Titre de section" } }
+              },
+              "repeat": {
+                "value": { "type": "Number", "config": { "label": "Valeur numérique" } },
+                "suffix": { "type": "Text", "config": { "label": "Suffixe (+, %, etc.)" } },
+                "label": { "type": "Text", "config": { "label": "Libellé" } },
+                "color": { "type": "Color", "config": { "label": "Couleur" } }
+              }
+            },
+            "steps": {
+              "type": "Slice",
+              "fieldset": "Étapes",
+              "description": "Comment inscrire un jeune - étapes numérotées",
+              "icon": "format_list_numbered",
+              "non-repeat": {
+                "section_title": { "type": "Text", "config": { "label": "Titre de section" } },
+                "cta_label": { "type": "Text", "config": { "label": "CTA - Texte" } },
+                "cta_link": { "type": "Link", "config": { "label": "CTA - Lien" } },
+                "reassurance_text": { "type": "Text", "config": { "label": "Texte de réassurance" } }
+              },
+              "repeat": {
+                "step_number": { "type": "Text", "config": { "label": "Numéro", "placeholder": "01" } },
+                "title": { "type": "Text", "config": { "label": "Titre" } },
+                "description": { "type": "Text", "config": { "label": "Description" } }
+              }
+            },
+            "testimonials": {
+              "type": "Slice",
+              "fieldset": "Témoignages",
+              "description": "Témoignages avec défilement infini vertical",
+              "icon": "format_quote",
+              "non-repeat": {
+                "section_title": { "type": "Text", "config": { "label": "Titre de section" } }
+              },
+              "repeat": {
+                "quote": { "type": "StructuredText", "config": { "label": "Citation", "multi": "paragraph,strong,em" } },
+                "author_name": { "type": "Text", "config": { "label": "Nom" } },
+                "author_role": { "type": "Text", "config": { "label": "Rôle" } },
+                "author_org": { "type": "Text", "config": { "label": "Organisation" } }
+              }
+            },
+            "faq": {
+              "type": "Slice",
+              "fieldset": "FAQ",
+              "description": "Questions fréquentes en accordéon",
+              "icon": "help_outline",
+              "non-repeat": {
+                "section_title": { "type": "Text", "config": { "label": "Titre de section" } }
+              },
+              "repeat": {
+                "question": { "type": "Text", "config": { "label": "Question" } },
+                "answer": { "type": "StructuredText", "config": { "label": "Réponse", "multi": "paragraph,strong,em,hyperlink,list-item,o-list-item" } }
+              }
+            },
+            "partners": {
+              "type": "Slice",
+              "fieldset": "Partenaires",
+              "description": "Logos partenaires avec défilement horizontal",
+              "icon": "business",
+              "non-repeat": {
+                "section_title": { "type": "Text", "config": { "label": "Titre de section" } },
+                "subtitle": { "type": "Text", "config": { "label": "Sous-titre" } }
+              },
+              "repeat": {
+                "name": { "type": "Text", "config": { "label": "Nom du partenaire" } },
+                "logo": { "type": "Image", "config": { "label": "Logo" } },
+                "url": { "type": "Link", "config": { "label": "Site web" } }
+              }
+            },
+            "en_savoir_plus": {
+              "type": "Slice",
+              "fieldset": "En savoir plus",
+              "description": "Cartes avec liens vers pages internes",
+              "icon": "info",
+              "non-repeat": {
+                "section_title": { "type": "Text", "config": { "label": "Titre de section" } }
+              },
+              "repeat": {
+                "title": { "type": "Text", "config": { "label": "Titre" } },
+                "description": { "type": "Text", "config": { "label": "Description" } },
+                "cta_label": { "type": "Text", "config": { "label": "Texte du lien" } },
+                "link": { "type": "Link", "config": { "label": "Lien" } }
+              }
+            },
+            "cta_final": {
+              "type": "Slice",
+              "fieldset": "CTA Final",
+              "description": "Appel à l'action final avec dégradé rose-orange",
+              "icon": "call_to_action",
+              "non-repeat": {
+                "title": { "type": "Text", "config": { "label": "Titre" } },
+                "description": { "type": "StructuredText", "config": { "label": "Description", "multi": "paragraph,strong,em" } },
+                "cta_primary_label": { "type": "Text", "config": { "label": "CTA primaire - Texte" } },
+                "cta_primary_link": { "type": "Link", "config": { "label": "CTA primaire - Lien" } },
+                "cta_secondary_label": { "type": "Text", "config": { "label": "CTA secondaire - Texte" } },
+                "cta_secondary_link": { "type": "Link", "config": { "label": "CTA secondaire - Lien" } },
+                "footer_text": { "type": "Text", "config": { "label": "Texte de pied" } }
+              },
+              "repeat": {}
+            }
+          }
+        }
+      }
+    },
+    "SEO": {
+      "meta_title": { "type": "Text", "config": { "label": "Meta Title", "placeholder": "Titre SEO de la page d'accueil" } },
+      "meta_description": { "type": "Text", "config": { "label": "Meta Description", "placeholder": "Description SEO" } },
+      "og_image": { "type": "Image", "config": { "label": "OG Image" } }
+    }
+  }
+}

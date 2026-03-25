@@ -88,6 +88,29 @@ export async function fetchInscriptions(client: SupabaseClient): Promise<Inscrip
 }
 
 export async function createInscription(client: SupabaseClient, prescripteurId: string, actionId: string, jeuneId: string): Promise<Inscription> {
+  // Check capacity before inserting
+  const { data: action, error: actionError } = await client
+    .from('actions')
+    .select('places_max')
+    .eq('id', actionId)
+    .single();
+  if (actionError || !action) {
+    throw new Error(actionError?.message ?? 'Action introuvable');
+  }
+
+  const placesMax = typeof action.places_max === 'number' ? action.places_max : null;
+  if (placesMax !== null) {
+    const { count, error: countError } = await client
+      .from('inscriptions')
+      .select('*', { count: 'exact', head: true })
+      .eq('action_id', actionId)
+      .is('canceled_at', null);
+    if (countError) throw new Error(countError.message);
+    if ((count ?? 0) >= placesMax) {
+      throw new Error('Cette action est complète');
+    }
+  }
+
   const { data, error } = await client.from('inscriptions').insert({
     prescripteur_id: prescripteurId, jeune_id: jeuneId, action_id: actionId,
   }).select().single();

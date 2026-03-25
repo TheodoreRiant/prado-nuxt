@@ -8,16 +8,36 @@ interface Stat {
   color: string
 }
 
-const stats: Stat[] = [
+const props = defineProps<{ data?: any }>()
+
+const defaultStats: Stat[] = [
   { value: 89, suffix: '', label: 'actions et ateliers programmés sur le territoire', color: '#CF006C' },
   { value: 183, suffix: '', label: 'ressources professionnelles en accès libre', color: '#FB6223' },
   { value: 500, suffix: '+', label: 'jeunes accompagnés chaque année', color: '#C18ED8' },
   { value: 50, suffix: '+', label: 'structures partenaires sur la Métropole de Lyon', color: '#93C1AF' },
 ]
 
-const displayValues = ref(stats.map(() => 0))
+const stats = computed<Stat[]>(() => {
+  if (props.data?.items?.length) {
+    return props.data.items.map((item: any) => ({
+      value: item.value ?? 0,
+      suffix: item.suffix ?? '',
+      label: item.label ?? '',
+      color: item.color ?? '#CF006C',
+    }))
+  }
+  return defaultStats
+})
+
+const displayValues = ref(stats.value.map(() => 0))
 const sectionRef = ref<HTMLElement | null>(null)
 const hasAnimated = ref(false)
+
+watch(stats, (newStats) => {
+  if (!hasAnimated.value) {
+    displayValues.value = newStats.map(() => 0)
+  }
+})
 
 async function animateCounters() {
   if (hasAnimated.value) return
@@ -28,7 +48,7 @@ async function animateCounters() {
     gsap = mod.gsap
   }
 
-  stats.forEach((stat, idx) => {
+  stats.value.forEach((stat, idx) => {
     const obj = { val: 0 }
     gsap!.to(obj, {
       val: stat.value,
