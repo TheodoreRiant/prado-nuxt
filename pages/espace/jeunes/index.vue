@@ -81,7 +81,6 @@ function handleExport() {
 const addFormFields = [
   { label: 'Prenom', key: 'firstName', type: 'text' },
   { label: 'Nom', key: 'lastName', type: 'text' },
-  { label: 'Date de naissance', key: 'dateOfBirth', type: 'date' },
   { label: 'Adresse', key: 'address', type: 'text' },
 ]
 
@@ -116,6 +115,10 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
           :class="inputClass"
           @input="(newJeune as Record<string, string>)[f.key] = ($event.target as HTMLInputElement).value"
         />
+      </div>
+      <div class="sm:col-span-2">
+        <label class="text-xs text-prado-text-muted mb-1 block">Date de naissance</label>
+        <UiDateOfBirthPicker v-model="newJeune.dateOfBirth" />
       </div>
       <div class="sm:col-span-2">
         <label class="text-xs text-prado-text-muted mb-1 block">Situation globale</label>

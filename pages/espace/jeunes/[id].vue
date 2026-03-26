@@ -50,7 +50,7 @@ const fields = computed(() => {
   return [
     { key: 'firstName', label: 'Prenom', value: jeune.value.firstName },
     { key: 'lastName', label: 'Nom', value: jeune.value.lastName },
-    { key: 'dateOfBirth', label: 'Date de naissance', value: jeune.value.dateOfBirth, display: new Date(jeune.value.dateOfBirth).toLocaleDateString('fr-FR'), type: 'date' },
+    { key: 'dateOfBirth', label: 'Date de naissance', value: jeune.value.dateOfBirth, display: new Date(jeune.value.dateOfBirth).toLocaleDateString('fr-FR'), type: 'dateOfBirth' },
     { key: 'address', label: 'Adresse', value: jeune.value.address },
     { key: 'situation', label: 'Situation', value: jeune.value.situation },
   ]
@@ -292,7 +292,11 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
 
           <!-- Editing mode -->
           <template v-if="editing === field.key">
+            <div v-if="field.type === 'dateOfBirth'" class="flex-1">
+              <UiDateOfBirthPicker v-model="editValue" />
+            </div>
             <input
+              v-else
               v-model="editValue"
               :type="field.type ?? 'text'"
               :class="inputClass"
