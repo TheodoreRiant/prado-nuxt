@@ -153,6 +153,8 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
             <input
               v-model="emailInput"
               type="email"
+              name="email"
+              autocomplete="email"
               required
               autofocus
               :class="inputClass"
@@ -197,6 +199,8 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
             <input
               v-model="loginForm.password"
               type="password"
+              name="password"
+              autocomplete="current-password"
               required
               autofocus
               :class="inputClass"
@@ -227,7 +231,7 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
           <label class="text-sm text-prado-text-secondary mb-1.5 block">Email professionnel</label>
           <div class="relative">
             <Mail :size="16" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-prado-text-muted" />
-            <input v-model="forgotEmail" type="email" required :class="inputClass" :placeholder="loginForm.email" />
+            <input v-model="forgotEmail" type="email" name="email" autocomplete="email" required :class="inputClass" :placeholder="loginForm.email" />
           </div>
         </div>
         <button
@@ -310,7 +314,7 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
           </div>
           <div>
             <label class="text-sm text-prado-text-secondary mb-1.5 block">Email professionnel *</label>
-            <input v-model="registerForm.email" type="email" required :class="inputClass.replace('pl-10', 'pl-4')" />
+            <input v-model="registerForm.email" type="email" name="email" autocomplete="email" required :class="inputClass.replace('pl-10', 'pl-4')" />
           </div>
           <div>
             <label class="text-sm text-prado-text-secondary mb-1.5 block">Structure *</label>
@@ -318,11 +322,11 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
           </div>
           <div>
             <label class="text-sm text-prado-text-secondary mb-1.5 block">Mot de passe *</label>
-            <input v-model="registerForm.password" type="password" required :class="inputClass.replace('pl-10', 'pl-4')" placeholder="6 caractères minimum" />
+            <input v-model="registerForm.password" type="password" name="new-password" autocomplete="new-password" required :class="inputClass.replace('pl-10', 'pl-4')" placeholder="6 caractères minimum" />
           </div>
           <div>
             <label class="text-sm text-prado-text-secondary mb-1.5 block">Confirmer *</label>
-            <input v-model="registerForm.confirmPassword" type="password" required :class="inputClass.replace('pl-10', 'pl-4')" />
+            <input v-model="registerForm.confirmPassword" type="password" name="confirm-password" autocomplete="new-password" required :class="inputClass.replace('pl-10', 'pl-4')" />
           </div>
           <button
             type="submit"
