@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowLeft, Pencil, Check, X, Trash2, Loader2, Calendar, Plus, StickyNote, ShieldCheck, ShieldOff } from 'lucide-vue-next'
+import { ArrowLeft, Pencil, Check, X, Trash2, Loader2, Calendar, Plus, StickyNote, ShieldCheck, ShieldOff, Heart, Users, ClipboardList } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 
 definePageMeta({ layout: 'espace', middleware: 'auth' })
@@ -165,6 +165,21 @@ watch(veriffError, (val) => {
   if (val) toast.error(val)
 })
 
+// Tabs
+const activeTab = ref<'infos' | 'sante' | 'famille'>('infos')
+const tabs = [
+  { key: 'infos' as const, label: 'Infos generales', icon: ClipboardList },
+  { key: 'sante' as const, label: 'Sante', icon: Heart },
+  { key: 'famille' as const, label: 'Situation familiale', icon: Users },
+]
+
+// Health data (HDS)
+const { form: santeForm, loading: santeLoading, saving: santeSaving, load: loadSante, save: saveSante } = useSante(id)
+
+watch(activeTab, (tab) => {
+  if (tab === 'sante' || tab === 'famille') loadSante()
+})
+
 const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-border-medium'
 </script>
 
@@ -246,6 +261,25 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
           </div>
         </div>
       </div>
+
+      <!-- Tab navigation -->
+      <div class="flex gap-1 bg-prado-surface rounded-xl p-1 border border-prado-border">
+        <button
+          v-for="tab in tabs"
+          :key="tab.key"
+          class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors"
+          :class="activeTab === tab.key
+            ? 'bg-[#004657] text-white'
+            : 'text-prado-text-muted hover:bg-prado-surface-hover'"
+          @click="activeTab = tab.key"
+        >
+          <component :is="tab.icon" :size="14" />
+          {{ tab.label }}
+        </button>
+      </div>
+
+      <!-- TAB: Infos generales -->
+      <template v-if="activeTab === 'infos'">
 
       <!-- Info fields with inline edit -->
       <div class="bg-prado-surface rounded-2xl border border-prado-border divide-y divide-prado-border">
@@ -424,6 +458,29 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
           </div>
         </div>
       </div>
+
+      </template>
+
+      <!-- TAB: Sante -->
+      <template v-if="activeTab === 'sante'">
+        <div v-if="santeLoading" class="flex items-center justify-center py-12">
+          <Loader2 :size="24" class="animate-spin text-prado-text-muted" />
+        </div>
+        <div v-else class="bg-prado-surface rounded-2xl border border-prado-border p-5">
+          <JeuneFicheSante v-model="santeForm" :saving="santeSaving" @save="saveSante" />
+        </div>
+      </template>
+
+      <!-- TAB: Situation familiale -->
+      <template v-if="activeTab === 'famille'">
+        <div v-if="santeLoading" class="flex items-center justify-center py-12">
+          <Loader2 :size="24" class="animate-spin text-prado-text-muted" />
+        </div>
+        <div v-else class="bg-prado-surface rounded-2xl border border-prado-border p-5">
+          <JeuneFicheFamille v-model="santeForm" :saving="santeSaving" @save="saveSante" />
+        </div>
+      </template>
+
     </template>
   </div>
 </template>

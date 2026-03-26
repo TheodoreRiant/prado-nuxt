@@ -64,6 +64,8 @@ export default defineNuxtConfig({
     veriffApiKey: '',
     veriffSecretKey: '',
     veriffBaseUrl: 'https://stationapi.veriff.com',
+    hdsDatabaseUrl: '',
+    hdsEncryptionKey: '',
     public: {
       supabaseUrl: '',
       supabaseKey: '',
