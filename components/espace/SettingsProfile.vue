@@ -18,7 +18,8 @@ const { user, updateProfile } = useAuth()
 const supabaseUser = useSupabaseUser()
 
 const form = ref({
-  name: '',
+  firstName: '',
+  lastName: '',
   structure: '',
   fonction: '',
   phone: '',
@@ -28,7 +29,10 @@ const saving = ref(false)
 
 watch(user, (u) => {
   if (u) {
-    form.value.name = u.name ?? ''
+    // Split name into first/last
+    const parts = (u.name ?? '').split(' ')
+    form.value.firstName = parts[0] ?? ''
+    form.value.lastName = parts.slice(1).join(' ') ?? ''
     form.value.phone = supabaseUser.value?.user_metadata?.phone ?? ''
     form.value.fonction = supabaseUser.value?.user_metadata?.fonction ?? ''
     // Si la structure n'est pas dans la liste, c'est une saisie libre
@@ -46,13 +50,17 @@ const client = useSupabaseClient()
 
 async function handleSave() {
   const structure = form.value.structure === '__autre' ? structureLibre.value : form.value.structure
-  if (!form.value.name || !structure) {
-    toast.error('Nom et structure sont requis')
+  if (!form.value.firstName || !form.value.lastName || !structure) {
+    toast.error('Prénom, nom et structure sont requis')
     return
   }
   saving.value = true
-  const result = await updateProfile({ ...form.value, structure })
-  // Refresh session to get updated user_metadata (phone, fonction)
+  const result = await updateProfile({
+    name: `${form.value.firstName} ${form.value.lastName}`,
+    structure,
+    fonction: form.value.fonction,
+    phone: form.value.phone,
+  })
   await client.auth.refreshSession()
   saving.value = false
   if (result.error) {
@@ -70,12 +78,20 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
     <h2 class="text-sm font-semibold text-prado-text mb-4">Informations personnelles</h2>
     <form class="grid grid-cols-1 sm:grid-cols-2 gap-4" @submit.prevent="handleSave">
       <div>
-        <label class="text-xs text-prado-text-muted mb-1.5 block">Nom complet *</label>
-        <input v-model="form.name" type="text" required :class="inputClass" />
+        <label class="text-xs text-prado-text-muted mb-1.5 block">Prénom *</label>
+        <input v-model="form.firstName" type="text" autocomplete="given-name" required :class="inputClass" />
+      </div>
+      <div>
+        <label class="text-xs text-prado-text-muted mb-1.5 block">Nom *</label>
+        <input v-model="form.lastName" type="text" autocomplete="family-name" required :class="inputClass" />
       </div>
       <div>
         <label class="text-xs text-prado-text-muted mb-1.5 block">Email</label>
         <input :value="user?.email" type="email" disabled :class="inputClass" class="opacity-60 cursor-not-allowed" />
+      </div>
+      <div>
+        <label class="text-xs text-prado-text-muted mb-1.5 block">Telephone</label>
+        <input v-model="form.phone" type="tel" autocomplete="tel" :class="inputClass" />
       </div>
       <div>
         <label class="text-xs text-prado-text-muted mb-1.5 block">Structure *</label>
@@ -100,10 +116,6 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
           <option value="">Sélectionner votre fonction</option>
           <option v-for="f in FONCTIONS" :key="f" :value="f">{{ f }}</option>
         </select>
-      </div>
-      <div>
-        <label class="text-xs text-prado-text-muted mb-1.5 block">Telephone</label>
-        <input v-model="form.phone" type="tel" :class="inputClass" />
       </div>
       <div class="sm:col-span-2">
         <button
