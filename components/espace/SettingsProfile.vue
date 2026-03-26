@@ -42,6 +42,8 @@ watch(user, (u) => {
   }
 }, { immediate: true })
 
+const client = useSupabaseClient()
+
 async function handleSave() {
   const structure = form.value.structure === '__autre' ? structureLibre.value : form.value.structure
   if (!form.value.name || !structure) {
@@ -50,6 +52,8 @@ async function handleSave() {
   }
   saving.value = true
   const result = await updateProfile({ ...form.value, structure })
+  // Refresh session to get updated user_metadata (phone, fonction)
+  await client.auth.refreshSession()
   saving.value = false
   if (result.error) {
     toast.error(result.error)
