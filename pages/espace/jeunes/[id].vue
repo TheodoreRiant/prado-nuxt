@@ -302,7 +302,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
           :key="tab.key"
           class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors"
           :class="activeTab === tab.key
-            ? 'bg-prado-signature text-prado-signature-text font-medium'
+            ? 'bg-[#004657] text-white font-medium shadow-sm'
             : 'text-prado-text-muted hover:bg-prado-surface-hover'"
           @click="activeTab = tab.key"
         >
