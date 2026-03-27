@@ -124,12 +124,12 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
 
     <!-- Suggestions dropdown -->
     <div v-if="showSuggestions && suggestions.length > 0" class="relative">
-      <div class="absolute z-20 left-0 right-0 top-0 mt-0.5 bg-prado-surface border border-prado-border rounded-xl shadow-lg overflow-hidden max-h-64 overflow-y-auto">
+      <div class="absolute z-50 left-0 right-0 top-0 mt-0.5 rounded-xl shadow-xl overflow-hidden max-h-64 overflow-y-auto border border-prado-border" style="background-color: var(--prado-surface);">
         <button
           v-for="(m, i) in suggestions"
           :key="i"
           type="button"
-          class="w-full text-left px-3 py-2.5 hover:bg-prado-surface-hover transition-colors border-b border-prado-border last:border-0"
+          class="w-full text-left px-3 py-2.5 hover:bg-prado-surface-hover transition-colors border-b border-prado-border last:border-0" style="background-color: var(--prado-surface);"
           @mousedown.prevent="selectMedecin(m)"
         >
           <div class="flex items-center justify-between">
