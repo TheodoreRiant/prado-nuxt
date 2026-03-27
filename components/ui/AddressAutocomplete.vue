@@ -98,13 +98,13 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
         <!-- Suggestions dropdown -->
         <div
           v-if="showSuggestions"
-          class="absolute z-20 left-0 right-0 top-full mt-1 bg-prado-surface border border-prado-border rounded-xl shadow-lg overflow-hidden"
+          class="absolute z-50 left-0 right-0 top-full mt-1 rounded-xl shadow-xl overflow-hidden border border-prado-border" style="background-color: var(--prado-surface);"
         >
           <button
             v-for="(s, i) in suggestions"
             :key="i"
             type="button"
-            class="w-full text-left px-3 py-2.5 text-sm text-prado-text hover:bg-prado-surface-hover transition-colors border-b border-prado-border last:border-0"
+            class="w-full text-left px-3 py-2.5 text-sm text-prado-text hover:bg-prado-surface-hover transition-colors border-b border-prado-border last:border-0" style="background-color: var(--prado-surface);"
             @mousedown.prevent="selectSuggestion(s)"
           >
             {{ s.label }}

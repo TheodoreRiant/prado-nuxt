@@ -90,12 +90,12 @@ function handleBlur() {
 
     <!-- Suggestions dropdown -->
     <div v-if="showSuggestions && filteredSuggestions.length > 0" class="relative">
-      <div class="absolute z-20 left-0 right-0 top-0 mt-1 bg-prado-surface border border-prado-border rounded-xl shadow-lg overflow-hidden max-h-48 overflow-y-auto">
+      <div class="absolute z-50 left-0 right-0 top-0 mt-1 rounded-xl shadow-xl overflow-hidden max-h-48 overflow-y-auto border border-prado-border" style="background-color: var(--prado-surface);">
         <button
           v-for="s in filteredSuggestions"
           :key="s"
           type="button"
-          class="w-full text-left px-3 py-2 text-sm text-prado-text hover:bg-prado-surface-hover transition-colors border-b border-prado-border last:border-0"
+          class="w-full text-left px-3 py-2 text-sm text-prado-text hover:bg-prado-surface-hover transition-colors border-b border-prado-border last:border-0" style="background-color: var(--prado-surface);"
           @mousedown.prevent="addTag(s)"
         >
           {{ s }}
