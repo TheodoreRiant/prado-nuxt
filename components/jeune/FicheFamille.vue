@@ -90,26 +90,10 @@ function updateMembre(index: number, field: keyof MembreFamille, value: string |
   }
 }
 
-// Mesure de protection: "aucune" is exclusive (deselects others, others deselect "aucune")
-const mesuresProxy = computed({
-  get: () => form.value.mesureProtection,
-  set: (newVal: string[]) => {
-    const oldVal = form.value.mesureProtection
-    const addedAucune = newVal.includes('aucune') && !oldVal.includes('aucune')
-    const addedOther = newVal.some(v => v !== 'aucune' && !oldVal.includes(v))
-
-    let result: string[]
-    if (addedAucune) {
-      result = ['aucune']
-    } else if (addedOther) {
-      result = newVal.filter(v => v !== 'aucune')
-    } else {
-      result = newVal.length === 0 ? ['aucune'] : newVal
-    }
-
-    form.value = { ...form.value, mesureProtection: result }
-  },
-})
+// Mesures de protection — labels for TagInput suggestions
+const mesuresSuggestions = MESURES_PROTECTION
+  .filter(m => m.value !== 'aucune')
+  .map(m => m.label)
 
 const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-border-medium'
 const labelClass = 'text-sm text-prado-text-muted mb-1 block'
@@ -123,10 +107,14 @@ const labelClass = 'text-sm text-prado-text-muted mb-1 block'
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <!-- Mesure de protection (multi-select) -->
+      <!-- Mesure(s) de protection (TagInput) -->
       <div class="md:col-span-2">
         <label :class="labelClass">Mesure(s) de protection</label>
-        <UiMultiCheckbox v-model="mesuresProxy" :options="MESURES_PROTECTION" />
+        <UiTagInput
+          v-model="form.mesureProtection"
+          :suggestions="mesuresSuggestions"
+          placeholder="Tapez pour rechercher une mesure (AEMO, ASE, PJJ...)..."
+        />
       </div>
 
       <!-- Lieu d'hebergement -->

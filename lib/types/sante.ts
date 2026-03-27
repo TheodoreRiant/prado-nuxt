@@ -423,7 +423,7 @@ export function emptySanteInput(): JeuneSanteInput {
     regimeAlimentaire: [],
     contactsUrgence: [],
     medecinTraitant: emptyMedecinTraitant(),
-    mesureProtection: ['aucune'],
+    mesureProtection: [],
     referentAse: emptyReferentAse(),
     compositionFamiliale: [],
     lieuHebergement: '',
