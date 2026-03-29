@@ -76,8 +76,8 @@ function toggle(index: number) {
             <span class="text-prado-text font-medium">{{ faq.question }}</span>
             <ChevronDown
               :size="20"
-              class="shrink-0 text-prado-text-muted transition-transform duration-300"
-              :class="openIndex === idx ? 'rotate-180' : ''"
+              class="shrink-0 transition-all duration-300"
+              :class="openIndex === idx ? 'rotate-180 text-prado-yellow' : 'text-prado-text-muted'"
             />
           </button>
           <div
