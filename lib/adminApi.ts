@@ -1,23 +1,30 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 export async function fetchDashboardStats(client: SupabaseClient) {
-  const [prescripteurs, jeunes, inscriptions, pending] = await Promise.all([
+  const [prescripteurs, jeunes, inscriptions, pending, structuresResult] = await Promise.all([
     client.from('prescripteurs').select('*', { count: 'exact', head: true }),
     client.from('jeunes').select('*', { count: 'exact', head: true }),
     client.from('inscriptions').select('*', { count: 'exact', head: true }),
     client.from('prescripteurs').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+    client.from('structures').select('*', { count: 'exact', head: true }),
   ]);
   return {
     prescripteursCount: prescripteurs.count ?? 0,
     jeunesCount: jeunes.count ?? 0,
     inscriptionsCount: inscriptions.count ?? 0,
     pendingCount: pending.count ?? 0,
+    structuresCount: structuresResult.count ?? 0,
   };
 }
 
 export interface AdminPrescripteur {
   id: string; name: string; professional_email: string; structure: string;
-  phone: string | null; role: string; status: string; created_at: string;
+  structure_id: string | null; phone: string | null; role: string; status: string; created_at: string;
+}
+
+export interface AdminStructure {
+  id: string; name: string; created_at: string;
+  prescripteurs_count: number; jeunes_count: number;
 }
 
 export async function fetchAllPrescripteurs(client: SupabaseClient): Promise<AdminPrescripteur[]> {

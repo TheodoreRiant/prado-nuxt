@@ -8,9 +8,9 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody(event)
-  const { name, structure, fonction, phone } = body
+  const { name, structure_id, fonction, phone } = body
 
-  if (!name || !structure) {
+  if (!name || !structure_id) {
     throw createError({ statusCode: 400, message: 'Nom et structure requis' })
   }
 
@@ -20,10 +20,19 @@ export default defineEventHandler(async (event) => {
     config.supabaseServiceRoleKey,
   )
 
+  // Resolve structure name for backwards compatibility
+  const { data: structureRow } = await adminClient
+    .from('structures')
+    .select('name')
+    .eq('id', structure_id)
+    .single()
+
+  const structureName = structureRow?.name ?? ''
+
   // Update prescripteurs table
   const { error } = await adminClient
     .from('prescripteurs')
-    .update({ name, structure, phone: phone ?? '' })
+    .update({ name, structure: structureName, structure_id, phone: phone ?? '' })
     .eq('id', user.id)
 
   if (error) {
@@ -32,7 +41,7 @@ export default defineEventHandler(async (event) => {
 
   // Update user metadata
   await adminClient.auth.admin.updateUserById(user.id, {
-    user_metadata: { name, structure, fonction: fonction ?? '', phone: phone ?? '' },
+    user_metadata: { name, structure: structureName, fonction: fonction ?? '', phone: phone ?? '' },
   })
 
   return { success: true }

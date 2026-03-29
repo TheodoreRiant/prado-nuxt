@@ -26,7 +26,7 @@ const { steps, progress, showChecklist, dismiss } = useOnboarding()
     <!-- Progress bar -->
     <div class="h-2 rounded-full bg-prado-bg-deep overflow-hidden mb-5">
       <div
-        class="h-full rounded-full bg-gradient-to-r from-[#CF006C] to-[#FB6223] transition-all duration-700 ease-out"
+        class="h-full rounded-full bg-[var(--prado-signature)] transition-all duration-700 ease-out"
         :style="{ width: `${progress}%` }"
       />
     </div>
@@ -41,7 +41,7 @@ const { steps, progress, showChecklist, dismiss } = useOnboarding()
         <div
           class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-colors"
           :class="step.done
-            ? 'bg-[#93C1AF]'
+            ? 'bg-[var(--prado-signature)]'
             : 'border border-prado-border-medium'"
         >
           <Check v-if="step.done" :size="12" class="text-white" />

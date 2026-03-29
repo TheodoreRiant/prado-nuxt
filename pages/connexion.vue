@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Loader2, Lock, Mail, ArrowLeft, ArrowRight } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
-import { STRUCTURES_PARTENAIRES } from '~/constants/structures'
 
 const FONCTIONS = [
   'Éducateur·rice spécialisé·e',
@@ -33,7 +32,15 @@ const checking = ref(false)
 
 const loginForm = ref({ email: '', password: '' })
 const registerForm = ref({
-  email: '', password: '', confirmPassword: '', firstName: '', lastName: '', structure: '', structureLibre: '', fonction: '', phone: '',
+  email: '', password: '', confirmPassword: '', firstName: '', lastName: '', structureId: '', fonction: '', phone: '',
+})
+
+// Fetch structures from API
+const structures = ref<{ id: string; name: string }[]>([])
+onMounted(async () => {
+  try {
+    structures.value = await $fetch<{ id: string; name: string }[]>('/api/structures')
+  } catch { /* silent — dropdown will be empty */ }
 })
 
 // Redirect if already logged in (with profile)
@@ -41,8 +48,8 @@ watch(user, (u) => {
   if (u && step.value !== 'profile' && step.value !== 'welcome') {
     if (!u.name || u.name === '') {
       step.value = 'profile'
-    } else if (step.value === 'password') {
-      navigateTo('/espace')
+    } else {
+      navigateTo(u.role === 'admin' ? '/admin' : '/espace')
     }
   }
 }, { immediate: true })
@@ -87,7 +94,7 @@ async function handleLogin() {
     return
   }
   toast.success('Connexion réussie !')
-  navigateTo('/espace')
+  // Redirect is handled by the watch(user) watcher once the profile loads
 }
 
 async function handleRegisterWithPassword() {
@@ -99,8 +106,7 @@ async function handleRegisterWithPassword() {
     toast.error('Le mot de passe doit contenir au moins 6 caractères')
     return
   }
-  const structure = registerForm.value.structure === '__autre' ? registerForm.value.structureLibre : registerForm.value.structure
-  if (!structure) {
+  if (!registerForm.value.structureId) {
     toast.error('Veuillez sélectionner une structure')
     return
   }
@@ -109,7 +115,7 @@ async function handleRegisterWithPassword() {
     email: registerForm.value.email,
     password: registerForm.value.password,
     name: `${registerForm.value.firstName} ${registerForm.value.lastName}`,
-    structure,
+    structure_id: registerForm.value.structureId,
     fonction: registerForm.value.fonction,
     phone: registerForm.value.phone,
   })
@@ -154,7 +160,7 @@ async function handleForgotPassword() {
   forgotPassword.value = false
 }
 
-const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border border-prado-border text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-[#CF006C]/50 transition-colors'
+const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border border-prado-border text-prado-text placeholder:text-prado-text-faint focus:outline-none focus:border-[var(--prado-signature)]/50 transition-colors'
 </script>
 
 <template>
@@ -190,7 +196,7 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
         <button
           type="submit"
           :disabled="checking"
-          class="w-full py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] transition-colors disabled:opacity-50 flex items-center justify-center gap-2 font-normal"
+          class="w-full py-3 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] hover:bg-[var(--prado-signature)]/80 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 font-normal"
         >
           <Loader2 v-if="checking" :size="16" class="animate-spin" />
           <template v-else>
@@ -236,12 +242,12 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
         <button
           type="submit"
           :disabled="submitting"
-          class="w-full py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] transition-colors disabled:opacity-50 flex items-center justify-center gap-2 font-normal"
+          class="w-full py-3 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] hover:bg-[var(--prado-signature)]/80 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 font-normal"
         >
           <Loader2 v-if="submitting" :size="16" class="animate-spin" />
           Se connecter
         </button>
-        <button type="button" class="text-sm text-[#FB6223] font-normal" @click="forgotPassword = true">
+        <button type="button" class="text-sm text-[var(--prado-signature-accent)] font-normal" @click="forgotPassword = true">
           Mot de passe oublié ?
         </button>
       </form>
@@ -261,7 +267,7 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
         <button
           type="submit"
           :disabled="submitting"
-          class="w-full py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] disabled:opacity-50 flex items-center justify-center gap-2 font-normal"
+          class="w-full py-3 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] hover:bg-[var(--prado-signature)]/80 disabled:opacity-50 flex items-center justify-center gap-2 font-normal"
         >
           <Loader2 v-if="submitting" :size="16" class="animate-spin" />
           Réinitialiser
@@ -291,8 +297,8 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
     <!-- Step: Magic link sent confirmation -->
     <template v-if="step === 'magic-link-sent'">
       <div class="text-center space-y-6">
-        <div class="w-16 h-16 rounded-full bg-[#93C1AF]/20 flex items-center justify-center mx-auto">
-          <Mail :size="28" class="text-[#93C1AF]" />
+        <div class="w-16 h-16 rounded-full bg-[var(--prado-signature)]/20 flex items-center justify-center mx-auto">
+          <Mail :size="28" class="text-[var(--prado-signature-accent)]" />
         </div>
         <div>
           <h2 class="text-xl text-prado-text mb-3">Vérifiez votre boîte mail</h2>
@@ -348,20 +354,13 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
           </div>
           <div>
             <label class="text-sm text-prado-text-secondary mb-1.5 block">Structure *</label>
-            <select v-model="registerForm.structure" required :class="inputClass.replace('pl-10', 'pl-4')">
+            <select v-model="registerForm.structureId" required :class="inputClass.replace('pl-10', 'pl-4')">
               <option value="" disabled>Sélectionner votre structure</option>
-              <option v-for="s in STRUCTURES_PARTENAIRES" :key="s" :value="s">{{ s }}</option>
-              <option value="__autre">Autre (saisie libre)</option>
+              <option v-for="s in structures" :key="s.id" :value="s.id">{{ s.name }}</option>
             </select>
-            <input
-              v-if="registerForm.structure === '__autre'"
-              v-model="registerForm.structureLibre"
-              type="text"
-              required
-              placeholder="Nom de votre structure..."
-              :class="inputClass.replace('pl-10', 'pl-4')"
-              class="mt-2"
-            />
+            <p class="text-xs text-prado-text-muted mt-1">
+              Votre structure n'apparaît pas ? Contactez l'administrateur.
+            </p>
           </div>
           <div>
             <label class="text-sm text-prado-text-secondary mb-1.5 block">Fonction</label>
@@ -381,7 +380,7 @@ const inputClass = 'w-full pl-10 pr-4 py-3 rounded-xl bg-prado-surface border bo
           <button
             type="submit"
             :disabled="submitting"
-            class="w-full py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] disabled:opacity-50 flex items-center justify-center gap-2 font-normal"
+            class="w-full py-3 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] hover:bg-[var(--prado-signature)]/80 disabled:opacity-50 flex items-center justify-center gap-2 font-normal"
           >
             <Loader2 v-if="submitting" :size="16" class="animate-spin" />
             Créer mon compte

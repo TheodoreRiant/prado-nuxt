@@ -9,9 +9,9 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody(event)
-  const { name, structure, fonction, phone } = body
+  const { name, structure_id, fonction, phone } = body
 
-  if (!name || !structure) {
+  if (!name || !structure_id) {
     throw createError({ statusCode: 400, message: 'Nom et structure requis' })
   }
 
@@ -22,15 +22,36 @@ export default defineEventHandler(async (event) => {
     config.supabaseServiceRoleKey,
   )
 
-  const { error } = await adminClient.from('prescripteurs').upsert({
-    id: user.id,
+  // Resolve structure name for backwards compatibility
+  const { data: structureRow } = await adminClient
+    .from('structures')
+    .select('name')
+    .eq('id', structure_id)
+    .single()
+
+  // Check if user already exists to avoid overwriting role/status
+  const { data: existing } = await adminClient
+    .from('prescripteurs')
+    .select('id')
+    .eq('id', user.id)
+    .single()
+
+  const profileFields = {
     name,
     professional_email: user.email,
-    structure,
+    structure: structureRow?.name ?? '',
+    structure_id,
     phone: phone ?? '',
-    role: 'prescripteur',
-    status: 'pending',
-  }, { onConflict: 'id' })
+  }
+
+  const { error } = existing
+    ? await adminClient.from('prescripteurs').update(profileFields).eq('id', user.id)
+    : await adminClient.from('prescripteurs').insert({
+      ...profileFields,
+      id: user.id,
+      role: 'prescripteur',
+      status: 'pending',
+    })
 
   if (error) {
     throw createError({ statusCode: 500, message: error.message })

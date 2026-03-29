@@ -6,6 +6,7 @@ interface User {
   email: string;
   name: string;
   structure: string;
+  structureId: string | null;
   role: 'prescripteur' | 'admin';
   status: 'pending' | 'approved' | 'rejected';
 }
@@ -25,7 +26,7 @@ export function useAuth() {
   const loadProfile = async (userId: string, email: string) => {
     const profile = await fetchPrescripteur(client, userId);
     if (profile) {
-      user.value = { id: userId, email, name: profile.name, structure: profile.structure, role: profile.role, status: profile.status };
+      user.value = { id: userId, email, name: profile.name, structure: profile.structure, structureId: profile.structureId, role: profile.role, status: profile.status };
     }
   };
 
@@ -67,10 +68,10 @@ export function useAuth() {
     inscriptions.value = [];
   };
 
-  const register = async (data: { email: string; password: string; name: string; structure: string; fonction?: string; phone?: string }) => {
+  const register = async (data: { email: string; password: string; name: string; structure_id: string; fonction?: string; phone?: string }) => {
     const { error } = await client.auth.signUp({
       email: data.email, password: data.password,
-      options: { data: { name: data.name, structure: data.structure, fonction: data.fonction ?? '', phone: data.phone ?? '' } },
+      options: { data: { name: data.name, structure_id: data.structure_id, fonction: data.fonction ?? '', phone: data.phone ?? '' } },
     });
     if (error) return { error: error.message };
     return {};
@@ -85,12 +86,12 @@ export function useAuth() {
     return {};
   };
 
-  const completeProfile = async (data: { name: string; structure: string; fonction?: string; phone?: string }) => {
+  const completeProfile = async (data: { name: string; structure_id: string; fonction?: string; phone?: string }) => {
     if (!supabaseUser.value) return { error: 'Non authentifié' };
 
     // Update user metadata
     const { error: metaError } = await client.auth.updateUser({
-      data: { name: data.name, structure: data.structure, fonction: data.fonction ?? '', phone: data.phone ?? '' },
+      data: { name: data.name, structure_id: data.structure_id, fonction: data.fonction ?? '', phone: data.phone ?? '' },
     });
     if (metaError) return { error: metaError.message };
 
@@ -124,7 +125,7 @@ export function useAuth() {
 
   const addJeune = async (j: Omit<Jeune, 'id'>) => {
     if (!supabaseUser.value) return;
-    const created = await apiCreateJeune(client, supabaseUser.value.id, j);
+    const created = await apiCreateJeune(client, supabaseUser.value.id, j, user.value?.structureId ?? null);
     jeunes.value = [created, ...jeunes.value];
   };
 
@@ -139,7 +140,7 @@ export function useAuth() {
     jeunes.value = jeunes.value.map(j => j.id === id ? updated : j);
   };
 
-  const updateProfile = async (data: { name: string; structure: string; fonction?: string; phone?: string }) => {
+  const updateProfile = async (data: { name: string; structure_id: string; fonction?: string; phone?: string }) => {
     if (!supabaseUser.value) return { error: 'Non authentifié' };
 
     try {
@@ -155,9 +156,9 @@ export function useAuth() {
     return {};
   };
 
-  const inscrire = async (actionId: string, jeuneId: string) => {
+  const inscrire = async (actionId: string, actionDateId: string | null, jeuneId: string) => {
     if (!supabaseUser.value) return;
-    const created = await apiCreateInscription(client, supabaseUser.value.id, actionId, jeuneId);
+    const created = await apiCreateInscription(client, supabaseUser.value.id, actionId, actionDateId, jeuneId);
     inscriptions.value = [created, ...inscriptions.value];
   };
 

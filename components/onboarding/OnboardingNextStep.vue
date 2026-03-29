@@ -7,19 +7,22 @@ const { nextStep, showWidget, openPanel, completedCount, totalSteps } = useOnboa
 <template>
   <div
     v-if="showWidget && nextStep"
-    class="flex items-center gap-3 px-4 py-3 rounded-xl bg-prado-signature-muted border border-prado-signature/20 mb-6 group cursor-pointer hover:border-prado-signature/40 transition-colors"
+    class="flex items-center gap-4 px-5 py-4 rounded-2xl bg-[var(--prado-signature)]/15 border-2 border-[var(--prado-signature)]/40 mb-6 group cursor-pointer hover:border-[var(--prado-signature)]/60 hover:bg-[var(--prado-signature)]/20 transition-all"
     @click="openPanel"
   >
-    <div class="w-8 h-8 rounded-lg bg-prado-signature/15 flex items-center justify-center shrink-0">
-      <Rocket :size="16" class="text-prado-signature" />
+    <div class="w-10 h-10 rounded-xl bg-[var(--prado-signature)] flex items-center justify-center shrink-0">
+      <Rocket :size="18" class="text-[#1a1a2e]" />
     </div>
     <div class="flex-1 min-w-0">
-      <p class="text-xs text-prado-text-muted">Prochaine étape ({{ completedCount }}/{{ totalSteps }})</p>
-      <p class="text-sm text-prado-text font-medium truncate">{{ nextStep.label }}</p>
+      <p class="text-xs text-prado-text-muted font-medium">Prochaine etape ({{ completedCount }}/{{ totalSteps }})</p>
+      <p class="text-sm text-prado-text font-semibold truncate">{{ nextStep.label }}</p>
     </div>
-    <ArrowRight
-      :size="16"
-      class="text-prado-signature group-hover:translate-x-0.5 transition-all shrink-0"
-    />
+    <div class="flex items-center gap-2 shrink-0">
+      <span class="hidden sm:inline text-xs font-medium text-[var(--prado-signature-accent)]">Continuer</span>
+      <ArrowRight
+        :size="18"
+        class="text-[var(--prado-signature-accent)] group-hover:translate-x-1 transition-transform"
+      />
+    </div>
   </div>
 </template>

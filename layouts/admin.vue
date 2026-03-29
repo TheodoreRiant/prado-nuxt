@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {
-  LayoutDashboard, Users, ClipboardList, UserCheck, Mail, Newspaper, Settings, LogOut, Menu, X,
+  LayoutDashboard, Users, ClipboardList, UserCheck, Mail, Newspaper, Settings, Building2, LogOut, Menu, X, CalendarDays,
 } from 'lucide-vue-next'
 import { Toaster } from 'vue-sonner'
 
@@ -13,17 +13,18 @@ const { counts } = useAdminCounts()
 
 const navItems = [
   { to: '/admin', label: 'Tableau de bord', icon: LayoutDashboard, exact: true, badgeKey: null },
+  { to: '/admin/structures', label: 'Structures', icon: Building2, exact: false, badgeKey: null },
   { to: '/admin/prescripteurs', label: 'Prescripteurs', icon: Users, exact: false, badgeKey: 'pendingPrescripteurs' as const },
   { to: '/admin/inscriptions', label: 'Inscriptions', icon: ClipboardList, exact: false, badgeKey: null },
   { to: '/admin/jeunes', label: 'Jeunes', icon: UserCheck, exact: false, badgeKey: null },
   { to: '/admin/contacts', label: 'Contacts', icon: Mail, exact: false, badgeKey: 'unreadContacts' as const },
   { to: '/admin/newsletter', label: 'Newsletter', icon: Newspaper, exact: false, badgeKey: null },
-  { to: '/admin/actions', label: 'Actions', icon: Settings, exact: false, badgeKey: null },
+  { to: '/admin/actions', label: 'Actions', icon: CalendarDays, exact: false, badgeKey: null },
 ]
 
 const badgeColors: Record<string, string> = {
-  pendingPrescripteurs: 'bg-[#FB6223]',
-  unreadContacts: 'bg-[#CF006C]',
+  pendingPrescripteurs: 'bg-[var(--prado-signature)]',
+  unreadContacts: 'bg-[var(--prado-signature)]',
 }
 
 function isNavActive(to: string, exact: boolean) {
@@ -71,7 +72,7 @@ async function handleLogout() {
           :class="[
             'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors',
             isNavActive(item.to, item.exact)
-              ? 'bg-[#CF006C] text-white'
+              ? 'bg-[var(--prado-signature)] text-[var(--prado-signature-text)]'
               : 'text-prado-text-secondary hover:text-prado-text hover:bg-prado-surface-hover',
           ]"
           @click="sidebarOpen = false"
@@ -87,7 +88,20 @@ async function handleLogout() {
         </NuxtLink>
       </nav>
 
-      <div class="p-4 border-t border-prado-border">
+      <div class="p-4 border-t border-prado-border space-y-1">
+        <NuxtLink
+          to="/admin/parametres"
+          :class="[
+            'flex items-center gap-3 px-3 py-2.5 w-full rounded-xl text-sm transition-colors',
+            isNavActive('/admin/parametres', false)
+              ? 'bg-[var(--prado-signature)] text-[var(--prado-signature-text)]'
+              : 'text-prado-text-secondary hover:text-prado-text hover:bg-prado-surface-hover',
+          ]"
+          @click="sidebarOpen = false"
+        >
+          <Settings :size="18" />
+          <span>Parametres</span>
+        </NuxtLink>
         <button
           class="flex items-center gap-3 px-3 py-2.5 w-full rounded-xl text-sm text-prado-text-muted hover:text-red-400 hover:bg-prado-surface-hover transition-colors"
           @click="handleLogout"

@@ -34,7 +34,7 @@ const cards = [
   <div class="space-y-8">
     <!-- Header -->
     <div class="text-center">
-      <div class="inline-flex items-center gap-2 text-[#93C1AF] mb-4">
+      <div class="inline-flex items-center gap-2 text-[var(--prado-signature-accent)] mb-4">
         <PartyPopper :size="20" />
         <span class="text-sm font-medium">Compte créé avec succès</span>
       </div>
@@ -75,8 +75,8 @@ const cards = [
     </div>
 
     <!-- Info banner -->
-    <div class="bg-[#FB6223]/10 rounded-xl p-4 text-sm">
-      <p class="text-[#FB6223] font-medium mb-1">En attente de validation</p>
+    <div class="bg-[var(--prado-signature)]/10 rounded-xl p-4 text-sm">
+      <p class="text-[var(--prado-signature-accent)] font-medium mb-1">En attente de validation</p>
       <p class="text-prado-text-secondary">
         Votre compte sera validé par notre équipe sous 24h. En attendant, vous pouvez naviguer librement et préparer vos inscriptions.
       </p>
@@ -85,7 +85,7 @@ const cards = [
     <!-- Go to dashboard -->
     <NuxtLink
       to="/espace"
-      class="block w-full py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] transition-colors text-center font-medium"
+      class="block w-full py-3 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] hover:bg-[var(--prado-signature)]/80 transition-colors text-center font-medium"
     >
       Accéder à mon espace
     </NuxtLink>
