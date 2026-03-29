@@ -83,7 +83,7 @@ onMounted(() => {
 
     <!-- Ligne de séparation subtile -->
     <div
-      class="w-16 h-px bg-gradient-to-r from-[#CF006C] to-[#FB6223] mx-auto mb-10 hero-reveal"
+      class="w-16 h-px bg-gradient-to-r from-[#CF006C] via-[#FFD228] to-[#FB6223] mx-auto mb-10 hero-reveal"
       :class="isVisible ? 'is-visible' : ''"
       style="--delay: 0.45s;"
     />
@@ -103,7 +103,7 @@ onMounted(() => {
       </NuxtLink>
       <NuxtLink
         :to="ctaSecondary.to"
-        class="px-8 py-3.5 rounded-full border border-prado-border-medium text-prado-text hover:bg-prado-surface-hover transition-colors"
+        class="px-8 py-3.5 rounded-full border border-prado-yellow text-prado-yellow hover:bg-prado-yellow/10 transition-colors font-medium"
       >
         {{ ctaSecondary.label }}
       </NuxtLink>
