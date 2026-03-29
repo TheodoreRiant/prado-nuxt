@@ -34,5 +34,21 @@ export default defineEventHandler(async (event) => {
 
   if (insertError) throw createError({ statusCode: 500, message: insertError.message })
 
+  // Duplicate action_dates from the source
+  const { data: sourceDates } = await adminClient
+    .from('action_dates')
+    .select('date, time, places_max')
+    .eq('action_id', sourceId)
+
+  if (sourceDates && sourceDates.length > 0) {
+    const newDates = sourceDates.map(d => ({
+      action_id: cloned.id,
+      date: d.date,
+      time: d.time ?? '',
+      places_max: d.places_max,
+    }))
+    await adminClient.from('action_dates').insert(newDates)
+  }
+
   return cloned
 })

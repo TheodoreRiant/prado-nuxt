@@ -8,7 +8,7 @@ vi.mock('vue-sonner', () => ({
 }))
 
 // Mock useAuth composable
-const mockInscriptions = ref<{ id: string; jeuneId: string; actionId: string; date: string }[]>([])
+const mockInscriptions = ref<{ id: string; jeuneId: string; actionId: string; actionDateId: string | null; date: string }[]>([])
 vi.mock('#imports', () => ({
   useAuth: () => ({ inscriptions: mockInscriptions }),
   computed: (fn: () => any) => ({ value: fn() }),
@@ -28,8 +28,8 @@ describe('useConflictCheck', () => {
     mockInscriptions.value = []
   })
 
-  function makeActionMap(entries: { id: number; title: string; date: string | null }[]) {
-    const map = new Map<string, { id: number; title: string; date: string | null }>()
+  function makeActionMap(entries: { id: number; title: string; dates: { id: string; date: string }[] }[]) {
+    const map = new Map<string, { id: number; title: string; dates: { id: string; date: string }[] }>()
     for (const e of entries) map.set(String(e.id), e)
     return map
   }
@@ -43,7 +43,7 @@ describe('useConflictCheck', () => {
 
   it('returns false when no inscriptions exist', () => {
     const { checkConflict } = useConflictCheck()
-    const map = makeActionMap([{ id: 10, title: 'Action A', date: '2026-04-01' }])
+    const map = makeActionMap([{ id: 10, title: 'Action A', dates: [{ id: 'd1', date: '2026-04-01' }] }])
     const result = checkConflict('jeune-1', '10', '2026-04-01', map)
     expect(result).toBe(false)
     expect(mockWarning).not.toHaveBeenCalled()
@@ -51,11 +51,11 @@ describe('useConflictCheck', () => {
 
   it('returns false when jeune has inscriptions on different dates', () => {
     mockInscriptions.value = [
-      { id: 'i1', jeuneId: 'jeune-1', actionId: '20', date: '2026-03-20' },
+      { id: 'i1', jeuneId: 'jeune-1', actionId: '20', actionDateId: 'd2', date: '2026-03-20' },
     ]
     const map = makeActionMap([
-      { id: 10, title: 'Action A', date: '2026-04-01' },
-      { id: 20, title: 'Action B', date: '2026-03-15' },
+      { id: 10, title: 'Action A', dates: [{ id: 'd1', date: '2026-04-01' }] },
+      { id: 20, title: 'Action B', dates: [{ id: 'd2', date: '2026-03-15' }] },
     ])
     const { checkConflict } = useConflictCheck()
     const result = checkConflict('jeune-1', '10', '2026-04-01', map)
@@ -65,11 +65,11 @@ describe('useConflictCheck', () => {
 
   it('returns true and shows warning when jeune has inscription on same date', () => {
     mockInscriptions.value = [
-      { id: 'i1', jeuneId: 'jeune-1', actionId: '20', date: '2026-03-20' },
+      { id: 'i1', jeuneId: 'jeune-1', actionId: '20', actionDateId: 'd2', date: '2026-03-20' },
     ]
     const map = makeActionMap([
-      { id: 10, title: 'Action A', date: '2026-04-01' },
-      { id: 20, title: 'Action B', date: '2026-04-01' },
+      { id: 10, title: 'Action A', dates: [{ id: 'd1', date: '2026-04-01' }] },
+      { id: 20, title: 'Action B', dates: [{ id: 'd2', date: '2026-04-01' }] },
     ])
     const { checkConflict } = useConflictCheck()
     const result = checkConflict('jeune-1', '10', '2026-04-01', map)
@@ -80,10 +80,10 @@ describe('useConflictCheck', () => {
 
   it('ignores inscriptions for the target action itself', () => {
     mockInscriptions.value = [
-      { id: 'i1', jeuneId: 'jeune-1', actionId: '10', date: '2026-03-20' },
+      { id: 'i1', jeuneId: 'jeune-1', actionId: '10', actionDateId: 'd1', date: '2026-03-20' },
     ]
     const map = makeActionMap([
-      { id: 10, title: 'Action A', date: '2026-04-01' },
+      { id: 10, title: 'Action A', dates: [{ id: 'd1', date: '2026-04-01' }] },
     ])
     const { checkConflict } = useConflictCheck()
     const result = checkConflict('jeune-1', '10', '2026-04-01', map)
@@ -92,11 +92,11 @@ describe('useConflictCheck', () => {
 
   it('ignores inscriptions for a different jeune', () => {
     mockInscriptions.value = [
-      { id: 'i1', jeuneId: 'jeune-2', actionId: '20', date: '2026-03-20' },
+      { id: 'i1', jeuneId: 'jeune-2', actionId: '20', actionDateId: 'd2', date: '2026-03-20' },
     ]
     const map = makeActionMap([
-      { id: 10, title: 'Action A', date: '2026-04-01' },
-      { id: 20, title: 'Action B', date: '2026-04-01' },
+      { id: 10, title: 'Action A', dates: [{ id: 'd1', date: '2026-04-01' }] },
+      { id: 20, title: 'Action B', dates: [{ id: 'd2', date: '2026-04-01' }] },
     ])
     const { checkConflict } = useConflictCheck()
     const result = checkConflict('jeune-1', '10', '2026-04-01', map)
@@ -105,11 +105,11 @@ describe('useConflictCheck', () => {
 
   it('handles dates with time component (splits on T)', () => {
     mockInscriptions.value = [
-      { id: 'i1', jeuneId: 'jeune-1', actionId: '20', date: '2026-03-20' },
+      { id: 'i1', jeuneId: 'jeune-1', actionId: '20', actionDateId: 'd2', date: '2026-03-20' },
     ]
     const map = makeActionMap([
-      { id: 10, title: 'Action A', date: '2026-04-01T14:00:00' },
-      { id: 20, title: 'Action B', date: '2026-04-01T09:00:00' },
+      { id: 10, title: 'Action A', dates: [{ id: 'd1', date: '2026-04-01T14:00:00' }] },
+      { id: 20, title: 'Action B', dates: [{ id: 'd2', date: '2026-04-01T09:00:00' }] },
     ])
     const { checkConflict } = useConflictCheck()
     const result = checkConflict('jeune-1', '10', '2026-04-01T14:00:00', map)
@@ -118,13 +118,13 @@ describe('useConflictCheck', () => {
 
   it('lists multiple conflicting actions in warning', () => {
     mockInscriptions.value = [
-      { id: 'i1', jeuneId: 'jeune-1', actionId: '20', date: '2026-03-20' },
-      { id: 'i2', jeuneId: 'jeune-1', actionId: '30', date: '2026-03-20' },
+      { id: 'i1', jeuneId: 'jeune-1', actionId: '20', actionDateId: 'd2', date: '2026-03-20' },
+      { id: 'i2', jeuneId: 'jeune-1', actionId: '30', actionDateId: 'd3', date: '2026-03-20' },
     ]
     const map = makeActionMap([
-      { id: 10, title: 'Action A', date: '2026-04-01' },
-      { id: 20, title: 'Action B', date: '2026-04-01' },
-      { id: 30, title: 'Action C', date: '2026-04-01' },
+      { id: 10, title: 'Action A', dates: [{ id: 'd1', date: '2026-04-01' }] },
+      { id: 20, title: 'Action B', dates: [{ id: 'd2', date: '2026-04-01' }] },
+      { id: 30, title: 'Action C', dates: [{ id: 'd3', date: '2026-04-01' }] },
     ])
     const { checkConflict } = useConflictCheck()
     const result = checkConflict('jeune-1', '10', '2026-04-01', map)
@@ -135,10 +135,10 @@ describe('useConflictCheck', () => {
 
   it('skips actions not in the map', () => {
     mockInscriptions.value = [
-      { id: 'i1', jeuneId: 'jeune-1', actionId: '99', date: '2026-03-20' },
+      { id: 'i1', jeuneId: 'jeune-1', actionId: '99', actionDateId: null, date: '2026-03-20' },
     ]
     const map = makeActionMap([
-      { id: 10, title: 'Action A', date: '2026-04-01' },
+      { id: 10, title: 'Action A', dates: [{ id: 'd1', date: '2026-04-01' }] },
     ])
     const { checkConflict } = useConflictCheck()
     const result = checkConflict('jeune-1', '10', '2026-04-01', map)

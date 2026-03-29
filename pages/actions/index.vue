@@ -34,7 +34,7 @@ const programmation = computed(() =>
     id: a.id,
     title: a.title,
     category: a.category as ProgrammationCategory,
-    date: a.date ?? '',
+    date: a.nextDate ?? a.date ?? '',
     time: a.time ?? '',
     summary: a.summary ?? '',
     description: a.description ?? '',
@@ -45,6 +45,8 @@ const programmation = computed(() =>
     inscriptionsCount: a.inscriptionsCount,
     placesRemaining: a.placesRemaining,
     isFull: a.places_max !== null && a.inscriptionsCount >= a.places_max,
+    isTermine: a.isTermine ?? false,
+    datesCount: a.dates?.length ?? 0,
   })),
 )
 
@@ -176,7 +178,7 @@ onMounted(() => {
             @click="setFilterModeAndReset(filterMode === 'activite' ? 'actions' : 'activite')"
           >
             <span
-              class="absolute h-8 rounded-full bg-[#CF006C] transition-all duration-300 ease-in-out"
+              class="absolute h-8 rounded-full bg-[var(--prado-signature)] transition-all duration-300 ease-in-out"
               :style="{
                 width: '96px',
                 left: filterMode === 'activite' ? '4px' : '100px',
@@ -235,11 +237,17 @@ onMounted(() => {
                 <div class="absolute inset-0 bg-gradient-to-t from-prado-surface/60 to-transparent" />
 
                 <div
-                  v-if="a.isActivite"
+                  v-if="a.isTermine"
+                  class="absolute top-3 right-3 px-3 py-1.5 rounded-xl text-xs bg-red-500/90 text-white font-medium"
+                >
+                  Termine
+                </div>
+                <div
+                  v-else-if="a.isActivite"
                   class="absolute top-3 right-3 px-3 py-1.5 rounded-xl text-xs text-white"
                   :style="{ backgroundColor: PROGRAMMATION_CATEGORY_COLORS[a.category] }"
                 >
-                  {{ a.date }}
+                  {{ a.date }}{{ a.datesCount > 1 ? ` +${a.datesCount - 1}` : '' }}
                 </div>
                 <div
                   v-else
@@ -255,8 +263,8 @@ onMounted(() => {
                     a.isFull
                       ? 'bg-red-500/90 text-white shadow-lg shadow-red-500/20 ring-1 ring-white/10'
                       : a.placesRemaining <= 3
-                        ? 'bg-[#FB6223] text-white animate-pulse'
-                        : 'bg-[#93C1AF] text-[#13332B]'
+                        ? 'bg-[var(--prado-signature)] text-[var(--prado-signature-text)] animate-pulse'
+                        : 'bg-[var(--prado-signature)] text-[var(--prado-signature-text)]'
                   ]"
                 >
                   <span v-if="a.isFull">Complet</span>
@@ -266,7 +274,7 @@ onMounted(() => {
 
               <div class="p-5">
                 <span class="text-xs mb-2 inline-block" :style="{ color: PROGRAMMATION_CATEGORY_COLORS[a.category] }">{{ a.category }}</span>
-                <h3 class="text-prado-text mb-2 line-clamp-2 group-hover:text-[#93C1AF] transition-colors">{{ a.title }}</h3>
+                <h3 class="text-prado-text mb-2 line-clamp-2 group-hover:text-[var(--prado-signature-accent)] transition-colors">{{ a.title }}</h3>
                 <p class="text-sm text-prado-text-muted line-clamp-2 mb-3">{{ a.summary }}</p>
                 <div v-if="a.time" class="text-xs text-prado-text-faint">{{ a.time }}</div>
               </div>

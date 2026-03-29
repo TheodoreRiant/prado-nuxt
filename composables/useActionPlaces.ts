@@ -1,4 +1,5 @@
 export interface ActionPlacesRow {
+  actionDateId: string
   actionId: string | number
   placesMax: number | null
   inscriptionsCount: number
@@ -13,7 +14,7 @@ export interface ActionPlacesInfo {
 }
 
 export function useActionPlaces() {
-  const placesByAction = useState<Record<string, ActionPlacesRow>>('action-places', () => ({}))
+  const placesByDate = useState<Record<string, ActionPlacesRow>>('action-places', () => ({}))
   const loading = useState<boolean>('action-places-loading', () => false)
 
   const refresh = async () => {
@@ -23,9 +24,9 @@ export function useActionPlaces() {
       const data = await $fetch<ActionPlacesRow[]>('/api/action-places')
       const next: Record<string, ActionPlacesRow> = {}
       for (const item of data ?? []) {
-        next[String(item.actionId)] = item
+        next[item.actionDateId] = item
       }
-      placesByAction.value = next
+      placesByDate.value = next
     } catch (err) {
       console.error('Erreur chargement places', err)
     } finally {
@@ -34,7 +35,7 @@ export function useActionPlaces() {
   }
 
   onMounted(() => {
-    if (Object.keys(placesByAction.value).length === 0) {
+    if (Object.keys(placesByDate.value).length === 0) {
       refresh()
     }
   })
@@ -48,8 +49,8 @@ export function useActionPlaces() {
     )
   }
 
-  const getPlacesInfo = (actionId: string | number): ActionPlacesInfo => {
-    const info = placesByAction.value[String(actionId)]
+  const getPlacesInfo = (actionDateId: string): ActionPlacesInfo => {
+    const info = placesByDate.value[actionDateId]
     const placesMax = info?.placesMax ?? null
     const inscriptionsCount = info?.inscriptionsCount ?? 0
     const placesRemaining = info?.placesRemaining ?? null
