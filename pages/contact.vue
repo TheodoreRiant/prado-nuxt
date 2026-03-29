@@ -32,7 +32,7 @@ function handleNewsletter() {
 <template>
   <div class="max-w-7xl mx-auto px-6 py-14">
     <div class="mb-12">
-      <p class="text-[#FB6223] text-sm mb-2 tracking-wide">Nous ecrire</p>
+      <p class="text-[var(--prado-signature-accent)] text-sm mb-2 tracking-wide">Nous ecrire</p>
       <h1 class="text-4xl text-prado-text italic mb-3" :style="{ fontFamily: 'Poppins' }">Contact</h1>
       <p class="text-prado-text-muted max-w-lg">Une question, une demande de partenariat ? N'hesitez pas.</p>
     </div>
@@ -64,7 +64,7 @@ function handleNewsletter() {
               placeholder="Votre message..."
             />
           </div>
-          <button type="submit" :disabled="loading" class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] transition-colors disabled:opacity-70 disabled:cursor-not-allowed">
+          <button type="submit" :disabled="loading" class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] hover:bg-[var(--prado-signature)]/80 transition-colors disabled:opacity-70 disabled:cursor-not-allowed">
             <Loader2 v-if="loading" class="animate-spin" :size="15" />
             <template v-else><Send :size="15" /> Envoyer</template>
           </button>
@@ -73,7 +73,7 @@ function handleNewsletter() {
 
       <div class="space-y-5">
         <div class="bg-prado-surface rounded-2xl p-6 border border-prado-border">
-          <h3 class="text-prado-text mb-3 flex items-center gap-2"><Mail :size="16" class="text-[#FB6223]" /> Newsletter</h3>
+          <h3 class="text-prado-text mb-3 flex items-center gap-2"><Mail :size="16" class="text-[var(--prado-signature-accent)]" /> Newsletter</h3>
           <p class="text-sm text-prado-text-muted mb-3">Recevez nos actualites.</p>
           <form class="flex gap-2" @submit.prevent="handleNewsletter">
             <input
@@ -83,17 +83,17 @@ function handleNewsletter() {
               class="flex-1 px-3 py-2 rounded-full bg-prado-input-bg border border-prado-border text-prado-text text-sm placeholder:text-prado-text-faint focus:outline-none"
               placeholder="votre@email.fr"
             />
-            <button type="submit" class="px-4 py-2 rounded-full bg-[#FB6223] text-white text-sm hover:bg-[#e5571f]">OK</button>
+            <button type="submit" class="px-4 py-2 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] text-sm hover:bg-[var(--prado-signature)]/80">OK</button>
           </form>
         </div>
 
         <div class="bg-prado-surface rounded-2xl p-6 border border-prado-border">
           <h3 class="text-prado-text mb-3">S'engager</h3>
           <div class="space-y-2">
-            <a href="#" class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#93C1AF] text-white text-sm hover:bg-[#7dab98] transition-colors w-full">
+            <a href="#" class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] text-sm hover:bg-[var(--prado-signature)]/80 transition-colors w-full">
               <Heart :size="14" /> Devenir benevole
             </a>
-            <a href="#" class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#FB6223] text-white text-sm hover:bg-[#e5571f] transition-colors w-full">
+            <a href="#" class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] text-sm hover:bg-[var(--prado-signature)]/80 transition-colors w-full">
               <Heart :size="14" /> Faire un don
             </a>
           </div>
@@ -106,7 +106,7 @@ function handleNewsletter() {
               v-for="(Icon, i) in socialIcons"
               :key="i"
               href="#"
-              class="w-10 h-10 rounded-full bg-prado-tag-bg text-prado-text-muted flex items-center justify-center hover:bg-[#CF006C] hover:text-white transition-colors"
+              class="w-10 h-10 rounded-full bg-prado-tag-bg text-prado-text-muted flex items-center justify-center hover:bg-[var(--prado-signature)] hover:text-white transition-colors"
             >
               <component :is="Icon" :size="16" />
             </a>

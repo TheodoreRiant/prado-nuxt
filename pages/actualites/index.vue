@@ -53,7 +53,7 @@ function onCardEnter(el: Element, index: number) {
   <div class="bg-prado-bg-deep min-h-screen">
     <div class="py-20 md:py-28 bg-prado-bg border-b border-prado-border-light">
       <div class="max-w-4xl mx-auto px-6 text-center">
-        <p class="text-[#CF006C] text-sm mb-5 tracking-wide uppercase font-medium">Blog & Mises à jour</p>
+        <p class="text-[var(--prado-signature-accent)] text-sm mb-5 tracking-wide uppercase font-medium">Blog & Mises à jour</p>
         <h1 class="text-4xl md:text-6xl text-prado-text mb-6" :style="{ fontFamily: 'Poppins' }">Actualités</h1>
         <div class="relative max-w-md mx-auto mt-8">
           <Search :size="18" class="absolute left-4 top-1/2 -translate-y-1/2 text-prado-text-faint" />
@@ -88,15 +88,15 @@ function onCardEnter(el: Element, index: number) {
             />
           </div>
           <div class="p-6 flex-1 flex flex-col">
-            <div class="text-xs text-[#CF006C] mb-3 flex items-center gap-1.5">
+            <div class="text-xs text-[var(--prado-signature-accent)] mb-3 flex items-center gap-1.5">
               <Calendar :size="12" />
               {{ doc.data.date ? new Date(doc.data.date as string).toLocaleDateString('fr-FR') : '' }}
             </div>
-            <h3 class="text-xl font-medium text-prado-text mb-3 group-hover:text-[#CF006C] transition-colors line-clamp-2">
+            <h3 class="text-xl font-medium text-prado-text mb-3 group-hover:text-[var(--prado-signature-accent)] transition-colors line-clamp-2">
               {{ doc.data.title }}
             </h3>
             <p class="text-sm text-prado-text-muted line-clamp-3 mb-4 flex-1">{{ doc.data.excerpt }}</p>
-            <span class="text-sm text-prado-text font-medium underline decoration-prado-border group-hover:decoration-[#CF006C] underline-offset-4 transition-all">Lire la suite</span>
+            <span class="text-sm text-prado-text font-medium underline decoration-prado-border group-hover:decoration-[var(--prado-signature-accent)] underline-offset-4 transition-all">Lire la suite</span>
           </div>
         </NuxtLink>
       </div>

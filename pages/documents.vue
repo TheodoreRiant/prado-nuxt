@@ -40,7 +40,7 @@ useHead({
   <div class="min-h-screen">
     <div class="py-20 md:py-28">
       <div class="max-w-4xl mx-auto px-6 text-center">
-        <p class="text-[#FB6223] text-sm mb-5 tracking-wide uppercase font-medium">Ressources</p>
+        <p class="text-[var(--prado-signature-accent)] text-sm mb-5 tracking-wide uppercase font-medium">Ressources</p>
         <h1 class="text-4xl md:text-5xl text-prado-text mb-6" :style="{ fontFamily: 'Poppins' }">Documents</h1>
         <p class="text-prado-text-muted max-w-lg mx-auto">Catalogues, rapports d'activité et guides à télécharger.</p>
         <div class="relative max-w-md mx-auto mt-8">

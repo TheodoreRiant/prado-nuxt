@@ -1,44 +1,44 @@
 <script setup lang="ts">
 import { ExternalLink, BookOpen } from 'lucide-vue-next'
 
-const IMAGES = {
-  creative: 'https://images.unsplash.com/photo-1752649935124-f5a7ac531a97?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx5b3VuZyUyMHBlb3BsZSUyMGNyZWF0aXZlJTIwYXJ0JTIwd29ya3Nob3B8ZW58MXx8fHwxNzc0Mjc0NTE0fDA&ixlib=rb-4.1.0&q=80&w=1080',
-}
+const { data: page } = await useEducolab()
+const d = computed(() => page.value?.data)
+
+useHead({
+  title: d.value?.meta_title || 'Educolab | Prado Itineraires',
+  meta: d.value?.meta_description
+    ? [{ name: 'description', content: d.value.meta_description }]
+    : [],
+})
+
+const brandColor = computed(() => d.value?.brand_color || '#93C1AF')
 </script>
 
 <template>
-  <div>
+  <div v-if="d">
     <div class="relative h-[40vh] min-h-[300px] flex items-end">
       <div class="absolute inset-0">
-        <img :src="IMAGES.creative" alt="Educolab" class="w-full h-full object-cover" />
+        <PrismicImage v-if="d.hero_image?.url" :field="d.hero_image" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-prado-bg via-prado-bg/60 to-transparent" />
       </div>
       <div class="relative z-10 max-w-7xl mx-auto px-6 pb-10 w-full">
-        <p class="text-[#93C1AF] text-sm mb-2 tracking-wide">Competences parentales</p>
-        <h1 class="text-4xl md:text-5xl text-prado-text italic" :style="{ fontFamily: 'Poppins' }">Educolab</h1>
+        <p class="text-sm mb-2 tracking-wide" :style="{ color: brandColor }">{{ d.surtitle }}</p>
+        <h1 class="text-4xl md:text-5xl text-prado-text italic" :style="{ fontFamily: 'Poppins' }">{{ d.title }}</h1>
       </div>
     </div>
 
     <div class="max-w-3xl mx-auto px-6 py-16 text-center">
       <div class="bg-prado-surface rounded-2xl p-10 border border-prado-border">
-        <div class="w-16 h-16 rounded-2xl bg-[#93C1AF]/15 flex items-center justify-center mx-auto mb-6">
-          <BookOpen :size="30" class="text-[#93C1AF]" />
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6" :style="{ backgroundColor: `${brandColor}25` }">
+          <BookOpen :size="30" :style="{ color: brandColor }" />
         </div>
-        <h2 class="text-2xl text-prado-text mb-4">Programmes educatifs</h2>
-        <p class="text-prado-text-muted mb-4 leading-relaxed">
-          Educolab regroupe les programmes de renforcement des competences parentales, a destination des familles et professionnels de l'education et de la petite enfance.
-        </p>
-        <p class="text-prado-text-muted mb-8 leading-relaxed">
-          Ce volet dispose de son propre site internet avec toutes les informations sur les programmes, formations et ressources.
-        </p>
-        <a
-          href="https://educolab.le-prado.fr"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#93C1AF] text-white hover:bg-[#7dab98] transition-colors"
-        >
-          Visiter le site Educolab <ExternalLink :size="15" />
-        </a>
+        <h2 class="text-2xl text-prado-text mb-4">{{ d.card_title }}</h2>
+        <div class="text-prado-text-muted mb-8 leading-relaxed">
+          <PrismicRichText :field="d.card_body" />
+        </div>
+        <PrismicLink v-if="d.cta_link" :field="d.cta_link" class="inline-flex items-center gap-2 px-7 py-3 rounded-full text-white transition-colors" :style="{ backgroundColor: brandColor }">
+          {{ d.cta_label }} <ExternalLink :size="15" />
+        </PrismicLink>
       </div>
     </div>
   </div>

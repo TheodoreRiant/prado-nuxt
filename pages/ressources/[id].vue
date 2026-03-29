@@ -22,7 +22,8 @@ const { data: ressourceDoc, status } = await useAsyncData(`ressource-${id}`, asy
       filters: [prismicH.filter.at('my.ressource.original_id', Number(id))],
       pageSize: 1,
     })
-    return res.results?.[0] ?? null
+    // useAsyncData requires non-null return; empty object signals fetch failure (consumers check .data)
+    return res.results?.[0] ?? ({} as Record<string, never>)
   }
 })
 
@@ -30,7 +31,7 @@ const loading = computed(() => status.value === 'pending')
 
 const ressource = computed(() => {
   const doc = ressourceDoc.value
-  if (!doc) return null
+  if (!doc?.data) return null
   return {
     id: doc.uid ?? doc.data.original_id,
     title: doc.data.title as string,
@@ -55,11 +56,11 @@ const color = computed(() =>
 
   <div v-else-if="!ressource" class="max-w-7xl mx-auto px-6 py-20 text-center">
     <h1 class="text-2xl text-prado-text">Ressource non trouvee</h1>
-    <NuxtLink to="/ressources" class="text-[#FB6223] mt-4 inline-block">Retour a la programmation</NuxtLink>
+    <NuxtLink to="/ressources" class="text-[var(--prado-signature-accent)] mt-4 inline-block">Retour a la programmation</NuxtLink>
   </div>
 
   <div v-else class="max-w-4xl mx-auto px-6 py-10">
-    <NuxtLink to="/ressources" class="inline-flex items-center gap-2 text-prado-text-muted hover:text-[#FB6223] mb-8 transition-colors text-sm">
+    <NuxtLink to="/ressources" class="inline-flex items-center gap-2 text-prado-text-muted hover:text-[var(--prado-signature-accent)] mb-8 transition-colors text-sm">
       <ArrowLeft :size="15" /> Retour aux ressources
     </NuxtLink>
 
@@ -80,7 +81,7 @@ const color = computed(() =>
       :href="ressource.url"
       target="_blank"
       rel="noopener noreferrer"
-      class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#CF006C] text-white hover:bg-[#a80057] transition-colors"
+      class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--prado-signature)] text-[var(--prado-signature-text)] hover:bg-[var(--prado-signature)]/80 transition-colors"
     >
       <ExternalLink :size="16" />
       Acceder a la ressource

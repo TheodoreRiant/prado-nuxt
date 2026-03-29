@@ -183,7 +183,7 @@ onMounted(() => {
               </div>
               <div class="p-5">
                 <span class="text-xs mb-2 inline-block" :style="{ color: RESSOURCE_CATEGORY_COLORS[r.category] }">{{ r.category }}</span>
-                <h3 class="text-prado-text mb-2 line-clamp-2 group-hover:text-[#93C1AF] transition-colors">{{ r.title }}</h3>
+                <h3 class="text-prado-text mb-2 line-clamp-2 group-hover:text-[var(--prado-signature-accent)] transition-colors">{{ r.title }}</h3>
                 <p class="text-sm text-prado-text-muted line-clamp-2">{{ r.description }}</p>
               </div>
             </NuxtLink>

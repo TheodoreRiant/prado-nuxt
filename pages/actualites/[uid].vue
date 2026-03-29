@@ -82,7 +82,7 @@ async function copyLink() {
       </div>
 
       <div class="max-w-3xl mx-auto px-6 py-12">
-        <div class="prose prose-lg dark:prose-invert prose-a:text-[#CF006C] max-w-none text-prado-text">
+        <div class="prose prose-lg dark:prose-invert prose-a:text-[var(--prado-signature-accent)] max-w-none text-prado-text">
           <PrismicRichText :field="article.body" />
         </div>
 
@@ -91,7 +91,7 @@ async function copyLink() {
           <div class="flex gap-3">
             <button @click="share('facebook')" class="p-2 rounded-full bg-prado-surface hover:bg-[#1877F2] hover:text-white transition-colors text-prado-text-muted"><Facebook :size="18" /></button>
             <button @click="share('linkedin')" class="p-2 rounded-full bg-prado-surface hover:bg-[#0A66C2] hover:text-white transition-colors text-prado-text-muted"><Linkedin :size="18" /></button>
-            <button @click="copyLink" class="p-2 rounded-full bg-prado-surface hover:bg-[#93C1AF] hover:text-white transition-colors text-prado-text-muted"><Share2 :size="18" /></button>
+            <button @click="copyLink" class="p-2 rounded-full bg-prado-surface hover:bg-[var(--prado-signature)] hover:text-white transition-colors text-prado-text-muted"><Share2 :size="18" /></button>
           </div>
         </div>
       </div>
@@ -103,7 +103,7 @@ async function copyLink() {
             <div class="aspect-video rounded-xl overflow-hidden mb-4 bg-prado-surface">
               <img v-if="(d.data.image as any)?.url" :src="(d.data.image as any).url" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
             </div>
-            <h4 class="text-lg font-medium text-prado-text group-hover:text-[#CF006C] transition-colors mb-2">{{ d.data.title }}</h4>
+            <h4 class="text-lg font-medium text-prado-text group-hover:text-[var(--prado-signature-accent)] transition-colors mb-2">{{ d.data.title }}</h4>
             <p class="text-sm text-prado-text-muted line-clamp-2">{{ d.data.excerpt }}</p>
           </NuxtLink>
         </div>
@@ -112,7 +112,7 @@ async function copyLink() {
 
     <div v-else class="py-32 text-center">
       <h1 class="text-2xl text-prado-text">Article introuvable</h1>
-      <NuxtLink to="/actualites" class="text-[#CF006C] mt-4 inline-block">Retour aux actualités</NuxtLink>
+      <NuxtLink to="/actualites" class="text-[var(--prado-signature-accent)] mt-4 inline-block">Retour aux actualités</NuxtLink>
     </div>
   </div>
 </template>
