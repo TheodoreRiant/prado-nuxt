@@ -24,8 +24,8 @@ function handleCancel() {
   <Teleport to="body">
     <Transition name="fade">
       <div v-if="state.visible" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-black/50" @click="handleCancel" />
-        <div class="relative bg-prado-surface rounded-2xl border border-prado-border p-6 max-w-md w-full shadow-xl">
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="handleCancel" />
+        <div class="relative rounded-2xl border border-prado-border p-6 max-w-md w-full shadow-xl" style="background-color: var(--prado-surface)">
           <div class="flex items-start gap-4">
             <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-red-500/10 flex-shrink-0">
               <AlertTriangle :size="20" class="text-red-400" />
