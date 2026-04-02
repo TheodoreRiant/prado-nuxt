@@ -11,8 +11,8 @@ interface Stat {
 const props = defineProps<{ data?: any }>()
 
 const defaultStats: Stat[] = [
-  { value: 89, suffix: '', label: 'actions et ateliers programmés sur le territoire', color: '#FB6223' },
-  { value: 183, suffix: '', label: 'ressources professionnelles en accès libre', color: '#FB6223' },
+  { value: 89, suffix: '', label: 'actions et ateliers programmés sur le territoire', color: '#93C1AF' },
+  { value: 183, suffix: '', label: 'ressources professionnelles en accès libre', color: '#93C1AF' },
   { value: 500, suffix: '+', label: 'jeunes accompagnés chaque année', color: '#024266' },
   { value: 50, suffix: '+', label: 'structures partenaires sur la Métropole de Lyon', color: '#93C1AF' },
 ]
@@ -23,7 +23,7 @@ const stats = computed<Stat[]>(() => {
       value: item.value ?? 0,
       suffix: item.suffix ?? '',
       label: item.label ?? '',
-      color: item.color ?? '#FB6223',
+      color: item.color ?? '#93C1AF',
     }))
   }
   return defaultStats
@@ -83,15 +83,15 @@ onMounted(() => {
 <template>
   <section
     ref="sectionRef"
-    class="py-24 my-16 bg-[var(--prado-signature)]"
+    class="py-24 my-16 bg-prado-teal"
   >
     <div class="max-w-7xl mx-auto px-6">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
         <div v-for="(stat, idx) in stats" :key="stat.label">
-          <div class="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--prado-signature-text)] mb-2">
+          <div class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-2">
             {{ displayValues[idx] }}{{ stat.suffix }}
           </div>
-          <div class="text-[var(--prado-signature-text)]/70 text-base leading-snug">
+          <div class="text-white/70 text-base leading-snug">
             {{ stat.label }}
           </div>
         </div>

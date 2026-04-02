@@ -22,7 +22,7 @@ defineProps<Props>()
     <NuxtLink
       v-if="ctaLabel && ctaTo"
       :to="ctaTo"
-      class="px-5 py-2 rounded-full bg-[var(--prado-signature)] text-[#1a1a2e] text-sm font-medium hover:brightness-110 transition-all"
+      class="px-5 py-2 rounded-full bg-[var(--prado-signature)] text-prado-black text-sm font-medium hover:brightness-110 transition-all"
     >
       {{ ctaLabel }}
     </NuxtLink>

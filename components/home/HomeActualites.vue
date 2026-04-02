@@ -32,7 +32,7 @@ const hasArticles = computed(() => (actualites.value?.length ?? 0) > 0)
       <!-- Header -->
       <div class="flex items-end justify-between mb-10">
         <div>
-          <p class="text-[var(--prado-signature-accent)] text-sm tracking-wide uppercase font-medium mb-2">
+          <p class="text-prado-sage text-sm tracking-wide uppercase font-medium mb-2">
             Blog
           </p>
           <h2 class="text-3xl md:text-4xl text-prado-text">
@@ -92,7 +92,7 @@ const hasArticles = computed(() => (actualites.value?.length ?? 0) > 0)
             </div>
             <!-- Content -->
             <div class="p-5">
-              <div class="text-xs text-[var(--prado-signature-accent)] mb-2 flex items-center gap-1.5">
+              <div class="text-xs text-prado-sage mb-2 flex items-center gap-1.5">
                 <Calendar :size="12" />
                 {{ formatDate(article.data.date as string) }}
               </div>

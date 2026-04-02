@@ -18,7 +18,7 @@ const titleHtml = computed(() => {
   if (p.value?.title?.length) {
     return asHTML(p.value.title, { serializer: richTextSerializer })
   }
-  return '<p>Accompagner les jeunes de <span class="text-[#FB6223]">11 à 25 ans</span> et leurs familles vers l\'autonomie.</p>'
+  return '<p>Accompagner les jeunes de <span class="text-prado-sage">11 à 25 ans</span> et leurs familles vers l\'autonomie.</p>'
 })
 
 const descriptionHtml = computed(() => {
@@ -57,7 +57,7 @@ onMounted(() => {
   <div ref="containerRef" class="max-w-4xl mx-auto">
     <!-- Sur-titre -->
     <p
-      class="text-[#FB6223] text-sm tracking-widest uppercase text-center mb-8 hero-reveal"
+      class="text-prado-sage text-sm tracking-widest uppercase text-center mb-8 hero-reveal"
       :class="isVisible ? 'is-visible' : ''"
       style="--delay: 0s;"
     >
@@ -83,7 +83,7 @@ onMounted(() => {
 
     <!-- Ligne de séparation subtile -->
     <div
-      class="w-16 h-px bg-gradient-to-r from-[#FB6223] via-[#FB6223] to-[#FB6223] mx-auto mb-10 hero-reveal"
+      class="w-16 h-px bg-prado-sage mx-auto mb-10 hero-reveal"
       :class="isVisible ? 'is-visible' : ''"
       style="--delay: 0.45s;"
     />
@@ -95,17 +95,17 @@ onMounted(() => {
       style="--delay: 0.55s;"
     >
       <NuxtLink
-        :to="ctaPrimary.to"
-        class="group inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#FB6223] text-white hover:bg-[#FB6223]/90 transition-all font-medium"
+        :to="ctaSecondary.to"
+        class="group inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-prado-orange text-white hover:bg-prado-orange/90 transition-all font-medium"
       >
-        {{ ctaPrimary.label }}
+        {{ ctaSecondary.label }}
         <ArrowRight :size="16" class="group-hover:translate-x-1 transition-transform" />
       </NuxtLink>
       <NuxtLink
-        :to="ctaSecondary.to"
-        class="px-8 py-3.5 rounded-full border border-prado-orange text-prado-orange hover:bg-prado-orange/10 transition-colors font-medium"
+        :to="ctaPrimary.to"
+        class="px-8 py-3.5 rounded-full border border-prado-sage text-prado-sage hover:bg-prado-sage/10 transition-colors font-medium"
       >
-        {{ ctaSecondary.label }}
+        {{ ctaPrimary.label }}
       </NuxtLink>
     </div>
   </div>

@@ -77,7 +77,7 @@ function toggle(index: number) {
             <ChevronDown
               :size="20"
               class="shrink-0 transition-all duration-300"
-              :class="openIndex === idx ? 'rotate-180 text-prado-orange' : 'text-prado-text-muted'"
+              :class="openIndex === idx ? 'rotate-180 text-prado-sage' : 'text-prado-text-muted'"
             />
           </button>
           <div

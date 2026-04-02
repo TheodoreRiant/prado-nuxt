@@ -11,7 +11,7 @@ const { nextStep, showWidget, openPanel, completedCount, totalSteps } = useOnboa
     @click="openPanel"
   >
     <div class="w-10 h-10 rounded-xl bg-[var(--prado-signature)] flex items-center justify-center shrink-0">
-      <Rocket :size="18" class="text-[#1a1a2e]" />
+      <Rocket :size="18" class="text-prado-black" />
     </div>
     <div class="flex-1 min-w-0">
       <p class="text-xs text-prado-text-muted font-medium">Prochaine etape ({{ completedCount }}/{{ totalSteps }})</p>

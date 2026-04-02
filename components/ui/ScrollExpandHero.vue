@@ -386,7 +386,7 @@ onUnmounted(() => {
 
 [data-theme="light"] .hero-gradient-bg {
   background:
-    radial-gradient(ellipse 70% 70% at 0% 0%, rgba(255, 210, 40, 0.45) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 70% at 0% 0%, rgba(147, 193, 175, 0.35) 0%, transparent 60%),
     var(--prado-bg);
 }
 
@@ -403,7 +403,7 @@ onUnmounted(() => {
   right: -8px;
   bottom: 0%;
   height: 80%;
-  background: var(--prado-signature);
+  background: var(--prado-sage);
   transform: rotate(-2deg);
   z-index: -1;
   border-radius: 4px;

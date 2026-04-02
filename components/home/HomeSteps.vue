@@ -81,7 +81,7 @@ onMounted(() => {
           :class="isVisible && 'is-visible'"
           :style="{ '--delay': `${0.1 + (idx as number) * 0.12}s` }"
         >
-          <div class="text-5xl font-bold text-prado-orange mb-4">
+          <div class="text-5xl font-bold text-prado-sage mb-4">
             {{ step.number }}
           </div>
           <h3 class="text-lg text-prado-text mb-3">

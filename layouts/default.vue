@@ -19,7 +19,7 @@ const mainLinks = [
 ]
 
 const programmeItems = [
-  { to: '/foodtruck', label: 'Foodtruck « Les Saveurs d\'Élise »', desc: 'Insertion par la restauration mobile', icon: Truck, color: '#FB6223' },
+  { to: '/foodtruck', label: 'Foodtruck « Les Saveurs d\'Élise »', desc: 'Insertion par la restauration mobile', icon: Truck, color: '#93C1AF' },
   { to: '/fresque', label: 'Fresque de la Protection de l\'Enfance', desc: 'Atelier collaboratif de sensibilisation', icon: BookOpen, color: '#93C1AF' },
   { to: '/educolab', label: 'Compétences parentales', desc: 'Programmes Ces Années Incroyables & Parent d\'Ado', icon: Heart, color: '#024266' },
 ]
@@ -320,7 +320,7 @@ async function handleLogout() {
               href="https://www.le-prado.fr/don/"
               target="_blank"
               rel="noopener noreferrer"
-              class="block mt-2 py-2.5 rounded-full border border-[var(--prado-signature)]/30 text-[var(--prado-signature-accent)] text-sm text-center"
+              class="block mt-2 py-2.5 rounded-full border border-prado-sage/30 text-prado-sage text-sm text-center"
               @click="closeMenu"
             >
               Faire un don
@@ -371,7 +371,7 @@ async function handleLogout() {
             href="https://www.le-prado.fr/don/"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-block mt-4 px-4 py-2 rounded-full border border-[var(--prado-signature)]/30 text-[var(--prado-signature-accent)] text-sm hover:bg-[var(--prado-signature)]/10 transition-colors"
+            class="inline-block mt-4 px-4 py-2 rounded-full border border-prado-sage/30 text-prado-sage text-sm hover:bg-prado-sage/10 transition-colors"
           >
             Faire un don
           </a>
@@ -392,7 +392,7 @@ async function handleLogout() {
               target="_blank"
               rel="noopener noreferrer"
               :aria-label="link.label"
-              class="w-9 h-9 rounded-full bg-prado-tag-bg flex items-center justify-center text-prado-text-muted hover:bg-[var(--prado-signature)] hover:text-white transition-colors"
+              class="w-9 h-9 rounded-full bg-prado-tag-bg flex items-center justify-center text-prado-text-muted hover:bg-prado-sage hover:text-white transition-colors"
             >
               <component :is="link.icon" :size="15" />
             </a>
@@ -426,7 +426,7 @@ async function handleLogout() {
   right: 12px;
   height: 2px;
   border-radius: 1px;
-  background: var(--prado-signature);
+  background: var(--prado-sage);
   transform: scaleX(0);
   transition: transform 0.25s ease-out;
 }
