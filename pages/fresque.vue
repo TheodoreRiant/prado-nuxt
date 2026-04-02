@@ -13,7 +13,7 @@ useHead({
     : [],
 })
 
-const brandColor = computed(() => d.value?.brand_color || '#024266')
+const brandColor = computed(() => '#93C1AF')
 </script>
 
 <template>

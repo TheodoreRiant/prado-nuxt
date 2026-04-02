@@ -23,7 +23,7 @@ const stats = computed<Stat[]>(() => {
       value: item.value ?? 0,
       suffix: item.suffix ?? '',
       label: item.label ?? '',
-      color: item.color ?? '#93C1AF',
+      color: '#93C1AF',
     }))
   }
   return defaultStats

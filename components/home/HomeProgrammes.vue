@@ -95,7 +95,7 @@ const programmes = computed<Programme[]>(() => {
       title: item.title || '',
       shortTitle: item.short_title || '',
       icon: iconMap[item.icon_name] || Users,
-      color: item.brand_color || '#93C1AF',
+      color: '#93C1AF',
       text: item.description?.map((block: any) => block.text).filter(Boolean) ?? [],
       ctas: [
         item.cta_1_label ? { label: item.cta_1_label, to: item.cta_1_link?.url || '#' } : null,
