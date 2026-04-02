@@ -24,6 +24,8 @@ export { default as PrTagInput } from './components/form/PrTagInput.vue'
 export { default as PrPhoneInput } from './components/form/PrPhoneInput.vue'
 export { default as PrMultiSelect } from './components/form/PrMultiSelect.vue'
 export { default as PrDatePicker } from './components/form/PrDatePicker.vue'
+export { default as PrDateRangePicker } from './components/form/PrDateRangePicker.vue'
+export { default as PrFileUpload } from './components/form/PrFileUpload.vue'
 
 // Feedback
 export { default as PrDialog } from './components/feedback/PrDialog.vue'
@@ -38,14 +40,19 @@ export { default as PrAccordion } from './components/navigation/PrAccordion.vue'
 export { default as PrAccordionItem } from './components/navigation/PrAccordionItem.vue'
 export { default as PrBreadcrumb } from './components/navigation/PrBreadcrumb.vue'
 export { default as PrPagination } from './components/navigation/PrPagination.vue'
+export { default as PrStepper } from './components/navigation/PrStepper.vue'
 
 // Overlay
 export { default as PrTooltip } from './components/overlay/PrTooltip.vue'
 export { default as PrDropdown } from './components/overlay/PrDropdown.vue'
+export { default as PrCommandPalette } from './components/overlay/PrCommandPalette.vue'
 
 // Data
 export { default as PrTable } from './components/data/PrTable.vue'
+export { default as PrDataTable } from './components/data/PrDataTable.vue'
 export { default as PrStatCard } from './components/data/PrStatCard.vue'
+export { default as PrTimeline } from './components/data/PrTimeline.vue'
+export { default as PrCalendar } from './components/data/PrCalendar.vue'
 
 // Media
 export { default as PrImageWithFallback } from './components/media/PrImageWithFallback.vue'
@@ -82,3 +89,15 @@ export type { PrDropdownItem } from './components/overlay/PrDropdown.vue'
 
 // Types — Data
 export type { PrTableColumn } from './components/data/PrTable.vue'
+export type { PrDataTableColumn } from './components/data/PrDataTable.vue'
+export type { PrTimelineItem } from './components/data/PrTimeline.vue'
+export type { PrCalendarEvent } from './components/data/PrCalendar.vue'
+
+// Types — Navigation (Tier 2)
+export type { PrStepperStep, PrStepStatus } from './components/navigation/PrStepper.vue'
+
+// Types — Form (Tier 2)
+export type { PrDateRange } from './components/form/PrDateRangePicker.vue'
+
+// Types — Overlay (Tier 2)
+export type { PrCommandPaletteItem } from './components/overlay/PrCommandPalette.vue'
