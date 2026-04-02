@@ -1,4 +1,4 @@
-import { apiEndpoint, repositoryName } from "./slicemachine.config.json";
+import { repositoryName } from "./slicemachine.config.json";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -16,7 +16,7 @@ export default defineNuxtConfig({
 
   vite: {
     plugins: [
-      // @ts-expect-error - tailwindcss vite plugin
+      // @ts-ignore - tailwindcss vite plugin
       (await import('@tailwindcss/vite')).default(),
     ],
   },
@@ -26,7 +26,7 @@ export default defineNuxtConfig({
   },
 
   prismic: {
-    endpoint: apiEndpoint || repositoryName,
+    endpoint: repositoryName,
   },
 
   app: {
