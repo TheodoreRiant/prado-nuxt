@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Mail, Newspaper, ShieldCheck, BarChart3, Phone, FileText } from 'lucide-vue-next'
+import { Mail, Newspaper, BarChart3, Phone, FileText } from 'lucide-vue-next'
 
 definePageMeta({ layout: 'admin' })
 
@@ -8,9 +8,8 @@ const { fetchSettings, loading } = useAdminSettings()
 const sections = [
   { key: 'email', label: 'Email & Notifications', icon: Mail },
   { key: 'newsletter', label: 'Newsletter & Mailchimp', icon: Newspaper },
-  { key: 'veriff', label: 'Vérification d\'identité', icon: ShieldCheck },
   { key: 'prismic', label: 'CMS (Prismic)', icon: FileText },
-  { key: 'analytics', label: 'Analytics (Clarity)', icon: BarChart3 },
+  { key: 'analytics', label: 'Analytics', icon: BarChart3 },
   { key: 'contact', label: 'Informations de contact', icon: Phone },
 ] as const
 
@@ -55,7 +54,6 @@ onMounted(() => {
       <div class="bg-prado-surface rounded-2xl border border-prado-border p-6">
         <AdminSettingsEmail v-if="activeSection === 'email'" />
         <AdminSettingsNewsletter v-else-if="activeSection === 'newsletter'" />
-        <AdminSettingsVeriff v-else-if="activeSection === 'veriff'" />
         <AdminSettingsPrismic v-else-if="activeSection === 'prismic'" />
         <AdminSettingsAnalytics v-else-if="activeSection === 'analytics'" />
         <AdminSettingsContact v-else-if="activeSection === 'contact'" />

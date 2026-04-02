@@ -1,7 +1,30 @@
 <script setup lang="ts">
-import { ArrowLeft, Pencil, Check, X, Trash2, Loader2, Calendar, Plus, StickyNote, ShieldCheck, ShieldOff, Heart, Users, ClipboardList } from 'lucide-vue-next'
+import { ArrowLeft, Pencil, Check, X, Trash2, Loader2, Calendar, Plus, StickyNote } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
-import { SITUATIONS } from '~/lib/types/sante'
+
+const SITUATIONS = [
+  { value: '', label: 'Non renseigne' },
+  { value: 'sans_emploi', label: 'Sans emploi' },
+  { value: 'scolarise_ordinaire', label: 'Scolarise(e) en milieu ordinaire' },
+  { value: 'scolarise_medico_social', label: 'Scolarise(e) en milieu medico-social' },
+  { value: 'emploi_formation', label: 'Emploi / Formation' },
+  { value: 'autre', label: 'Autre' },
+] as const
+
+const SEXES = [
+  { value: 'homme', label: 'Homme' },
+  { value: 'femme', label: 'Femme' },
+] as const
+
+const ACCOMPAGNEMENT_OPTIONS = [
+  { value: 'ase', label: 'ASE' },
+  { value: 'pjj', label: 'PJJ' },
+  { value: 'mission_locale', label: 'Mission locale' },
+  { value: 'prevention_specialisee', label: 'Prevention specialisee' },
+  { value: 'insertion', label: 'Insertion' },
+  { value: 'handicap', label: 'Handicap' },
+  { value: 'autre', label: 'Autre' },
+] as const
 
 definePageMeta({ layout: 'espace', middleware: 'auth' })
 
@@ -10,7 +33,6 @@ const id = route.params.id as string
 const { jeunes, inscriptions, editJeune, desinscrire, inscrire } = useAuth()
 const { confirm } = useConfirm()
 const { checkConflict } = useConflictCheck()
-const { startVerification, verifying, status: veriffStatus, error: veriffError, reset: resetVeriff } = useVeriff()
 
 const jeune = computed(() => jeunes.value.find(j => j.id === id))
 
@@ -46,10 +68,26 @@ const editing = ref<string | null>(null)
 const editValue = ref('')
 const saving = ref(false)
 
+// Multi-value editing for accompagnementType
+const editMultiValue = ref<string[]>([])
+
 const situationLabel = computed(() => {
   if (!jeune.value?.situation) return ''
   const found = SITUATIONS.find(s => s.value === jeune.value!.situation)
   return found ? found.label : jeune.value.situation
+})
+
+const sexLabel = computed(() => {
+  if (!jeune.value?.sex) return 'Non renseigne'
+  const found = SEXES.find(s => s.value === jeune.value!.sex)
+  return found ? found.label : jeune.value.sex
+})
+
+const accompagnementLabel = computed(() => {
+  if (!jeune.value?.accompagnementType || jeune.value.accompagnementType.length === 0) return 'Non renseigne'
+  return jeune.value.accompagnementType
+    .map(v => ACCOMPAGNEMENT_OPTIONS.find(o => o.value === v)?.label ?? v)
+    .join(', ')
 })
 
 const fields = computed(() => {
@@ -57,53 +95,40 @@ const fields = computed(() => {
   return [
     { key: 'firstName', label: 'Prenom', value: jeune.value.firstName },
     { key: 'lastName', label: 'Nom', value: jeune.value.lastName },
+    { key: 'sex', label: 'Sexe', value: jeune.value.sex, display: sexLabel.value, type: 'sex' },
     { key: 'dateOfBirth', label: 'Date de naissance', value: jeune.value.dateOfBirth, display: new Date(jeune.value.dateOfBirth).toLocaleDateString('fr-FR'), type: 'dateOfBirth' },
     { key: 'situation', label: 'Situation', value: jeune.value.situation, display: situationLabel.value, type: 'situation' },
+    { key: 'isQpv', label: 'QPV', value: String(jeune.value.isQpv), display: jeune.value.isQpv ? 'Oui' : 'Non', type: 'checkbox' },
+    { key: 'accompagnementType', label: 'Accompagnement au titre de', value: (jeune.value.accompagnementType ?? []).join(','), display: accompagnementLabel.value, type: 'multiCheckbox' },
   ]
 })
 
-// Address inline edit (grouped)
-const editingAddress = ref(false)
-const editAddress = ref({ address: '', postalCode: '', city: '' })
-
-function startEditAddress() {
-  if (!jeune.value) return
-  editAddress.value = {
-    address: jeune.value.address,
-    postalCode: jeune.value.postalCode,
-    city: jeune.value.city,
-  }
-  editingAddress.value = true
-}
-
-async function saveAddress() {
-  saving.value = true
-  try {
-    await editJeune(id, editAddress.value)
-    toast.success('Adresse enregistree')
-    editingAddress.value = false
-  } catch (err: unknown) {
-    toast.error(err instanceof Error ? err.message : 'Erreur')
-  } finally {
-    saving.value = false
-  }
-}
-
 function startEdit(key: string, value: string) {
   editing.value = key
-  editValue.value = value
+  if (key === 'accompagnementType') {
+    editMultiValue.value = [...(jeune.value?.accompagnementType ?? [])]
+  } else {
+    editValue.value = value
+  }
 }
 
 function cancelEdit() {
   editing.value = null
   editValue.value = ''
+  editMultiValue.value = []
 }
 
 async function saveEdit(key: string) {
-  if (!editValue.value.trim()) return
   saving.value = true
   try {
-    await editJeune(id, { [key]: editValue.value })
+    if (key === 'isQpv') {
+      await editJeune(id, { isQpv: editValue.value === 'true' })
+    } else if (key === 'accompagnementType') {
+      await editJeune(id, { accompagnementType: editMultiValue.value })
+    } else {
+      if (!editValue.value.trim()) return
+      await editJeune(id, { [key]: editValue.value })
+    }
     toast.success('Modification enregistree')
     editing.value = null
   } catch (err: unknown) {
@@ -145,7 +170,7 @@ async function handleInscrire() {
   const selectedActionEntry = actionMap.value.get(selectedAction.value)
   checkConflict(id, selectedAction.value, selectedActionEntry?.date ?? null, actionMap.value)
   try {
-    await inscrire(selectedAction.value, id)
+    await inscrire(selectedAction.value, null, id)
     toast.success('Inscription reussie')
     showPicker.value = false
     selectedAction.value = ''
@@ -179,40 +204,6 @@ async function saveNotes() {
   }
 }
 
-async function handleVerifyIdentity() {
-  if (!jeune.value) return
-  resetVeriff()
-  await startVerification(jeune.value.id, jeune.value.firstName, jeune.value.lastName)
-}
-
-watch(veriffStatus, (val) => {
-  if (val === 'submitted') {
-    toast.success('Vérification soumise ! Le résultat sera mis à jour automatiquement.')
-  }
-  if (val === 'canceled') {
-    toast.info('Vérification annulée.')
-  }
-})
-
-watch(veriffError, (val) => {
-  if (val) toast.error(val)
-})
-
-// Tabs
-const activeTab = ref<'infos' | 'sante' | 'famille'>('infos')
-const tabs = [
-  { key: 'infos' as const, label: 'Infos generales', icon: ClipboardList },
-  { key: 'sante' as const, label: 'Sante', icon: Heart },
-  { key: 'famille' as const, label: 'Situation familiale', icon: Users },
-]
-
-// Health data (HDS)
-const { form: santeForm, loading: santeLoading, saving: santeSaving, load: loadSante, save: saveSante } = useSante(id)
-
-watch(activeTab, (tab) => {
-  if (tab === 'sante' || tab === 'famille') loadSante()
-})
-
 const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-border-medium'
 </script>
 
@@ -234,85 +225,9 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
     </div>
 
     <template v-else>
-      <div class="flex items-center justify-between">
-        <h1 class="text-xl font-semibold text-prado-text italic">
-          {{ jeune.firstName }} {{ jeune.lastName }}
-        </h1>
-        <span
-          v-if="jeune.identityVerified"
-          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-prado-signature-muted text-prado-signature"
-        >
-          <ShieldCheck :size="13" />
-          Identité vérifiée
-        </span>
-        <span
-          v-else
-          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-prado-tag-bg text-prado-text-muted"
-        >
-          <ShieldOff :size="13" />
-          Non vérifiée
-        </span>
-      </div>
-
-      <!-- Identity verification -->
-      <div
-        v-if="!jeune.identityVerified && veriffStatus !== 'submitted'"
-        class="bg-prado-teal/10 rounded-2xl p-5 border border-prado-teal/20"
-      >
-        <div class="flex items-start gap-3">
-          <div class="w-10 h-10 rounded-xl bg-prado-teal/15 flex items-center justify-center shrink-0">
-            <ShieldCheck :size="20" class="text-prado-teal" />
-          </div>
-          <div class="flex-1">
-            <p class="text-prado-text font-medium mb-1">Vérifier l'identité de {{ jeune.firstName }}</p>
-            <p class="text-sm text-prado-text-secondary mb-3">
-              En présence du jeune, lancez la vérification d'identité avec une pièce d'identité valide.
-            </p>
-            <button
-              :disabled="verifying"
-              class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-prado-teal text-white text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
-              @click="handleVerifyIdentity"
-            >
-              <Loader2 v-if="verifying" :size="14" class="animate-spin" />
-              <ShieldCheck v-else :size="14" />
-              {{ verifying ? 'Lancement...' : 'Vérifier l\'identité' }}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Verification in progress -->
-      <div
-        v-else-if="veriffStatus === 'submitted'"
-        class="bg-prado-signature-muted rounded-2xl p-5 border border-prado-signature/20"
-      >
-        <div class="flex items-center gap-3">
-          <ShieldCheck :size="20" class="text-[#93C1AF]" />
-          <div>
-            <p class="text-[#93C1AF] font-medium">Vérification en cours</p>
-            <p class="text-sm text-prado-text-secondary">L'identité est en cours de vérification par Veriff.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tab navigation -->
-      <div class="flex gap-1 bg-prado-surface rounded-xl p-1 border border-prado-border">
-        <button
-          v-for="tab in tabs"
-          :key="tab.key"
-          class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors"
-          :class="activeTab === tab.key
-            ? 'bg-prado-teal text-white font-medium shadow-sm'
-            : 'text-prado-text-muted hover:bg-prado-surface-hover'"
-          @click="activeTab = tab.key"
-        >
-          <component :is="tab.icon" :size="14" />
-          {{ tab.label }}
-        </button>
-      </div>
-
-      <!-- TAB: Infos generales -->
-      <template v-if="activeTab === 'infos'">
+      <h1 class="text-xl font-semibold text-prado-text italic">
+        {{ jeune.firstName }} {{ jeune.lastName }}
+      </h1>
 
       <!-- Info fields with inline edit -->
       <div class="bg-prado-surface rounded-2xl border border-prado-border divide-y divide-prado-border">
@@ -336,6 +251,32 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
             >
               <option v-for="s in SITUATIONS" :key="s.value" :value="s.value">{{ s.label }}</option>
             </select>
+            <select
+              v-else-if="field.type === 'sex'"
+              v-model="editValue"
+              :class="inputClass"
+              class="flex-1"
+            >
+              <option v-for="s in SEXES" :key="s.value" :value="s.value">{{ s.label }}</option>
+            </select>
+            <label
+              v-else-if="field.type === 'checkbox'"
+              class="flex-1 flex items-center gap-2 cursor-pointer"
+            >
+              <input
+                type="checkbox"
+                :checked="editValue === 'true'"
+                class="rounded border-prado-border text-prado-teal focus:ring-prado-teal"
+                @change="editValue = ($event.target as HTMLInputElement).checked ? 'true' : 'false'"
+              />
+              <span class="text-sm text-prado-text">Quartier Prioritaire de la Ville</span>
+            </label>
+            <div v-else-if="field.type === 'multiCheckbox'" class="flex-1">
+              <UiMultiCheckbox
+                v-model="editMultiValue"
+                :options="ACCOMPAGNEMENT_OPTIONS"
+              />
+            </div>
             <input
               v-else
               v-model="editValue"
@@ -367,57 +308,6 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
             <button
               class="p-1.5 rounded-lg hover:bg-prado-surface-hover text-prado-text-faint hover:text-prado-text-muted transition-colors"
               @click="startEdit(field.key, field.value)"
-            >
-              <Pencil :size="14" />
-            </button>
-          </template>
-        </div>
-      </div>
-
-      <!-- Adresse (grouped inline edit) -->
-      <div class="bg-prado-surface rounded-2xl border border-prado-border">
-        <div class="flex items-start gap-4 px-5 py-4">
-          <span class="text-sm text-prado-text-muted w-40 shrink-0 pt-0.5">Adresse</span>
-
-          <template v-if="editingAddress">
-            <div class="flex-1">
-              <UiAddressAutocomplete
-                v-model:address="editAddress.address"
-                v-model:postal-code="editAddress.postalCode"
-                v-model:city="editAddress.city"
-              />
-            </div>
-            <div class="flex gap-1 pt-1">
-              <button
-                :disabled="saving"
-                class="p-1.5 rounded-lg hover:bg-prado-signature/20 text-prado-signature transition-colors"
-                @click="saveAddress"
-              >
-                <Loader2 v-if="saving" :size="15" class="animate-spin" />
-                <Check v-else :size="15" />
-              </button>
-              <button
-                class="p-1.5 rounded-lg hover:bg-prado-surface-hover text-prado-text-muted transition-colors"
-                @click="editingAddress = false"
-              >
-                <X :size="15" />
-              </button>
-            </div>
-          </template>
-
-          <template v-else>
-            <div class="flex-1 text-sm text-prado-text">
-              <p v-if="jeune.address || jeune.postalCode || jeune.city">
-                {{ jeune.address }}<br v-if="jeune.address && (jeune.postalCode || jeune.city)" />
-                <span v-if="jeune.postalCode || jeune.city" class="text-prado-text-muted">
-                  {{ jeune.postalCode }} {{ jeune.city }}
-                </span>
-              </p>
-              <span v-else class="text-prado-text-faint italic">Non renseignee</span>
-            </div>
-            <button
-              class="p-1.5 rounded-lg hover:bg-prado-surface-hover text-prado-text-faint hover:text-prado-text-muted transition-colors"
-              @click="startEditAddress"
             >
               <Pencil :size="14" />
             </button>
@@ -554,28 +444,6 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
           </div>
         </div>
       </div>
-
-      </template>
-
-      <!-- TAB: Sante -->
-      <template v-if="activeTab === 'sante'">
-        <div v-if="santeLoading" class="flex items-center justify-center py-12">
-          <Loader2 :size="24" class="animate-spin text-prado-text-muted" />
-        </div>
-        <div v-else class="bg-prado-surface rounded-2xl border border-prado-border p-5">
-          <JeuneFicheSante v-model="santeForm" :saving="santeSaving" @save="saveSante" />
-        </div>
-      </template>
-
-      <!-- TAB: Situation familiale -->
-      <template v-if="activeTab === 'famille'">
-        <div v-if="santeLoading" class="flex items-center justify-center py-12">
-          <Loader2 :size="24" class="animate-spin text-prado-text-muted" />
-        </div>
-        <div v-else class="bg-prado-surface rounded-2xl border border-prado-border p-5">
-          <JeuneFicheFamille v-model="santeForm" :saving="santeSaving" @save="saveSante" />
-        </div>
-      </template>
 
     </template>
   </div>

@@ -3,5 +3,10 @@ export default defineNuxtPlugin(() => {
   // Here we just sync the Nuxt reactive state.
   const current = document.documentElement.getAttribute('data-theme') as 'light' | 'dark' | null;
   const themeState = useState('theme');
-  themeState.value = current ?? 'dark';
+  themeState.value = current ?? 'light';
+
+  // If no theme was stored yet, apply light as default
+  if (!current) {
+    document.documentElement.setAttribute('data-theme', 'light');
+  }
 });

@@ -1,13 +1,9 @@
 import { requireAdmin } from '~/server/utils/admin'
+import { validateBody, actionDuplicateSchema } from '~/server/utils/validation'
 
 export default defineEventHandler(async (event) => {
   const adminClient = await requireAdmin(event)
-  const body = await readBody(event)
-  const { sourceId } = body ?? {}
-
-  if (!sourceId) {
-    throw createError({ statusCode: 400, message: 'sourceId requis' })
-  }
+  const { sourceId } = await validateBody(event, actionDuplicateSchema)
 
   // Fetch the source action
   const { data: source, error: fetchError } = await adminClient

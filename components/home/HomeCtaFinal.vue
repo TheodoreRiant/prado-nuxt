@@ -50,7 +50,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section ref="sectionRef" class="py-24 bg-gradient-to-r from-[#CF006C] to-[#FB6223]">
+  <section ref="sectionRef" class="py-24 bg-gradient-to-r from-[#FD6223] to-[#FD6223]">
     <div class="max-w-3xl mx-auto px-6 text-center">
       <h2
         class="text-3xl md:text-4xl text-white mb-8 reveal"
@@ -72,7 +72,7 @@ onMounted(() => {
       >
         <NuxtLink
           :to="ctaPrimary.to"
-          class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-prado-yellow text-prado-black hover:bg-prado-yellow/90 transition-colors font-medium"
+          class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-prado-orange text-white hover:bg-prado-orange/90 transition-colors font-medium"
         >
           {{ ctaPrimary.label }}
           <ArrowRight :size="16" />

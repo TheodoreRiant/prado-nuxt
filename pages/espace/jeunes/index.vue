@@ -2,9 +2,16 @@
 import { UserPlus, Trash2, Eye, Download, Loader2 } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import { exportToCsv } from '~/utils/csvExport'
-import { SITUATIONS, TYPES_HANDICAP, MESURES_PROTECTION, REGIMES_ALIMENTAIRES, LIEUX_HEBERGEMENT, DROITS_PARENTAUX_OPTIONS } from '~/lib/types/sante'
-import type { JeuneSante } from '~/lib/types/sante'
 import type { AdminTableColumn } from '~/components/admin/AdminTable.vue'
+
+const SITUATIONS = [
+  { value: '', label: 'Non renseigné' },
+  { value: 'sans_emploi', label: 'Sans emploi' },
+  { value: 'scolarise_ordinaire', label: 'Scolarisé(e) en milieu ordinaire' },
+  { value: 'scolarise_medico_social', label: 'Scolarisé(e) en milieu médico-social' },
+  { value: 'emploi_formation', label: 'Emploi / Formation' },
+  { value: 'autre', label: 'Autre' },
+] as const
 
 definePageMeta({ layout: 'espace', middleware: 'auth' })
 
@@ -27,7 +34,7 @@ watch([hasJeunes, jeunesLoading], ([has, loading]) => {
 
 const submitting = ref(false)
 const newJeune = ref({
-  firstName: '', lastName: '', dateOfBirth: '', address: '', postalCode: '', city: '', situation: '',
+  firstName: '', lastName: '', dateOfBirth: '', situation: '',
 })
 
 const columns: AdminTableColumn[] = [
@@ -58,7 +65,7 @@ async function handleAdd() {
   try {
     await addJeune(newJeune.value)
     complete('firstJeuneAdded')
-    newJeune.value = { firstName: '', lastName: '', dateOfBirth: '', address: '', postalCode: '', city: '', situation: '' }
+    newJeune.value = { firstName: '', lastName: '', dateOfBirth: '', situation: '' }
     showAdd.value = false
     toast.success('Fiche jeune creee')
   } catch (err: unknown) {
@@ -81,63 +88,17 @@ async function handleRemove(id: string, name: string) {
 
 const exporting = ref(false)
 
-function labelFromOptions(options: readonly { value: string; label: string }[], val: string): string {
-  return options.find(o => o.value === val)?.label ?? val
-}
-
-function labelsFromOptions(options: readonly { value: string; label: string }[], vals: string[]): string {
-  return vals.map(v => labelFromOptions(options, v)).join(', ')
-}
-
 async function handleExport() {
   exporting.value = true
   try {
-    // Fetch all sante data for enriched export
-    const santeMap = await $fetch<Record<string, JeuneSante>>('/api/jeunes/sante-export')
-
     exportToCsv(
       'jeunes.csv',
-      [
-        'Nom', 'Date de naissance', 'Adresse', 'Code postal', 'Ville', 'Situation',
-        'Allergies', 'Handicap', 'Taux invalidite', 'Regime alimentaire',
-        'Medecin traitant', 'Traitements en cours',
-        'Suivi medical', 'Suivi psychologique',
-        'Contacts urgence',
-        'Mesure de protection', 'Lieu hebergement', 'Referent ASE',
-        'Droits parentaux', 'Composition familiale',
-      ],
-      jeunes.value.map(j => {
-        const s = santeMap[j.id]
-        const droitsType = s?.droitsParentaux?.split('|')[0] ?? ''
-        const droitsDetail = s?.droitsParentaux?.split('|').slice(1).join('|') ?? ''
-
-        return [
-          `${j.firstName} ${j.lastName}`,
-          new Date(j.dateOfBirth).toLocaleDateString('fr-FR'),
-          j.address,
-          j.postalCode,
-          j.city,
-          situationLabel(j.situation),
-          // Sante
-          s?.allergies?.join(', ') ?? '',
-          s ? labelFromOptions([...TYPES_HANDICAP], s.handicap) : '',
-          s?.tauxInvalidite ?? '',
-          s ? labelsFromOptions([...REGIMES_ALIMENTAIRES], s.regimeAlimentaire) : '',
-          s?.medecinTraitant ? `${s.medecinTraitant.nom}${s.medecinTraitant.telephone ? ' (' + s.medecinTraitant.telephone + ')' : ''}` : '',
-          s?.traitementsEnCours?.join(', ') ?? '',
-          s?.suiviMedical?.map(sm => `${sm.specialite} - ${sm.frequence}${sm.details ? ' (' + sm.details + ')' : ''}`).join('; ') ?? '',
-          s?.suiviPsychologique?.enCours
-            ? `Oui - ${s.suiviPsychologique.type} ${s.suiviPsychologique.frequence}${s.suiviPsychologique.notes ? ' (' + s.suiviPsychologique.notes + ')' : ''}`
-            : 'Non',
-          s?.contactsUrgence?.map(c => `${c.nom} (${c.lien}) ${c.telephone}`).join('; ') ?? '',
-          // Famille
-          s ? labelsFromOptions([...MESURES_PROTECTION], s.mesureProtection) : '',
-          s ? labelFromOptions([...LIEUX_HEBERGEMENT], s.lieuHebergement) : '',
-          s?.referentAse ? `${s.referentAse.nom}${s.referentAse.fonction ? ' - ' + s.referentAse.fonction : ''}${s.referentAse.telephone ? ' (' + s.referentAse.telephone + ')' : ''}` : '',
-          droitsType ? `${labelFromOptions([...DROITS_PARENTAUX_OPTIONS], droitsType)}${droitsDetail ? ' - ' + droitsDetail : ''}` : '',
-          s?.compositionFamiliale?.map(m => `${m.lien}: ${m.prenom}${m.age ? ' (' + m.age + ' ans)' : ''}${m.vitAvec ? ' [vit avec]' : ''}`).join('; ') ?? '',
-        ]
-      }),
+      ['Nom', 'Date de naissance', 'Situation'],
+      jeunes.value.map(j => [
+        `${j.firstName} ${j.lastName}`,
+        new Date(j.dateOfBirth).toLocaleDateString('fr-FR'),
+        situationLabel(j.situation),
+      ]),
     )
   } catch {
     toast.error('Erreur lors de l\'export')
@@ -197,13 +158,6 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
       <div class="sm:col-span-2">
         <label class="text-xs text-prado-text-muted mb-1 block">Date de naissance</label>
         <UiDateOfBirthPicker v-model="newJeune.dateOfBirth" />
-      </div>
-      <div class="sm:col-span-2">
-        <UiAddressAutocomplete
-          v-model:address="newJeune.address"
-          v-model:postal-code="newJeune.postalCode"
-          v-model:city="newJeune.city"
-        />
       </div>
       <div class="sm:col-span-2">
         <label class="text-xs text-prado-text-muted mb-1 block">Situation</label>

@@ -18,12 +18,11 @@ export interface Jeune {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
-  address: string;
-  postalCode: string;
-  city: string;
   situation: string;
   notes: string;
-  identityVerified: boolean;
+  sex: string;
+  isQpv: boolean;
+  accompagnementType: string[];
 }
 
 export interface Inscription {
@@ -32,6 +31,21 @@ export interface Inscription {
   actionDateId: string | null;
   jeuneId: string;
   date: string;
+  accompagnateurPresent: boolean;
+  nomsAccompagnateurs: string | null;
+  personneUrgenceNom: string | null;
+  personneUrgenceTel: string | null;
+  attestationResponsabilite: boolean;
+  presence: 'inscrit' | 'present' | 'absent';
+}
+
+export interface Etablissement {
+  id: string;
+  name: string;
+  address: string | null;
+  postalCode: string | null;
+  city: string | null;
+  createdAt: string;
 }
 
 export interface ActionDate {
@@ -46,25 +60,39 @@ export interface ActionDate {
 
 // ─── Mappers ───
 
-const toJeune = (row: any): Jeune => ({
+export const toJeune = (row: any): Jeune => ({
   id: row.id,
   firstName: row.first_name,
   lastName: row.last_name,
   dateOfBirth: row.date_of_birth,
-  address: row.address,
-  postalCode: row.postal_code ?? '',
-  city: row.city ?? '',
   situation: row.situation,
   notes: row.notes ?? '',
-  identityVerified: row.identity_verified ?? false,
+  sex: row.sex ?? '',
+  isQpv: row.is_qpv ?? false,
+  accompagnementType: row.accompagnement_type ?? [],
 });
 
-const toInscription = (row: any): Inscription => ({
+export const toInscription = (row: any): Inscription => ({
   id: row.id,
   actionId: row.action_id,
   actionDateId: row.action_date_id ?? null,
   jeuneId: row.jeune_id,
   date: row.date,
+  accompagnateurPresent: row.accompagnateur_present ?? false,
+  nomsAccompagnateurs: row.noms_accompagnateurs ?? null,
+  personneUrgenceNom: row.personne_urgence_nom ?? null,
+  personneUrgenceTel: row.personne_urgence_tel ?? null,
+  attestationResponsabilite: row.attestation_responsabilite ?? false,
+  presence: row.presence ?? 'inscrit',
+});
+
+export const toEtablissement = (row: any): Etablissement => ({
+  id: row.id,
+  name: row.name,
+  address: row.address ?? null,
+  postalCode: row.postal_code ?? null,
+  city: row.city ?? null,
+  createdAt: row.created_at,
 });
 
 // ─── Prescripteur ───
@@ -91,7 +119,7 @@ export async function createJeune(client: SupabaseClient, prescripteurId: string
   const { data, error } = await client.from('jeunes').insert({
     prescripteur_id: prescripteurId, structure_id: structureId,
     first_name: jeune.firstName, last_name: jeune.lastName,
-    date_of_birth: jeune.dateOfBirth, address: jeune.address, postal_code: jeune.postalCode ?? '', city: jeune.city ?? '', situation: jeune.situation,
+    date_of_birth: jeune.dateOfBirth, situation: jeune.situation,
   }).select().single();
   if (error) throw new Error(error.message);
   return toJeune(data);
@@ -177,6 +205,9 @@ export interface DbAction {
   url_image: string;
   is_activite: boolean;
   is_published: boolean;
+  cost: number | null;
+  is_recurring: boolean;
+  etablissement_id: string | null;
 }
 
 export interface DbActionWithPlaces extends DbAction {

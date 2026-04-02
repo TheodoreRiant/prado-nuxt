@@ -1,19 +1,15 @@
 import { createClient } from '@supabase/supabase-js'
 import { serverSupabaseUser } from '#supabase/server'
+import { validateBody, completeProfileSchema } from '~/server/utils/validation'
 
 export default defineEventHandler(async (event) => {
   // Verify the user is authenticated
   const user = await serverSupabaseUser(event)
   if (!user) {
-    throw createError({ statusCode: 401, message: 'Non authentifié' })
+    throw createError({ statusCode: 401, message: 'Non authentifie' })
   }
 
-  const body = await readBody(event)
-  const { name, structure_id, fonction, phone } = body
-
-  if (!name || !structure_id) {
-    throw createError({ statusCode: 400, message: 'Nom et structure requis' })
-  }
+  const { name, structure_id, fonction, phone } = await validateBody(event, completeProfileSchema)
 
   // Use service role to bypass RLS for insert/upsert
   const config = useRuntimeConfig()

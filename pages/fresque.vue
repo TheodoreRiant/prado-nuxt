@@ -13,7 +13,7 @@ useHead({
     : [],
 })
 
-const brandColor = computed(() => d.value?.brand_color || '#C18ED8')
+const brandColor = computed(() => d.value?.brand_color || '#024266')
 </script>
 
 <template>
@@ -67,13 +67,13 @@ const brandColor = computed(() => d.value?.brand_color || '#C18ED8')
           </p>
           <div v-for="(p, i) in d.parcours" :key="p.nom ?? i" class="bg-prado-surface rounded-2xl p-5 border border-prado-border">
             <div class="flex items-center gap-3 mb-2">
-              <span class="w-2.5 h-2.5 rounded-full" :style="{ backgroundColor: p.color ?? '#C18ED8' }" />
+              <span class="w-2.5 h-2.5 rounded-full" :style="{ backgroundColor: p.color ?? '#024266' }" />
               <span class="text-prado-text font-medium text-sm">{{ p.nom }}</span>
             </div>
             <p class="text-prado-text-muted text-sm pl-5.5">{{ p.desc }}</p>
           </div>
 
-          <div class="rounded-2xl p-5 border border-prado-border mt-4" :style="{ backgroundColor: `${brandColor ?? '#C18ED8'}15` }">
+          <div class="rounded-2xl p-5 border border-prado-border mt-4" :style="{ backgroundColor: `${brandColor ?? '#024266'}15` }">
             <p class="text-prado-text-muted text-sm leading-relaxed">
               Des cartes "mots-cles" et "complements d'info" enrichissent les echanges. Une riche bibliographie (rapports publics, referentiels, videos, emissions radio) est mise a disposition.
             </p>
@@ -90,19 +90,19 @@ const brandColor = computed(() => d.value?.brand_color || '#C18ED8')
         Deux formats d'animation
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-16">
-        <div class="bg-prado-surface rounded-2xl p-6 border border-[#C18ED8]/20">
+        <div class="bg-prado-surface rounded-2xl p-6 border border-[#024266]/20">
           <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-full bg-[#C18ED8]/15 flex items-center justify-center">
-              <Users :size="18" class="text-[#C18ED8]" />
+            <div class="w-10 h-10 rounded-full bg-[#024266]/15 flex items-center justify-center">
+              <Users :size="18" class="text-[#024266]" />
             </div>
             <h3 class="text-prado-text text-lg">Pro &amp; etudiants</h3>
           </div>
           <div class="space-y-2 text-sm mb-4">
             <div class="flex items-center gap-2 text-prado-text-muted">
-              <Clock :size="14" class="text-[#C18ED8]" /> <span>3h00</span>
+              <Clock :size="14" class="text-[#024266]" /> <span>3h00</span>
             </div>
             <div class="flex items-center gap-2 text-prado-text-muted">
-              <Users :size="14" class="text-[#C18ED8]" /> <span>Jusqu'a 32 participants</span>
+              <Users :size="14" class="text-[#024266]" /> <span>Jusqu'a 32 participants</span>
             </div>
           </div>
           <p class="text-prado-text-muted text-sm">
@@ -110,19 +110,19 @@ const brandColor = computed(() => d.value?.brand_color || '#C18ED8')
           </p>
         </div>
 
-        <div class="bg-prado-surface rounded-2xl p-6 border border-[#FB6223]/20">
+        <div class="bg-prado-surface rounded-2xl p-6 border border-[#FD6223]/20">
           <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-full bg-[#FB6223]/15 flex items-center justify-center">
-              <Users :size="18" class="text-[#FB6223]" />
+            <div class="w-10 h-10 rounded-full bg-[#FD6223]/15 flex items-center justify-center">
+              <Users :size="18" class="text-[#FD6223]" />
             </div>
             <h3 class="text-prado-text text-lg">Grand public</h3>
           </div>
           <div class="space-y-2 text-sm mb-4">
             <div class="flex items-center gap-2 text-prado-text-muted">
-              <Clock :size="14" class="text-[#FB6223]" /> <span>2h30</span>
+              <Clock :size="14" class="text-[#FD6223]" /> <span>2h30</span>
             </div>
             <div class="flex items-center gap-2 text-prado-text-muted">
-              <Users :size="14" class="text-[#FB6223]" /> <span>4 a 8 participants par groupe</span>
+              <Users :size="14" class="text-[#FD6223]" /> <span>4 a 8 participants par groupe</span>
             </div>
           </div>
           <p class="text-prado-text-muted text-sm">

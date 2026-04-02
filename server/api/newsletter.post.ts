@@ -1,14 +1,10 @@
 import { createClient } from '@supabase/supabase-js'
 import { randomUUID } from 'crypto'
 import { sendEmail, escapeHtml } from '~/server/utils/email'
+import { validateBody, newsletterSchema } from '~/server/utils/validation'
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
-  const { email, structure, source } = body ?? {}
-
-  if (!email) {
-    throw createError({ statusCode: 400, message: 'Email requis' })
-  }
+  const { email, structure, source } = await validateBody(event, newsletterSchema)
 
   const config = useRuntimeConfig()
   const adminClient = createClient(config.public.supabase.url, config.supabaseServiceRoleKey)
@@ -65,7 +61,7 @@ export default defineEventHandler(async (event) => {
         <p style="margin:0 0 12px;font-size:16px;">Bonjour,</p>
         <p style="margin:0 0 16px;font-size:16px;">Merci pour votre inscription à la newsletter Prado Itinéraires.</p>
         <p style="margin:0 0 16px;">
-          <a href="${confirmUrl}" style="display:inline-block;background:#cf006c;color:#ffffff;text-decoration:none;padding:10px 16px;border-radius:999px;font-size:14px;">
+          <a href="${confirmUrl}" style="display:inline-block;background:#FD6223;color:#ffffff;text-decoration:none;padding:10px 16px;border-radius:999px;font-size:14px;">
             Confirmer mon inscription
           </a>
         </p>

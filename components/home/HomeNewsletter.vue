@@ -9,7 +9,7 @@ import { Mail } from 'lucide-vue-next'
         <!-- Left: text -->
         <div class="flex-1 text-center md:text-left">
           <div class="flex items-center gap-2 justify-center md:justify-start mb-2">
-            <Mail :size="18" class="text-prado-yellow" />
+            <Mail :size="18" class="text-prado-orange" />
             <h3 class="text-prado-text font-medium">Restez informé·e</h3>
           </div>
           <p class="text-sm text-prado-text-muted">

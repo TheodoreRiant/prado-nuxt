@@ -1,13 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
 import { sendEmail, escapeHtml } from '~/server/utils/email'
+import { validateBody, contactSchema } from '~/server/utils/validation'
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
-  const { name, email, subject, message } = body
-
-  if (!name || !email || !message) {
-    throw createError({ statusCode: 400, message: 'Champs requis manquants' })
-  }
+  const { name, email, subject, message } = await validateBody(event, contactSchema)
 
   const config = useRuntimeConfig()
   const adminClient = createClient(config.public.supabase.url, config.supabaseServiceRoleKey)

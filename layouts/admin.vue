@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   LayoutDashboard, Users, ClipboardList, UserCheck, Mail, Newspaper, Settings, Building2, LogOut, Menu, X, CalendarDays,
+  BarChart3, Euro, Landmark,
 } from 'lucide-vue-next'
 import { Toaster } from 'vue-sonner'
 
@@ -20,6 +21,9 @@ const navItems = [
   { to: '/admin/contacts', label: 'Contacts', icon: Mail, exact: false, badgeKey: 'unreadContacts' as const },
   { to: '/admin/newsletter', label: 'Newsletter', icon: Newspaper, exact: false, badgeKey: null },
   { to: '/admin/actions', label: 'Actions', icon: CalendarDays, exact: false, badgeKey: null },
+  { to: '/admin/etablissements', label: 'Etablissements', icon: Landmark, exact: false, badgeKey: null },
+  { to: '/admin/statistiques', label: 'Statistiques', icon: BarChart3, exact: false, badgeKey: null },
+  { to: '/admin/budget', label: 'Budget', icon: Euro, exact: false, badgeKey: null },
 ]
 
 const badgeColors: Record<string, string> = {

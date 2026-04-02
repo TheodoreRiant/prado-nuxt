@@ -1,35 +1,20 @@
-import { createClient } from '@supabase/supabase-js'
-import { serverSupabaseUser } from '#supabase/server'
+import { requireAdmin } from '~/server/utils/admin'
+import { validateBody, structurePatchSchema } from '~/server/utils/validation'
 
 export default defineEventHandler(async (event) => {
-  const user = await serverSupabaseUser(event)
-  if (!user) throw createError({ statusCode: 401, message: 'Non authentifie' })
+  const supabase = await requireAdmin(event)
+  const body = await validateBody(event, structurePatchSchema)
 
-  const config = useRuntimeConfig()
-  const supabase = createClient(config.public.supabase.url, config.supabaseServiceRoleKey)
-
-  const { data: prescripteur } = await supabase
-    .from('prescripteurs')
-    .select('role')
-    .eq('id', user.id)
-    .single()
-
-  if (prescripteur?.role !== 'admin') {
-    throw createError({ statusCode: 403, message: 'Acces refuse' })
-  }
-
-  const body = await readBody(event)
-  const id = typeof body?.id === 'string' ? body.id : ''
-  const name = typeof body?.name === 'string' ? body.name.trim() : ''
-
-  if (!id || !name) {
-    throw createError({ statusCode: 400, message: 'id et name requis' })
-  }
+  const updates: Record<string, unknown> = { name: body.name }
+  if (body.is_prado !== undefined) updates.is_prado = body.is_prado
+  if (body.type !== undefined) updates.type = body.type
+  if (body.postal_code !== undefined) updates.postal_code = body.postal_code
+  if (body.city !== undefined) updates.city = body.city
 
   const { data, error } = await supabase
     .from('structures')
-    .update({ name })
-    .eq('id', id)
+    .update(updates)
+    .eq('id', body.id)
     .select()
     .single()
 

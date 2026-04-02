@@ -10,6 +10,12 @@ const { jeunes, inscriptions, desinscrire } = useAuth()
 const { confirm } = useConfirm()
 
 const filterJeune = ref('')
+const filterYear = ref(String(new Date().getFullYear()))
+
+const yearOptions = computed(() => {
+  const currentYear = new Date().getFullYear()
+  return Array.from({ length: 5 }, (_, i) => String(currentYear - i))
+})
 
 const { data: actionsData } = await useAsyncData('espace-inscriptions-actions-map', () =>
   $fetch<{ id: number; title: string }[]>('/api/actions/map'),
@@ -46,8 +52,14 @@ const allRows = computed(() =>
 )
 
 const rows = computed(() => {
-  if (!filterJeune.value) return allRows.value
-  return allRows.value.filter(r => r.jeuneId === filterJeune.value)
+  let result = allRows.value
+  if (filterJeune.value) {
+    result = result.filter(r => r.jeuneId === filterJeune.value)
+  }
+  if (filterYear.value) {
+    result = result.filter(r => r.date.startsWith(filterYear.value))
+  }
+  return result
 })
 
 async function handleDesinscrire(inscriptionId: string, jeuneName: string, actionTitle: string) {
@@ -74,7 +86,7 @@ function handleExport() {
   <div class="max-w-5xl mx-auto space-y-6">
     <h1 class="text-xl font-semibold text-prado-text italic">Inscriptions</h1>
 
-    <!-- Filter by jeune -->
+    <!-- Filters -->
     <div class="flex flex-wrap gap-3">
       <select
         v-model="filterJeune"
@@ -84,6 +96,12 @@ function handleExport() {
         <option v-for="j in jeunes" :key="j.id" :value="j.id">
           {{ j.firstName }} {{ j.lastName }}
         </option>
+      </select>
+      <select
+        v-model="filterYear"
+        class="px-3 py-2 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-border-medium"
+      >
+        <option v-for="y in yearOptions" :key="y" :value="y">{{ y }}</option>
       </select>
     </div>
 

@@ -1,27 +1,31 @@
 import { requireAdmin } from '~/server/utils/admin'
+import { validateBody, actionPatchSchema } from '~/server/utils/validation'
 
 export default defineEventHandler(async (event) => {
   const adminClient = await requireAdmin(event)
-  const body = await readBody(event)
-  const { id, places_max, archived_at, dates } = body ?? {}
-
-  if (!id) {
-    throw createError({ statusCode: 400, message: 'id requis' })
-  }
+  const { id, places_max, archived_at, dates, cost, is_recurring, etablissement_id } = await validateBody(event, actionPatchSchema)
 
   const updates: Record<string, unknown> = {}
 
   // Handle places_max update (legacy, action-level)
   if (places_max !== undefined) {
-    if (places_max !== null && (typeof places_max !== 'number' || places_max < 0)) {
-      throw createError({ statusCode: 400, message: 'places_max doit être un nombre positif ou null' })
-    }
     updates.places_max = places_max ?? null
   }
 
   // Handle archived_at update
   if (archived_at !== undefined) {
     updates.archived_at = archived_at
+  }
+
+  // Handle new Sprint 2 fields
+  if (cost !== undefined) {
+    updates.cost = cost
+  }
+  if (is_recurring !== undefined) {
+    updates.is_recurring = is_recurring
+  }
+  if (etablissement_id !== undefined) {
+    updates.etablissement_id = etablissement_id
   }
 
   if (Object.keys(updates).length > 0) {

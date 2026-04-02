@@ -1,16 +1,16 @@
 import { createClient } from '@supabase/supabase-js'
 import { serverSupabaseUser } from '#supabase/server'
+import { validateBody, deleteAccountSchema } from '~/server/utils/validation'
 
 export default defineEventHandler(async (event) => {
   const user = await serverSupabaseUser(event)
   if (!user) {
-    throw createError({ statusCode: 401, message: 'Non authentifié' })
+    throw createError({ statusCode: 401, message: 'Non authentifie' })
   }
 
-  const body = await readBody(event)
-  const { confirmEmail } = body
+  const { confirmEmail } = await validateBody(event, deleteAccountSchema)
 
-  if (typeof confirmEmail !== 'string' || confirmEmail.trim() === '' || confirmEmail !== user.email) {
+  if (confirmEmail !== user.email) {
     throw createError({ statusCode: 400, message: 'L\'email de confirmation ne correspond pas' })
   }
 

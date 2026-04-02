@@ -5,13 +5,9 @@
 
   /* ── 60/30/10 Palette ── */
   --prado-black: #0D1F26;
-  --prado-teal: #004657;
-  --prado-magenta: #CF006C;
+  --prado-teal: #024266;
   --prado-sage: #93C1AF;
-  --prado-lavender: #C18ED8;
-  --prado-purple: #701C86;
-  --prado-yellow: #FFD228;
-  --prado-orange: #FB6223;
+  --prado-orange: #FD6223;
 
   /* ── 60% Dominant (dark) ── */
   --background: var(--prado-black);
@@ -22,18 +18,18 @@
   --popover-foreground: #ffffff;
 
   /* ── 30% Structure / UI ── */
-  --primary: var(--prado-magenta);
+  --primary: var(--prado-orange);
   --primary-foreground: #ffffff;
   --secondary: var(--prado-sage);
   --secondary-foreground: #ffffff;
-  --accent: var(--prado-lavender);
+  --accent: var(--prado-teal);
   --accent-foreground: #ffffff;
 
   /* ── 10% Accent ── */
-  --prado-signature: var(--prado-yellow);
-  --prado-signature-accent: var(--prado-yellow);
-  --prado-signature-muted: rgba(255, 210, 40, 0.15);
-  --prado-signature-text: var(--prado-black);
+  --prado-signature: var(--prado-orange);
+  --prado-signature-accent: var(--prado-orange);
+  --prado-signature-muted: rgba(253, 98, 35, 0.15);
+  --prado-signature-text: #ffffff;
 
   /* ── UI tokens ── */
   --muted: #1A3039;
@@ -46,7 +42,7 @@
   --switch-background: #254550;
   --font-weight-medium: 600;
   --font-weight-normal: 400;
-  --ring: var(--prado-magenta);
+  --ring: var(--prado-orange);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -77,8 +73,8 @@
   --prado-header-bg: rgba(13, 31, 38, 0.95);
   --prado-input-bg: rgba(255, 255, 255, 0.05);
   --prado-tag-bg: rgba(255, 255, 255, 0.08);
-  --prado-gradient-start: var(--prado-magenta);
-  --prado-gradient-end: var(--prado-orange);
+  --prado-gradient-start: var(--prado-orange);
+  --prado-gradient-end: var(--prado-teal);
 
   /* Tinted section backgrounds (subtle teal-derived tints) */
   --prado-bg-pink: #1A1520;
@@ -97,18 +93,18 @@
   --popover-foreground: var(--prado-black);
 
   /* ── 30% Structure / UI ── */
-  --primary: var(--prado-magenta);
+  --primary: var(--prado-orange);
   --primary-foreground: #ffffff;
   --secondary: var(--prado-sage);
   --secondary-foreground: var(--prado-black);
-  --accent: var(--prado-lavender);
+  --accent: var(--prado-teal);
   --accent-foreground: #ffffff;
 
   /* ── 10% Accent ── */
-  --prado-signature: var(--prado-yellow);
-  --prado-signature-accent: #B8940A;
-  --prado-signature-muted: rgba(255, 210, 40, 0.12);
-  --prado-signature-text: var(--prado-black);
+  --prado-signature: var(--prado-orange);
+  --prado-signature-accent: #D94E15;
+  --prado-signature-muted: rgba(253, 98, 35, 0.12);
+  --prado-signature-text: #ffffff;
 
   /* ── UI tokens ── */
   --muted: #EDF2F3;
@@ -119,7 +115,7 @@
   --input: transparent;
   --input-background: #F0F4F5;
   --switch-background: #C8D8DC;
-  --ring: var(--prado-magenta);
+  --ring: var(--prado-orange);
 
   /* ── Prado surface tokens ── */
   --prado-bg: #FAFAFA;
@@ -136,8 +132,8 @@
   --prado-header-bg: rgba(250, 250, 250, 0.95);
   --prado-input-bg: rgba(0, 70, 87, 0.04);
   --prado-tag-bg: rgba(0, 70, 87, 0.06);
-  --prado-gradient-start: var(--prado-magenta);
-  --prado-gradient-end: var(--prado-orange);
+  --prado-gradient-start: var(--prado-orange);
+  --prado-gradient-end: var(--prado-teal);
 
   /* Tinted section backgrounds */
   --prado-bg-pink: #F8F0F4;
@@ -188,11 +184,7 @@
 
   --color-prado-black: var(--prado-black);
   --color-prado-teal: var(--prado-teal);
-  --color-prado-magenta: var(--prado-magenta);
   --color-prado-sage: var(--prado-sage);
-  --color-prado-lavender: var(--prado-lavender);
-  --color-prado-purple: var(--prado-purple);
-  --color-prado-yellow: var(--prado-yellow);
   --color-prado-orange: var(--prado-orange);
   --color-prado-bg: var(--prado-bg);
   --color-prado-bg-deep: var(--prado-bg-deep);

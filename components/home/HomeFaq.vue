@@ -55,7 +55,7 @@ function toggle(index: number) {
 
 <template>
   <section class="py-24 relative">
-    <HomeHalo color="#C18ED8" position="top-center" :size="600" :opacity="0.06" />
+    <HomeHalo color="#024266" position="top-center" :size="600" :opacity="0.06" />
 
     <div class="max-w-3xl mx-auto px-6 relative z-10">
       <h2 class="text-3xl md:text-4xl text-prado-text text-center mb-12">
@@ -77,7 +77,7 @@ function toggle(index: number) {
             <ChevronDown
               :size="20"
               class="shrink-0 transition-all duration-300"
-              :class="openIndex === idx ? 'rotate-180 text-prado-yellow' : 'text-prado-text-muted'"
+              :class="openIndex === idx ? 'rotate-180 text-prado-orange' : 'text-prado-text-muted'"
             />
           </button>
           <div

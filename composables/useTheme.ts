@@ -1,5 +1,5 @@
 export function useTheme() {
-  const theme = useState<'light' | 'dark'>('theme', () => 'dark');
+  const theme = useState<'light' | 'dark'>('theme', () => 'light');
 
   const toggleTheme = () => {
     theme.value = theme.value === 'dark' ? 'light' : 'dark';

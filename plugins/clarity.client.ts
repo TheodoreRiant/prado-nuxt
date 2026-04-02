@@ -1,5 +1,15 @@
+/**
+ * Microsoft Clarity client plugin.
+ * Loads the Clarity script only if:
+ *  1. Clarity is enabled and a project ID is configured in app_settings
+ *  2. The user has accepted cookies (prado-cookie-consent === 'accepted')
+ */
 export default defineNuxtPlugin(async () => {
   try {
+    // Check cookie consent first
+    const consent = localStorage.getItem('prado-cookie-consent')
+    if (consent !== 'accepted') return
+
     const settings = await $fetch<{
       clarityEnabled?: boolean
       clarityProjectId?: string

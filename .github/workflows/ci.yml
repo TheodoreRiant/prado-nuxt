@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npx nuxi typecheck
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+        env:
+          NUXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NUXT_PUBLIC_SUPABASE_KEY: placeholder-key
+          NUXT_PUBLIC_SITE_URL: https://placeholder.vercel.app
+          NUXT_SUPABASE_SERVICE_ROLE_KEY: placeholder-service-role
+          NUXT_RESEND_API_KEY: placeholder-resend

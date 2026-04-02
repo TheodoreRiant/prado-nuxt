@@ -1,19 +1,15 @@
 import { createClient } from '@supabase/supabase-js'
 import { serverSupabaseUser } from '#supabase/server'
 import { sendEmail, escapeHtml, formatDateFr } from '~/server/utils/email'
+import { validateBody, sendConfirmationSchema } from '~/server/utils/validation'
 
 export default defineEventHandler(async (event) => {
   const user = await serverSupabaseUser(event)
   if (!user) {
-    throw createError({ statusCode: 401, message: 'Non authentifié' })
+    throw createError({ statusCode: 401, message: 'Non authentifie' })
   }
 
-  const body = await readBody(event)
-  const { inscriptionId } = body ?? {}
-
-  if (!inscriptionId) {
-    throw createError({ statusCode: 400, message: 'inscriptionId requis' })
-  }
+  const { inscriptionId } = await validateBody(event, sendConfirmationSchema)
 
   const config = useRuntimeConfig()
   const adminClient = createClient(

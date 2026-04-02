@@ -17,18 +17,6 @@ watch(panelOpen, (open) => {
   }
 })
 
-// Confetti on 100%
-watch(isComplete, async (complete) => {
-  if (complete && import.meta.client) {
-    const confetti = (await import('canvas-confetti')).default
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors: ['#CF006C', '#93C1AF', '#FB6223', '#004657'],
-    })
-  }
-})
 
 const radius = 40
 const circumference = 2 * Math.PI * radius
@@ -93,8 +81,8 @@ const strokeDashoffset = computed(() =>
                 />
                 <defs>
                   <linearGradient id="progress-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#FFD228" />
-                    <stop offset="100%" stop-color="#FB6223" />
+                    <stop offset="0%" stop-color="#FD6223" />
+                    <stop offset="100%" stop-color="#FD6223" />
                   </linearGradient>
                 </defs>
               </svg>

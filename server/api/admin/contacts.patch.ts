@@ -1,13 +1,9 @@
 import { requireAdmin } from '~/server/utils/admin'
+import { validateBody, contactPatchSchema } from '~/server/utils/validation'
 
 export default defineEventHandler(async (event) => {
   const adminClient = await requireAdmin(event)
-  const body = await readBody(event)
-  const { id, is_read } = body ?? {}
-
-  if (!id || typeof is_read !== 'boolean') {
-    throw createError({ statusCode: 400, message: 'id et is_read requis' })
-  }
+  const { id, is_read } = await validateBody(event, contactPatchSchema)
 
   const { error } = await adminClient
     .from('contact_messages')

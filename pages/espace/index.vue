@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Users, ClipboardList, CalendarDays, Loader2, Calendar, ShieldCheck, UserPlus, FileText, ArrowRight } from 'lucide-vue-next'
+import { Users, ClipboardList, CalendarDays, Loader2, Calendar, UserPlus, ArrowRight } from 'lucide-vue-next'
 
 definePageMeta({ layout: 'espace', middleware: 'auth' })
 
@@ -17,6 +17,13 @@ const inscriptionsThisMonth = computed(() => {
   return inscriptions.value.filter(i => new Date(i.date) >= startOfMonth).length
 })
 
+const filterYear = ref(String(new Date().getFullYear()))
+
+const yearOptions = computed(() => {
+  const currentYear = new Date().getFullYear()
+  return Array.from({ length: 5 }, (_, i) => String(currentYear - i))
+})
+
 // Actions map for inscription display
 const { data: actionsData } = await useAsyncData('espace-actions-map', () =>
   $fetch<{ id: number; title: string }[]>('/api/actions/map'),
@@ -30,26 +37,29 @@ const actionMap = computed(() => {
   return map
 })
 
-// Latest 5 inscriptions
+// Latest 5 inscriptions filtered by year
 const latestInscriptions = computed(() => {
-  return inscriptions.value.slice(0, 5).map(insc => {
-    const jeune = jeunes.value.find(j => j.id === insc.jeuneId)
-    const action = actionMap.value.get(insc.actionId)
-    return {
-      id: insc.id,
-      jeuneName: jeune ? `${jeune.firstName} ${jeune.lastName}` : 'Jeune inconnu',
-      actionTitle: action?.title ?? 'Action inconnue',
-      actionId: action?.id,
-      date: insc.date,
-    }
-  })
+  return inscriptions.value
+    .filter(insc => insc.date.startsWith(filterYear.value))
+    .slice(0, 5)
+    .map(insc => {
+      const jeune = jeunes.value.find(j => j.id === insc.jeuneId)
+      const action = actionMap.value.get(insc.actionId)
+      return {
+        id: insc.id,
+        jeuneName: jeune ? `${jeune.firstName} ${jeune.lastName}` : 'Jeune inconnu',
+        actionTitle: action?.title ?? 'Action inconnue',
+        actionId: action?.id,
+        date: insc.date,
+      }
+    })
 })
 
 // Contextual action cards
 const actionCards = computed(() => {
-  const cards: { icon: typeof ShieldCheck; color: string; bgColor: string; title: string; description: string; link: string }[] = []
+  const cards: { icon: typeof UserPlus; color: string; bgColor: string; title: string; description: string; link: string }[] = []
 
-  // No jeunes yet → suggest adding one
+  // No jeunes yet -> suggest adding one
   if (jeunes.value.length === 0) {
     cards.push({
       icon: UserPlus,
@@ -61,19 +71,7 @@ const actionCards = computed(() => {
     })
   }
 
-  // Jeunes without identity verification
-  for (const j of jeunes.value.filter(j => !j.identityVerified)) {
-    cards.push({
-      icon: ShieldCheck,
-      color: 'var(--prado-teal)',
-      bgColor: 'var(--prado-teal)',
-      title: `Vérifier l'identité de ${j.firstName}`,
-      description: 'En présence du jeune, lancez la vérification avec une pièce d\'identité valide.',
-      link: `/espace/jeunes/${j.id}`,
-    })
-  }
-
-  // Jeunes without inscriptions → suggest enrolling
+  // Jeunes without inscriptions -> suggest enrolling
   const jeuneIds = new Set(inscriptions.value.map(i => i.jeuneId))
   for (const j of jeunes.value.filter(j => !jeuneIds.has(j.id))) {
     cards.push({
@@ -86,23 +84,7 @@ const actionCards = computed(() => {
     })
   }
 
-  // Jeunes with incomplete health records
-  // (show max 2 of this type to avoid flooding)
-  let healthCount = 0
-  for (const j of jeunes.value) {
-    if (healthCount >= 2) break
-    cards.push({
-      icon: FileText,
-      color: '#FB6223',
-      bgColor: '#FB6223',
-      title: `Compléter la fiche santé de ${j.firstName}`,
-      description: 'Renseignez les informations de santé et la situation familiale.',
-      link: `/espace/jeunes/${j.id}`,
-    })
-    healthCount++
-  }
-
-  return cards.slice(0, 4) // Max 4 action cards
+  return cards.slice(0, 4)
 })
 
 function formatDate(dateStr: string) {
@@ -187,7 +169,15 @@ function formatDate(dateStr: string) {
 
     <!-- Latest inscriptions -->
     <div class="bg-prado-surface rounded-2xl border border-prado-border p-6">
-      <h2 class="text-sm font-semibold text-prado-text mb-4">Dernieres inscriptions</h2>
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-sm font-semibold text-prado-text">Dernieres inscriptions</h2>
+        <select
+          v-model="filterYear"
+          class="px-3 py-1.5 rounded-xl bg-prado-input-bg border border-prado-border text-prado-text text-sm focus:outline-none focus:border-prado-border-medium"
+        >
+          <option v-for="y in yearOptions" :key="y" :value="y">{{ y }}</option>
+        </select>
+      </div>
       <div v-if="latestInscriptions.length === 0" class="text-sm text-prado-text-muted py-4 text-center">
         Aucune inscription pour le moment.
       </div>

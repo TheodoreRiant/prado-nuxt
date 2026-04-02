@@ -1,33 +1,19 @@
-import { createClient } from '@supabase/supabase-js'
-import { serverSupabaseUser } from '#supabase/server'
+import { requireAdmin } from '~/server/utils/admin'
+import { validateBody, structureCreateSchema } from '~/server/utils/validation'
 
 export default defineEventHandler(async (event) => {
-  const user = await serverSupabaseUser(event)
-  if (!user) throw createError({ statusCode: 401, message: 'Non authentifie' })
+  const supabase = await requireAdmin(event)
+  const body = await validateBody(event, structureCreateSchema)
 
-  const config = useRuntimeConfig()
-  const supabase = createClient(config.public.supabase.url, config.supabaseServiceRoleKey)
-
-  const { data: prescripteur } = await supabase
-    .from('prescripteurs')
-    .select('role')
-    .eq('id', user.id)
-    .single()
-
-  if (prescripteur?.role !== 'admin') {
-    throw createError({ statusCode: 403, message: 'Acces refuse' })
-  }
-
-  const body = await readBody(event)
-  const name = typeof body?.name === 'string' ? body.name.trim() : ''
-
-  if (!name) {
-    throw createError({ statusCode: 400, message: 'Le nom de la structure est requis' })
-  }
+  const insertData: Record<string, unknown> = { name: body.name }
+  if (body.is_prado !== undefined) insertData.is_prado = body.is_prado
+  if (body.type !== undefined) insertData.type = body.type
+  if (body.postal_code !== undefined) insertData.postal_code = body.postal_code
+  if (body.city !== undefined) insertData.city = body.city
 
   const { data, error } = await supabase
     .from('structures')
-    .insert({ name })
+    .insert(insertData)
     .select()
     .single()
 

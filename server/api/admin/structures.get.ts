@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
   // Fetch structures with counts
   const { data: structures, error } = await supabase
     .from('structures')
-    .select('id, name, created_at')
+    .select('id, name, is_prado, type, postal_code, city, created_at')
     .order('name')
 
   if (error) throw createError({ statusCode: 500, message: error.message })
@@ -48,7 +48,13 @@ export default defineEventHandler(async (event) => {
   }
 
   return (structures ?? []).map(s => ({
-    ...s,
+    id: s.id,
+    name: s.name,
+    is_prado: s.is_prado ?? false,
+    type: s.type ?? null,
+    postal_code: s.postal_code ?? null,
+    city: s.city ?? null,
+    created_at: s.created_at,
     prescripteurs_count: prescripteurCounts.get(s.id) ?? 0,
     jeunes_count: jeuneCounts.get(s.id) ?? 0,
   }))

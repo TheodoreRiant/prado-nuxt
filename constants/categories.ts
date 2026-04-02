@@ -18,17 +18,17 @@ export const PROGRAMMATION_CATEGORIES: ProgrammationCategory[] = [
 ];
 
 export const PROGRAMMATION_CATEGORY_COLORS: Record<ProgrammationCategory, string> = {
-  'Bien-être': '#C18ED8',
-  'Découverte & orientation': '#FB6223',
+  'Bien-être': '#024266',
+  'Découverte & orientation': '#FD6223',
   'Vie quotidienne': '#93C1AF',
-  'Formations': '#CF006C',
-  'Formations & Ateliers': '#CF006C',
+  'Formations': '#FD6223',
+  'Formations & Ateliers': '#FD6223',
   'Rencontres/Visites': 'var(--prado-teal)',
   'Mobilité': '#93C1AF',
-  'Emploi': '#FB6223',
+  'Emploi': '#FD6223',
   'Numérique': 'var(--prado-teal)',
-  'Droits': '#CF006C',
-  'Bénévolat': '#C18ED8',
+  'Droits': '#FD6223',
+  'Bénévolat': '#024266',
 };
 
 export type RessourceCategory =
@@ -44,9 +44,9 @@ export const RESSOURCE_CATEGORIES: RessourceCategory[] = [
 ];
 
 export const RESSOURCE_CATEGORY_COLORS: Record<RessourceCategory, string> = {
-  'Accompagnement/Insertion': '#CF006C',
-  'Acces aux droits': '#FB6223',
+  'Accompagnement/Insertion': '#FD6223',
+  'Acces aux droits': '#FD6223',
   'Emploi/Formation': '#93C1AF',
-  'Logement/Mobilite': '#C18ED8',
+  'Logement/Mobilite': '#024266',
   'Sante': 'var(--prado-teal)',
 };

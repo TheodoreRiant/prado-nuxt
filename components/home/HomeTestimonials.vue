@@ -45,7 +45,7 @@ const testimonials = computed<Testimonial[]>(() => {
   return defaultTestimonials
 })
 
-const colors = ['#CF006C', '#FB6223', '#C18ED8', '#93C1AF']
+const colors = ['#FD6223', '#FD6223', '#024266', '#93C1AF']
 const firstColumn = computed(() => testimonials.value)
 const secondColumn = computed(() => [...testimonials.value].reverse())
 const thirdColumn = computed(() => [...testimonials.value.slice(1), testimonials.value[0]])
@@ -74,7 +74,7 @@ const fourthColumn = computed(() => [...testimonials.value.slice(2), ...testimon
               class="p-8 rounded-3xl border border-prado-border bg-prado-surface max-w-xs w-full"
             >
               <p class="text-prado-text-secondary text-sm leading-relaxed italic">
-                <span class="text-prado-yellow font-semibold">«</span> {{ t.text }} <span class="text-prado-yellow font-semibold">»</span>
+                <span class="text-prado-orange font-semibold">«</span> {{ t.text }} <span class="text-prado-orange font-semibold">»</span>
               </p>
               <div class="flex items-center gap-3 mt-5">
                 <div
@@ -103,7 +103,7 @@ const fourthColumn = computed(() => [...testimonials.value.slice(2), ...testimon
               class="p-8 rounded-3xl border border-prado-border bg-prado-surface max-w-xs w-full"
             >
               <p class="text-prado-text-secondary text-sm leading-relaxed italic">
-                <span class="text-prado-yellow font-semibold">«</span> {{ t.text }} <span class="text-prado-yellow font-semibold">»</span>
+                <span class="text-prado-orange font-semibold">«</span> {{ t.text }} <span class="text-prado-orange font-semibold">»</span>
               </p>
               <div class="flex items-center gap-3 mt-5">
                 <div
@@ -132,7 +132,7 @@ const fourthColumn = computed(() => [...testimonials.value.slice(2), ...testimon
               class="p-8 rounded-3xl border border-prado-border bg-prado-surface max-w-xs w-full"
             >
               <p class="text-prado-text-secondary text-sm leading-relaxed italic">
-                <span class="text-prado-yellow font-semibold">«</span> {{ t.text }} <span class="text-prado-yellow font-semibold">»</span>
+                <span class="text-prado-orange font-semibold">«</span> {{ t.text }} <span class="text-prado-orange font-semibold">»</span>
               </p>
               <div class="flex items-center gap-3 mt-5">
                 <div
@@ -161,7 +161,7 @@ const fourthColumn = computed(() => [...testimonials.value.slice(2), ...testimon
               class="p-8 rounded-3xl border border-prado-border bg-prado-surface max-w-xs w-full"
             >
               <p class="text-prado-text-secondary text-sm leading-relaxed italic">
-                <span class="text-prado-yellow font-semibold">«</span> {{ t.text }} <span class="text-prado-yellow font-semibold">»</span>
+                <span class="text-prado-orange font-semibold">«</span> {{ t.text }} <span class="text-prado-orange font-semibold">»</span>
               </p>
               <div class="flex items-center gap-3 mt-5">
                 <div

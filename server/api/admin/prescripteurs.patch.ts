@@ -1,17 +1,17 @@
 import { requireAdmin } from '~/server/utils/admin'
+import { validateBody, prescripteurPatchSchema } from '~/server/utils/validation'
 
 export default defineEventHandler(async (event) => {
   const adminClient = await requireAdmin(event)
-  const body = await readBody(event)
-  const { id, status } = body ?? {}
+  const { id, status, role } = await validateBody(event, prescripteurPatchSchema)
 
-  if (!id || !['approved', 'rejected'].includes(status)) {
-    throw createError({ statusCode: 400, message: 'id et status (approved|rejected) requis' })
-  }
+  const updates: Record<string, unknown> = {}
+  if (status !== undefined) updates.status = status
+  if (role !== undefined) updates.role = role
 
   const { error } = await adminClient
     .from('prescripteurs')
-    .update({ status })
+    .update(updates)
     .eq('id', id)
 
   if (error) throw createError({ statusCode: 500, message: error.message })

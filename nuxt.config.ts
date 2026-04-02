@@ -35,7 +35,7 @@ export default defineNuxtConfig({
       htmlAttrs: { lang: 'fr' },
       script: [
         {
-          innerHTML: `(function(){try{var t=localStorage.getItem('prado-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t)}}catch(e){}})()`,
+          innerHTML: `(function(){try{var t=localStorage.getItem('prado-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t)}else{document.documentElement.setAttribute('data-theme','light')}}catch(e){document.documentElement.setAttribute('data-theme','light')}})()`,
           type: 'text/javascript',
           tagPosition: 'head',
         },
@@ -55,19 +55,28 @@ export default defineNuxtConfig({
 
   routeRules: {
     '/': { isr: false, headers: { 'Cache-Control': 's-maxage=60, stale-while-revalidate' } },
+    '/**': {
+      headers: {
+        'X-Frame-Options': 'DENY',
+        'X-Content-Type-Options': 'nosniff',
+        'Referrer-Policy': 'strict-origin-when-cross-origin',
+        'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+      },
+    },
   },
 
   runtimeConfig: {
     supabaseServiceRoleKey: '',
     resendApiKey: '',
     cronSecret: '',
-    veriffApiKey: '',
-    veriffSecretKey: '',
-    veriffBaseUrl: 'https://stationapi.veriff.com',
+    mailchimpApiKey: '',
+    mailchimpListId: '',
     public: {
       supabaseUrl: '',
       supabaseKey: '',
       siteUrl: '',
+      ga4Id: '',
+      clarityId: '',
     },
   },
 })

@@ -56,6 +56,11 @@ function findSlice(type: string) {
       <HomeFaq :data="findSlice('faq')" />
     </div>
 
+    <!-- Actualites -->
+    <div id="actualites">
+      <HomeActualites />
+    </div>
+
     <!-- Newsletter -->
     <div id="newsletter">
       <HomeNewsletter />

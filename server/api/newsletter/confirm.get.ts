@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { syncToMailchimp } from '~/server/utils/mailchimp'
 
 export default defineEventHandler(async (event) => {
   const { token } = getQuery(event)
@@ -11,7 +12,7 @@ export default defineEventHandler(async (event) => {
 
   const { data: subscriber, error } = await adminClient
     .from('newsletter_subscribers')
-    .select('confirmed_at')
+    .select('email, structure, confirmed_at')
     .eq('confirmation_token', token)
     .single()
 
@@ -24,6 +25,16 @@ export default defineEventHandler(async (event) => {
       .from('newsletter_subscribers')
       .update({ confirmed_at: new Date().toISOString() })
       .eq('confirmation_token', token)
+
+    // Auto-sync to Mailchimp on confirmation (non-blocking)
+    syncToMailchimp(
+      subscriber.email,
+      undefined,
+      undefined,
+      subscriber.structure ?? undefined,
+    ).catch(() => {
+      // Silent — Mailchimp sync is non-critical
+    })
   }
 
   return sendRedirect(event, '/?newsletter=confirmed', 302)
