@@ -1,0 +1,152 @@
+/*
+ * Prado Design Tokens
+ *
+ * Standalone CSS custom properties for the Prado design system.
+ * No dependency on Tailwind — these variables can be consumed
+ * by any CSS engine or inline styles.
+ *
+ * The consuming app is responsible for Tailwind theme mapping
+ * (@theme inline) and base layer resets (@layer base).
+ */
+
+:root {
+  --font-size: 16px;
+
+  /* -- 60/30/10 Palette -- */
+  --prado-black: #0D1F26;
+  --prado-teal: #024266;
+  --prado-sage: #93C1AF;
+  --prado-orange: #FB6223;
+
+  /* -- 60% Dominant (dark) -- */
+  --background: var(--prado-black);
+  --foreground: #ffffff;
+  --card: #132A32;
+  --card-foreground: #ffffff;
+  --popover: #132A32;
+  --popover-foreground: #ffffff;
+
+  /* -- 30% Structure / UI -- */
+  --primary: var(--prado-orange);
+  --primary-foreground: #ffffff;
+  --secondary: var(--prado-sage);
+  --secondary-foreground: #ffffff;
+  --accent: var(--prado-teal);
+  --accent-foreground: #ffffff;
+
+  /* -- 10% Accent -- */
+  --prado-signature: var(--prado-orange);
+  --prado-signature-accent: var(--prado-orange);
+  --prado-signature-muted: rgba(251, 98, 35, 0.15);
+  --prado-signature-text: #ffffff;
+
+  /* -- UI tokens -- */
+  --muted: #1A3039;
+  --muted-foreground: #8BA8B0;
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: transparent;
+  --input-background: #1A3039;
+  --switch-background: #254550;
+  --font-weight-medium: 600;
+  --font-weight-normal: 400;
+  --ring: var(--prado-sage);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: var(--prado-black);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+
+  /* -- Prado surface tokens -- */
+  --prado-bg: var(--prado-black);
+  --prado-bg-deep: #081318;
+  --prado-surface: #132A32;
+  --prado-surface-hover: rgba(255, 255, 255, 0.05);
+  --prado-text: #ffffff;
+  --prado-text-secondary: rgba(255, 255, 255, 0.6);
+  --prado-text-muted: rgba(255, 255, 255, 0.4);
+  --prado-text-faint: rgba(255, 255, 255, 0.25);
+  --prado-border: rgba(255, 255, 255, 0.05);
+  --prado-border-light: rgba(255, 255, 255, 0.1);
+  --prado-border-medium: rgba(255, 255, 255, 0.2);
+  --prado-header-bg: rgba(13, 31, 38, 0.95);
+  --prado-input-bg: rgba(255, 255, 255, 0.05);
+  --prado-tag-bg: rgba(255, 255, 255, 0.08);
+  --prado-gradient-start: var(--prado-sage);
+  --prado-gradient-end: var(--prado-teal);
+
+  /* Tinted section backgrounds (subtle sage-derived tints) */
+  --prado-bg-pink: #1A1520;
+  --prado-bg-teal: #0F2830;
+  --prado-bg-purple: #18152A;
+  --prado-bg-orange: #1A1818;
+}
+
+[data-theme="light"] {
+  /* -- 60% Dominant (light) -- */
+  --background: #FAFAFA;
+  --foreground: var(--prado-black);
+  --card: #ffffff;
+  --card-foreground: var(--prado-black);
+  --popover: #ffffff;
+  --popover-foreground: var(--prado-black);
+
+  /* -- 30% Structure / UI -- */
+  --primary: var(--prado-orange);
+  --primary-foreground: #ffffff;
+  --secondary: var(--prado-sage);
+  --secondary-foreground: var(--prado-black);
+  --accent: var(--prado-teal);
+  --accent-foreground: #ffffff;
+
+  /* -- 10% Accent -- */
+  --prado-signature: var(--prado-orange);
+  --prado-signature-accent: #FB6223;
+  --prado-signature-muted: rgba(251, 98, 35, 0.12);
+  --prado-signature-text: #ffffff;
+
+  /* -- UI tokens -- */
+  --muted: #EDF2F3;
+  --muted-foreground: #5A7A82;
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+  --border: rgba(0, 70, 87, 0.08);
+  --input: transparent;
+  --input-background: #F0F4F5;
+  --switch-background: #C8D8DC;
+  --ring: var(--prado-sage);
+
+  /* -- Prado surface tokens -- */
+  --prado-bg: #FAFAFA;
+  --prado-bg-deep: #EFF3F4;
+  --prado-surface: #ffffff;
+  --prado-surface-hover: rgba(0, 70, 87, 0.03);
+  --prado-text: var(--prado-black);
+  --prado-text-secondary: rgba(13, 31, 38, 0.7);
+  --prado-text-muted: rgba(13, 31, 38, 0.5);
+  --prado-text-faint: rgba(13, 31, 38, 0.3);
+  --prado-border: rgba(0, 70, 87, 0.06);
+  --prado-border-light: rgba(0, 70, 87, 0.08);
+  --prado-border-medium: rgba(0, 70, 87, 0.15);
+  --prado-header-bg: rgba(250, 250, 250, 0.95);
+  --prado-input-bg: rgba(0, 70, 87, 0.04);
+  --prado-tag-bg: rgba(0, 70, 87, 0.06);
+  --prado-gradient-start: var(--prado-sage);
+  --prado-gradient-end: var(--prado-teal);
+
+  /* Tinted section backgrounds */
+  --prado-bg-pink: #F8F0F4;
+  --prado-bg-teal: #EFF6F3;
+  --prado-bg-purple: #F4F0F6;
+  --prado-bg-orange: #F6F2EF;
+}

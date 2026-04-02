@@ -2,6 +2,7 @@
   "name": "prado-nuxt",
   "private": true,
   "type": "module",
+  "workspaces": ["packages/*"],
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -11,7 +12,9 @@
     "slicemachine": "start-slicemachine",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@nuxtjs/supabase": "^1.5.0",
@@ -28,6 +31,7 @@
   "devDependencies": {
     "@nuxt/test-utils": "^4.0.0",
     "@nuxtjs/prismic": "^5.2.0",
+    "@playwright/test": "^1.59.1",
     "@prismicio/client": "^7.21.6",
     "@slicemachine/adapter-nuxt": "^0.3.95",
     "@tailwindcss/vite": "^4.1.0",

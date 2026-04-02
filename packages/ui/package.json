@@ -1,0 +1,45 @@
+{
+  "name": "@prado/ui",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/runtime/index.js",
+      "types": "./dist/runtime/index.d.ts"
+    },
+    "./nuxt": {
+      "import": "./dist/module.mjs",
+      "types": "./dist/module.d.ts"
+    },
+    "./theme/tokens.css": "./dist/runtime/theme/tokens.css",
+    "./composables": {
+      "import": "./dist/runtime/composables/index.js",
+      "types": "./dist/runtime/composables/index.d.ts"
+    }
+  },
+  "main": "./dist/module.mjs",
+  "types": "./dist/types.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "nuxt-module-build build",
+    "dev": "nuxi dev playground",
+    "prepack": "nuxt-module-build build"
+  },
+  "dependencies": {
+    "@nuxt/kit": "^3.21.0"
+  },
+  "devDependencies": {
+    "@nuxt/module-builder": "^0.8.0",
+    "nuxt": "^3.21.0",
+    "vue": "^3.5.0"
+  },
+  "peerDependencies": {
+    "vue": ">=3.4.0",
+    "lucide-vue-next": ">=0.400.0"
+  },
+  "peerDependenciesMeta": {
+    "lucide-vue-next": {
+      "optional": true
+    }
+  }
+}
