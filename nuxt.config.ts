@@ -5,9 +5,14 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   modules: [
+    '@prado/ui/nuxt',
     '@nuxtjs/supabase',
     '@nuxtjs/prismic',
   ],
+
+  pradoUI: {
+    theme: false, // App already provides theme tokens via ~/assets/css/theme.css
+  },
 
   css: [
     '~/assets/css/tailwind.css',
