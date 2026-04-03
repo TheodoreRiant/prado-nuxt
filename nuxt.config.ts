@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   modules: [
-    '@prado/ui/nuxt',
+    '@theodoreriant/prado-ui/nuxt',
     '@nuxtjs/supabase',
     '@nuxtjs/prismic',
   ],
