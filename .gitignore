@@ -21,6 +21,11 @@ logs
 # Test coverage
 coverage
 
+# Playwright
+tests/e2e/.auth/
+test-results/
+playwright-report/
+
 # Local env files
 .env
 .env.*

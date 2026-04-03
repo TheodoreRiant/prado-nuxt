@@ -187,25 +187,32 @@ async function handleLogout() {
           <!-- Separator -->
           <div class="w-px h-5 bg-prado-border mx-0.5" />
 
-          <!-- Espace pro / connexion -->
-          <template v-if="user">
-            <NuxtLink
-              :to="isAdmin ? '/admin' : '/espace'"
-              class="nav-icon-btn"
-              :title="isAdmin ? 'Administration' : 'Mon espace'"
-            >
-              <LayoutDashboard :size="16" />
-            </NuxtLink>
-          </template>
-          <template v-else>
-            <NuxtLink
-              to="/connexion"
-              class="nav-icon-btn"
-              title="Se connecter"
-            >
-              <LayoutDashboard :size="16" />
-            </NuxtLink>
-          </template>
+          <!-- Espace pro / connexion (ClientOnly to avoid SSR hydration mismatch) -->
+          <ClientOnly>
+            <template v-if="user">
+              <NuxtLink
+                :to="isAdmin ? '/admin' : '/espace'"
+                class="nav-icon-btn"
+                :title="isAdmin ? 'Administration' : 'Mon espace'"
+              >
+                <LayoutDashboard :size="16" />
+              </NuxtLink>
+            </template>
+            <template v-else>
+              <NuxtLink
+                to="/connexion"
+                class="nav-icon-btn"
+                title="Se connecter"
+              >
+                <LayoutDashboard :size="16" />
+              </NuxtLink>
+            </template>
+            <template #fallback>
+              <span class="nav-icon-btn">
+                <LayoutDashboard :size="16" />
+              </span>
+            </template>
+          </ClientOnly>
 
           <!-- Theme toggle -->
           <button
@@ -406,7 +413,12 @@ async function handleLogout() {
 
     <!-- Cookie Banner -->
     <ClientOnly>
-      <UiCookieBanner />
+      <PrCookieBanner>
+        Ce site utilise des cookies pour ameliorer votre experience.
+        <template #link>
+          <NuxtLink to="/politique-confidentialite" class="text-[var(--prado-signature-accent)] underline ml-1">En savoir plus</NuxtLink>
+        </template>
+      </PrCookieBanner>
     </ClientOnly>
 
     <!-- Chat widget (flottant, toutes les pages) -->

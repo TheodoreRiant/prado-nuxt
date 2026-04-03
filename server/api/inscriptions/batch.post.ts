@@ -1,13 +1,10 @@
 import { createClient } from '@supabase/supabase-js'
-import { serverSupabaseUser } from '#supabase/server'
+import { requireUser } from '~/server/utils/admin'
 import { validateBody, inscriptionBatchSchema } from '~/server/utils/validation'
 import { sendEmail, escapeHtml, formatDateFr } from '~/server/utils/email'
 
 export default defineEventHandler(async (event) => {
-  const user = await serverSupabaseUser(event)
-  if (!user) {
-    throw createError({ statusCode: 401, message: 'Non authentifie' })
-  }
+  const user = await requireUser(event)
 
   const body = await validateBody(event, inscriptionBatchSchema)
   const { actionId, jeuneIds, accompagnateurPresent, nomsAccompagnateurs } = body

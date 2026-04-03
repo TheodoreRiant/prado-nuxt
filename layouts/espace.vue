@@ -96,12 +96,14 @@ async function handleLogout() {
           />
           <component :is="item.icon" :size="18" :class="isNavActive(item.to, item.exact) ? 'text-prado-sage' : ''" />
           <span class="flex-1">{{ item.label }}</span>
-          <span
-            v-if="item.badge && item.badge() > 0"
-            class="ml-auto min-w-[20px] h-5 flex items-center justify-center rounded-full text-[10px] font-bold text-white px-1.5 bg-prado-sage"
-          >
-            {{ item.badge() }}
-          </span>
+          <ClientOnly>
+            <span
+              v-if="item.badge && item.badge() > 0"
+              class="ml-auto min-w-[20px] h-5 flex items-center justify-center rounded-full text-[10px] font-bold text-white px-1.5 bg-prado-sage"
+            >
+              {{ item.badge() }}
+            </span>
+          </ClientOnly>
         </NuxtLink>
 
       </nav>
@@ -156,9 +158,11 @@ async function handleLogout() {
           <Menu v-else :size="20" />
         </button>
 
-        <div class="hidden lg:block text-sm text-prado-text-secondary">
-          {{ user?.name }}
-        </div>
+        <ClientOnly>
+          <div class="hidden lg:block text-sm text-prado-text-secondary">
+            {{ user?.name }}
+          </div>
+        </ClientOnly>
 
         <div class="flex items-center gap-4" />
       </header>

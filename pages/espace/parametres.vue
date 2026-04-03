@@ -7,16 +7,24 @@ const { loading } = useAuth()
 </script>
 
 <template>
-  <div v-if="loading" class="flex items-center justify-center py-32">
-    <Loader2 class="animate-spin text-prado-text-muted" :size="32" />
-  </div>
+  <ClientOnly>
+    <div v-if="loading" class="flex items-center justify-center py-32">
+      <Loader2 class="animate-spin text-prado-text-muted" :size="32" />
+    </div>
 
-  <div v-else class="max-w-3xl mx-auto space-y-8">
-    <h1 class="text-xl font-semibold text-prado-text italic">Parametres</h1>
+    <div v-else class="max-w-3xl mx-auto space-y-8">
+      <h1 class="text-xl font-semibold text-prado-text italic">Parametres</h1>
 
-    <EspaceSettingsProfile />
-    <EspaceSettingsSecurity />
-    <EspaceSettingsNotifications />
-    <EspaceSettingsAccount />
-  </div>
+      <EspaceSettingsProfile />
+      <EspaceSettingsSecurity />
+      <EspaceSettingsNotifications />
+      <EspaceSettingsAccount />
+    </div>
+
+    <template #fallback>
+      <div class="flex items-center justify-center py-32">
+        <Loader2 class="animate-spin text-prado-text-muted" :size="32" />
+      </div>
+    </template>
+  </ClientOnly>
 </template>

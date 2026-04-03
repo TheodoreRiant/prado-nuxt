@@ -2,7 +2,6 @@
   "name": "prado-nuxt",
   "private": true,
   "type": "module",
-  "workspaces": ["packages/*"],
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",

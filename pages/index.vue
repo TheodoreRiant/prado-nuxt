@@ -12,7 +12,7 @@ function findSlice(type: string) {
   <div>
     <!-- Section 1 — Hero (remonte derrière la navbar) -->
     <div id="hero" class="-mt-16">
-      <UiScrollExpandHero
+      <PrScrollExpandHero
         media-type="image"
         :media-src="HERO_IMAGE"
         title-line1="L'innovation sociale"
@@ -23,7 +23,7 @@ function findSlice(type: string) {
         scroll-hint="Scrollez pour découvrir"
       >
         <HomeHeroContent :data="findSlice('hero')" />
-      </UiScrollExpandHero>
+      </PrScrollExpandHero>
     </div>
 
     <!-- Section 2 — Les Programmes -->

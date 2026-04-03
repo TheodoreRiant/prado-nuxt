@@ -1,11 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
-import { serverSupabaseUser } from '#supabase/server'
+import { requireUser } from '~/server/utils/admin'
 
 export default defineEventHandler(async (event) => {
-  const user = await serverSupabaseUser(event)
-  if (!user) {
-    throw createError({ statusCode: 401, message: 'Non authentifié' })
-  }
+  const user = await requireUser(event)
 
   const config = useRuntimeConfig()
   const adminClient = createClient(

@@ -93,11 +93,17 @@ function formatDate(dateStr: string) {
 </script>
 
 <template>
-  <div v-if="loading" class="flex items-center justify-center py-32">
-    <Loader2 class="animate-spin text-prado-text-muted" :size="32" />
-  </div>
+  <ClientOnly>
+    <template #fallback>
+      <div class="flex items-center justify-center py-32">
+        <Loader2 class="animate-spin text-prado-text-muted" :size="32" />
+      </div>
+    </template>
+    <div v-if="loading" class="flex items-center justify-center py-32">
+      <Loader2 class="animate-spin text-prado-text-muted" :size="32" />
+    </div>
 
-  <div v-else class="max-w-5xl mx-auto space-y-8">
+    <div v-else class="max-w-5xl mx-auto space-y-8">
     <h1 class="text-xl font-semibold text-prado-text italic">Tableau de bord</h1>
 
     <!-- Status banners -->
@@ -209,4 +215,5 @@ function formatDate(dateStr: string) {
       </div>
     </div>
   </div>
+  </ClientOnly>
 </template>

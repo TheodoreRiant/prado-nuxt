@@ -203,7 +203,7 @@ onMounted(() => {
       >
         <!-- Image -->
         <div class="w-20 h-16 rounded-lg overflow-hidden bg-prado-bg shrink-0">
-          <ImageWithFallback :src="a.urlImage" :alt="a.title" class="w-full h-full object-cover" />
+          <PrImageWithFallback :src="a.urlImage" :alt="a.title" class="w-full h-full object-cover" />
         </div>
 
         <!-- Content -->

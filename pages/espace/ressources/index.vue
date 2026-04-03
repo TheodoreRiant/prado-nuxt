@@ -146,7 +146,7 @@ onMounted(() => {
       >
         <!-- Image -->
         <div class="w-16 h-16 rounded-lg overflow-hidden bg-prado-bg shrink-0 flex items-center justify-center">
-          <ImageWithFallback :src="r.image" :alt="r.title" class="w-full h-full object-contain p-1" />
+          <PrImageWithFallback :src="r.image" :alt="r.title" class="w-full h-full object-contain p-1" />
         </div>
 
         <!-- Content -->

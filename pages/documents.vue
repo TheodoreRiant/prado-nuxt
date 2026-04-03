@@ -60,7 +60,7 @@ useHead({
       </div>
 
       <div v-else-if="filtered.length > 0" class="space-y-4">
-        <UiDocumentDownload
+        <PrDocumentDownload
           v-for="doc in filtered"
           :key="doc.uid"
           :title="doc.title"

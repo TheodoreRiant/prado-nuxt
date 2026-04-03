@@ -134,7 +134,7 @@ onMounted(() => {
         <div class="h-8 w-64 rounded-full bg-prado-surface animate-pulse mb-8" />
         <div class="h-14 w-full rounded-2xl bg-prado-surface animate-pulse mb-8" />
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <UiSkeletonCard v-for="n in 6" :key="n" />
+          <PrSkeleton variant="rect" width="100%" height="280px" v-for="n in 6" :key="n" />
         </div>
       </div>
       <div v-else class="max-w-7xl mx-auto px-6 py-14">
@@ -182,7 +182,7 @@ onMounted(() => {
               class="group block rounded-2xl overflow-hidden bg-prado-surface hover:brightness-105 transition-all duration-300"
             >
               <div class="relative h-44 overflow-hidden bg-prado-surface">
-                <ImageWithFallback :src="r.image" :alt="r.title" class="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500" />
+                <PrImageWithFallback :src="r.image" :alt="r.title" class="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500" />
               </div>
               <div class="p-5">
                 <span class="text-xs mb-2 inline-block" :style="{ color: RESSOURCE_CATEGORY_COLORS[r.category] }">{{ r.category }}</span>
@@ -198,7 +198,7 @@ onMounted(() => {
         <!-- Infinite scroll sentinel -->
         <div ref="sentinelRef">
           <div v-if="hasMore" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-            <UiSkeletonCard v-for="n in 3" :key="n" />
+            <PrSkeleton variant="rect" width="100%" height="280px" v-for="n in 3" :key="n" />
           </div>
         </div>
       </div>

@@ -272,7 +272,7 @@ const inputClass = 'w-full px-3 py-2 rounded-xl bg-prado-input-bg border border-
               <span class="text-sm text-prado-text">Quartier Prioritaire de la Ville</span>
             </label>
             <div v-else-if="field.type === 'multiCheckbox'" class="flex-1">
-              <UiMultiCheckbox
+              <PrMultiSelect
                 v-model="editMultiValue"
                 :options="ACCOMPAGNEMENT_OPTIONS"
               />

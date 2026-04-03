@@ -51,11 +51,12 @@ const color = computed(() =>
 </script>
 
 <template>
-  <div v-if="loading" class="flex items-center justify-center py-20">
-    <Loader2 class="animate-spin text-prado-text-muted" :size="28" />
-  </div>
+  <ClientOnly>
+    <div v-if="loading" class="flex items-center justify-center py-20">
+      <Loader2 class="animate-spin text-prado-text-muted" :size="28" />
+    </div>
 
-  <div v-else-if="!ressource" class="max-w-3xl mx-auto py-16 text-center">
+    <div v-else-if="!ressource" class="max-w-3xl mx-auto py-16 text-center">
     <h1 class="text-xl text-prado-text mb-3">Ressource non trouvee</h1>
     <NuxtLink to="/espace/ressources" class="text-prado-sage text-sm">Retour aux ressources</NuxtLink>
   </div>
@@ -67,7 +68,7 @@ const color = computed(() =>
 
     <!-- Image -->
     <div class="rounded-xl overflow-hidden bg-prado-surface flex items-center justify-center p-6">
-      <ImageWithFallback :src="ressource.image" :alt="ressource.title" class="max-h-60 object-contain" />
+      <PrImageWithFallback :src="ressource.image" :alt="ressource.title" class="max-h-60 object-contain" />
     </div>
 
     <!-- Category -->
@@ -95,4 +96,11 @@ const color = computed(() =>
       Acceder a la ressource
     </a>
   </div>
+
+    <template #fallback>
+      <div class="flex items-center justify-center py-20">
+        <Loader2 class="animate-spin text-prado-text-muted" :size="28" />
+      </div>
+    </template>
+  </ClientOnly>
 </template>

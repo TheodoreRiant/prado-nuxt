@@ -1,13 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
-import { serverSupabaseUser } from '#supabase/server'
+import { requireUser } from '~/server/utils/admin'
 import { validateBody, completeProfileSchema } from '~/server/utils/validation'
 
 export default defineEventHandler(async (event) => {
-  // Verify the user is authenticated
-  const user = await serverSupabaseUser(event)
-  if (!user) {
-    throw createError({ statusCode: 401, message: 'Non authentifie' })
-  }
+  const user = await requireUser(event)
 
   const { name, structure_id, fonction, phone } = await validateBody(event, completeProfileSchema)
 

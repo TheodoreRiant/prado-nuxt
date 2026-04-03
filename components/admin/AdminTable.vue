@@ -146,7 +146,7 @@ function toggleSort(key: string) {
                   :key="col.key"
                   :class="['px-4 py-3', col.hiddenBelow ? hiddenClass[col.hiddenBelow] : '']"
                 >
-                  <div class="h-4 bg-prado-border/50 rounded animate-pulse" :style="{ width: `${60 + Math.random() * 40}%` }" />
+                  <div class="h-4 bg-prado-border/50 rounded animate-pulse" :style="{ width: `${65 + ((n * 17 + columns.indexOf(col) * 31) % 30)}%` }" />
                 </td>
                 <td v-if="$slots.actions" class="px-4 py-3">
                   <div class="h-4 w-16 bg-prado-border/50 rounded animate-pulse ml-auto" />

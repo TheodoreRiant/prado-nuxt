@@ -22,7 +22,7 @@ const brandColor = computed(() => '#93C1AF')
     <div class="relative h-[50vh] min-h-[380px] flex items-end">
       <div class="absolute inset-0">
         <PrismicImage v-if="d.hero_image?.url" :field="d.hero_image" class="w-full h-full object-cover" />
-        <ImageWithFallback v-else src="/images/foodtruck.png" alt="Les Saveurs d'Elise - Foodtruck solidaire" class="w-full h-full object-cover" />
+        <PrImageWithFallback v-else src="/images/foodtruck.png" alt="Les Saveurs d'Elise - Foodtruck solidaire" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-prado-bg via-prado-bg/70 to-transparent" />
       </div>
       <div class="relative z-10 max-w-7xl mx-auto px-6 pb-12 w-full">
@@ -53,7 +53,7 @@ const brandColor = computed(() => '#93C1AF')
         </div>
 
         <div class="lg:col-span-2 rounded-2xl overflow-hidden">
-          <ImageWithFallback src="/images/foodtruck-cuisine.png" alt="Jeunes en stage cuisine dans le foodtruck" class="w-full h-full object-cover aspect-[4/5]" />
+          <PrImageWithFallback src="/images/foodtruck-cuisine.png" alt="Jeunes en stage cuisine dans le foodtruck" class="w-full h-full object-cover aspect-[4/5]" />
         </div>
       </div>
     </div>

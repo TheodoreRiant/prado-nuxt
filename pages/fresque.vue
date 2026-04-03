@@ -22,7 +22,7 @@ const brandColor = computed(() => '#93C1AF')
     <div class="relative h-[45vh] min-h-[340px] flex items-end">
       <div class="absolute inset-0">
         <PrismicImage v-if="d.hero_image?.url" :field="d.hero_image" class="w-full h-full object-cover" />
-        <ImageWithFallback v-else src="/images/fresque.png" alt="Atelier Fresque de la Protection de l'Enfance" class="w-full h-full object-cover" />
+        <PrImageWithFallback v-else src="/images/fresque.png" alt="Atelier Fresque de la Protection de l'Enfance" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-prado-bg via-prado-bg/70 to-transparent" />
       </div>
       <div class="relative z-10 max-w-7xl mx-auto px-6 pb-12 w-full">

@@ -66,7 +66,7 @@ const color = computed(() =>
     </NuxtLink>
 
     <div class="rounded-2xl overflow-hidden mb-8 bg-prado-surface flex items-center justify-center p-8">
-      <ImageWithFallback :src="ressource.image" :alt="ressource.title" class="max-h-72 object-contain" />
+      <PrImageWithFallback :src="ressource.image" :alt="ressource.title" class="max-h-72 object-contain" />
     </div>
 
     <div class="flex flex-wrap gap-2 mb-4">

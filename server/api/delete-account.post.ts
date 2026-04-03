@@ -1,12 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
-import { serverSupabaseUser } from '#supabase/server'
+import { requireUser } from '~/server/utils/admin'
 import { validateBody, deleteAccountSchema } from '~/server/utils/validation'
 
 export default defineEventHandler(async (event) => {
-  const user = await serverSupabaseUser(event)
-  if (!user) {
-    throw createError({ statusCode: 401, message: 'Non authentifie' })
-  }
+  const user = await requireUser(event)
 
   const { confirmEmail } = await validateBody(event, deleteAccountSchema)
 

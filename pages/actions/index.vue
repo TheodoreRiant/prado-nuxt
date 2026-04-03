@@ -154,7 +154,7 @@ onMounted(() => {
         <div class="h-8 w-64 rounded-full bg-prado-surface animate-pulse mb-8" />
         <div class="h-14 w-full rounded-2xl bg-prado-surface animate-pulse mb-8" />
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <UiSkeletonCard v-for="n in 6" :key="n" />
+          <PrSkeleton variant="rect" width="100%" height="280px" v-for="n in 6" :key="n" />
         </div>
       </div>
       <div v-else class="max-w-7xl mx-auto px-6 py-14">
@@ -233,7 +233,7 @@ onMounted(() => {
               :class="{ 'opacity-60 hover:opacity-100': a.isFull }"
             >
               <div class="relative h-48 overflow-hidden bg-prado-surface">
-                <ImageWithFallback :src="a.urlImage" :alt="a.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <PrImageWithFallback :src="a.urlImage" :alt="a.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 <div class="absolute inset-0 bg-gradient-to-t from-prado-surface/60 to-transparent" />
 
                 <div
@@ -287,7 +287,7 @@ onMounted(() => {
         <!-- Infinite scroll sentinel -->
         <div ref="sentinelRef">
           <div v-if="hasMore" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-            <UiSkeletonCard v-for="n in 3" :key="n" />
+            <PrSkeleton variant="rect" width="100%" height="280px" v-for="n in 3" :key="n" />
           </div>
         </div>
       </div>

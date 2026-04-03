@@ -1,11 +1,9 @@
-import { serverSupabaseUser } from '#supabase/server'
-import { requireAdmin } from '~/server/utils/admin'
+import { requireAdmin, requireUser } from '~/server/utils/admin'
 import { sendEmail } from '~/server/utils/email'
 
 export default defineEventHandler(async (event) => {
   const adminClient = await requireAdmin(event)
-  const user = await serverSupabaseUser(event)
-  if (!user) throw createError({ statusCode: 401 })
+  const user = await requireUser(event)
 
   // Get admin's email from prescripteurs table
   const { data: prescripteur } = await adminClient

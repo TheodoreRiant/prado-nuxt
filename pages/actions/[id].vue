@@ -142,7 +142,7 @@ async function handleDesinscrire(inscriptionId: string) {
     </NuxtLink>
 
     <div class="rounded-2xl overflow-hidden mb-8 bg-prado-surface">
-      <ImageWithFallback :src="action.url_image" :alt="action.title" class="w-full h-64 md:h-80 object-cover" />
+      <PrImageWithFallback :src="action.url_image" :alt="action.title" class="w-full h-64 md:h-80 object-cover" />
     </div>
 
     <div class="flex flex-wrap gap-2 mb-4">

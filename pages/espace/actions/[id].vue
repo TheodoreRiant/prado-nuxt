@@ -138,11 +138,12 @@ async function handleDesinscrire(inscriptionId: string) {
 </script>
 
 <template>
-  <div v-if="loading" class="flex items-center justify-center py-20">
-    <Loader2 class="animate-spin text-prado-text-muted" :size="28" />
-  </div>
+  <ClientOnly>
+    <div v-if="loading" class="flex items-center justify-center py-20">
+      <Loader2 class="animate-spin text-prado-text-muted" :size="28" />
+    </div>
 
-  <div v-else-if="!action" class="max-w-3xl mx-auto py-16 text-center">
+    <div v-else-if="!action" class="max-w-3xl mx-auto py-16 text-center">
     <h1 class="text-xl text-prado-text mb-3">Action non trouvee</h1>
     <NuxtLink to="/espace/actions" class="text-prado-sage text-sm">Retour aux actions</NuxtLink>
   </div>
@@ -154,7 +155,7 @@ async function handleDesinscrire(inscriptionId: string) {
 
     <!-- Image -->
     <div class="rounded-xl overflow-hidden bg-prado-surface">
-      <ImageWithFallback :src="action.url_image" :alt="action.title" class="w-full h-52 md:h-64 object-cover" />
+      <PrImageWithFallback :src="action.url_image" :alt="action.title" class="w-full h-52 md:h-64 object-cover" />
     </div>
 
     <!-- Tags -->
@@ -486,4 +487,11 @@ async function handleDesinscrire(inscriptionId: string) {
       </p>
     </div>
   </div>
+
+    <template #fallback>
+      <div class="flex items-center justify-center py-20">
+        <Loader2 class="animate-spin text-prado-text-muted" :size="28" />
+      </div>
+    </template>
+  </ClientOnly>
 </template>
